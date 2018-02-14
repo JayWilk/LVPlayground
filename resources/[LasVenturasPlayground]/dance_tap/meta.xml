@@ -1,0 +1,23 @@
+<meta>
+    <!--use with /dance [ID] like /dance 1, /dance 2-->
+	<info author="Talidan" name="dance" description="Dance script" type="script" version="1.0.0" />
+	<file src="music.xml" type="client" />
+	<script src="main.lua" type="client" />
+	<script src="recorder.lua" type="client" />
+	<script src="textlib.lua" type="client" />
+	<script src="client_anim.lua" type="client" />
+	<script src="textlib_anim.lua" type="client" />
+	
+	<file src="arrow.png" type="client" />
+	<file src="centre.png" type="client" />
+	
+	<!--Individual music defs-->
+	<file src="freedfromdesire/definition.xml" type="client" />
+	<file src="freedfromdesire/track.mp3" type="client" />
+
+	<file src="obstacle1/definition.xml" type="client" />
+	<file src="obstacle1/track.mp3" type="client" />	
+	
+	<file src="eazyE/definition.xml" type="client" />
+	<file src="eazyE/track.mp3" type="client" />
+</meta>

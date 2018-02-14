@@ -1,0 +1,5 @@
+<meta>
+     <info author="Jay" name="Spawn Manager" description="Handles the spawning of the player in a random pos in LV" version="0.1"/>
+     <script src="spawnManager.lua"/>
+	 <map src="spawnPos.map"/>
+</meta>

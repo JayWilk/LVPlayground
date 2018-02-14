@@ -1,0 +1,4 @@
+<meta>
+	<info author="Jay" name="Misc shit" version="0.1"/>
+	<script src="misc_c.lua" type="client"/>
+</meta>

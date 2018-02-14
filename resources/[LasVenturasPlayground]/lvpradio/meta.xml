@@ -1,0 +1,22 @@
+<meta>
+     <info author="Jay" name="LVP Radio" description="Replace car radio with a custom radio stream" version="0.1"/>
+     <script src="radio_c.lua" type="client" />
+	 <script src="radio_s.lua" />
+	 <settings>
+		<setting name="*streamName" value="LVP RADIO"
+					friendlyname="Radio Stream Name"
+					accept="*"
+					examples="LVP Radio, Capital FM"
+					group="Gameplay"
+					desc="Set the name of the current radio stream"
+					/>
+	 
+		<setting name="*streamUrl" value="http://play.sa-mp.nl:8000/stream/1/"
+					friendlyname="URL for the shoutcast audio stream"
+					accept="*"
+					examples="http://play.sa-mp.nl:8000/stream/1/"
+					group="Gameplay"
+					desc="Can be used to configure the radio stream"
+					/>
+	 </settings>
+</meta>

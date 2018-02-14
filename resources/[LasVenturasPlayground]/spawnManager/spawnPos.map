@@ -1,0 +1,51 @@
+<map>
+	<spawnpoint posX="2005" posY="1543" posZ="13.5" rot="270" />
+	<spawnpoint posX="2087.62890625" posY="1516.0771484375" posZ="10.8203125" rot="0" />
+	<spawnpoint posX="1956.5166015625" posY="1343.2919921875" posZ="15.374607086182" rot="0" />
+	<spawnpoint posX="2026.763671875" posY="1007.8896484375" posZ="10.8203125" rot="0" />
+	<spawnpoint posX="2182.814453125" posY="1672.3955078125" posZ="11.073860168457" rot="0" />
+	<spawnpoint posX="1680.416015625" posY="1449.08203125" posZ="10.773626327515" rot="0" />
+	<spawnpoint posX = "1435.8024" posY = "2662.3647" posZ = "11.3926" rot = "1.1650"/> 
+	<spawnpoint posX = "1457.4762" posY = "2773.4868" posZ = "10.8203" rot = "272.2754"/> 
+	<spawnpoint posX = "1739.6390" posY = "2803.0569" posZ = "14.2735" rot = "285.3929"/> 
+	<spawnpoint posX = "1870.3096" posY = "2785.2471" posZ = "14.2734" rot = "42.3102"/> 
+	<spawnpoint posX = "1959.7142" posY = "2754.6863" posZ = "10.8203" rot = "181.4731"/> 
+	<spawnpoint posX = "2314.2556" posY = "2759.4504" posZ = "10.8203" rot = "93.2711"/> 
+	<spawnpoint posX = "2216.5674" posY = "2715.0334" posZ = "10.8130" rot = "267.6540"/> 
+	<spawnpoint posX = "2101.4192" posY = "2678.7874" posZ = "10.8130" rot = "92.0607"/> 
+	<spawnpoint posX = "1951.1090" posY = "2660.3877" posZ = "10.8203" rot = "180.8461"/> 
+	<spawnpoint posX = "1666.6949" posY = "2604.9861" posZ = "10.8203" rot = "179.8495"/> 
+	<spawnpoint posX = "2808.3367" posY = "2421.5107" posZ = "11.0625" rot = "136.2060"/> 
+	<spawnpoint posX = "2633.3203" posY = "2349.7061" posZ = "10.6719" rot = "178.7175"/> 
+	<spawnpoint posX = "2606.6348" posY = "2161.7490" posZ = "10.8203" rot = "88.7508"/> 
+	<spawnpoint posX = "2616.5286" posY = "2100.6226" posZ = "10.8158" rot = "177.7834"/> 
+	<spawnpoint posX = "2491.8816" posY = "2397.9370" posZ = "10.8203" rot = "266.6003"/> 
+	<spawnpoint posX = "2531.7891" posY = "2530.3223" posZ = "21.8750" rot = "91.6686"/> 
+	<spawnpoint posX = "2340.6677" posY = "2530.4324" posZ = "10.8203" rot = "177.8630"/> 
+	<spawnpoint posX = "2097.6855" posY = "2491.3313" posZ = "14.8390" rot = "181.8117"/> 
+	<spawnpoint posX = "1893.1000" posY = "2423.2412" posZ = "11.1782" rot = "269.4385"/> 
+	<spawnpoint posX = "1698.9330" posY = "2241.8320" posZ = "10.8203" rot = "357.8584"/> 
+	<spawnpoint posX = "1479.4559" posY = "2249.0769" posZ = "11.0234" rot = "306.3790"/> 
+	<spawnpoint posX = "1298.1548" posY = "2083.4016" posZ = "10.8127" rot = "256.7034"/> 
+	<spawnpoint posX = "1117.8785" posY = "2304.1514" posZ = "10.8203" rot = "81.5490"/> 
+	<spawnpoint posX = "1108.9878" posY = "1705.8639" posZ = "10.8203" rot = "0.6785"/> 
+	<spawnpoint posX = "1423.9780" posY = "1034.4188" posZ = "10.8203" rot = "90.9590"/> 
+	<spawnpoint posX = "1537.4377" posY = "752.0641" posZ = "11.0234" rot = "271.6893"/> 
+	<spawnpoint posX = "1917.9590" posY = "702.6984" posZ = "11.1328" rot = "359.2682"/> 
+	<spawnpoint posX = "2089.4785" posY = "658.0414" posZ = "11.2707" rot = "357.3572"/> 
+	<spawnpoint posX = "2489.8286" posY = "928.3251" posZ = "10.8280" rot = "67.2245"/> 
+	<spawnpoint posX = "2697.4717" posY = "856.4916" posZ = "9.8360" rot = "267.0983"/> 
+	<spawnpoint posX = "2845.6104" posY = "1288.1444" posZ = "11.3906" rot = "3.6506"/> 
+	<spawnpoint posX = "2437.9370" posY = "1293.1442" posZ = "10.8203" rot = "86.3830"/> 
+	<spawnpoint posX = "2299.5430" posY = "1451.4177" posZ = "10.8203" rot = "269.1287"/> 
+	<spawnpoint posX = "2214.3008" posY = "2041.9165" posZ = "10.8203" rot = "268.7626"/> 
+	<spawnpoint posX = "2005.9174" posY = "2152.0835" posZ = "10.8203" rot = "270.1372"/> 
+	<spawnpoint posX = "2222.1042" posY = "1837.4220" posZ = "10.8203" rot = "88.6461"/> 
+	<spawnpoint posX = "2025.6753" posY = "1916.4363" posZ = "12.3382" rot = "272.5852"/> 
+	<spawnpoint posX = "2087.9902" posY = "1516.5336" posZ = "10.8203" rot = "48.9300"/> 
+	<spawnpoint posX = "2172.1624" posY = "1398.7496" posZ = "11.0625" rot = "91.3783"/> 
+	<spawnpoint posX = "2139.1841" posY = "987.7975" posZ = "10.8203" rot = "0.2315"/> 
+	<spawnpoint posX = "1860.9672" posY = "1030.2910" posZ = "10.8203" rot = "271.6988"/>
+	<spawnpoint posX = "1673.2345" posY = "1316.1067" posZ = "10.8203" rot = "177.7294"/> 
+	<spawnpoint posX = "1412.6187" posY = "2000.0596" posZ = "14.7396" rot = "271.3568"/> 
+</map>

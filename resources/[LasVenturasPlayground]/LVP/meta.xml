@@ -1,0 +1,5 @@
+<meta>
+     <info author="Jay" type="gamemode" name="LVP" description="LVP gamemode" version="0.1"/>
+     <script src="script.lua" />
+	 <map src="vehicles.map" />
+</meta>

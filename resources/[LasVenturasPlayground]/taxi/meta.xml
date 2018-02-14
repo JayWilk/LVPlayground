@@ -1,0 +1,6 @@
+<meta>
+     <info author="Jay" name="Taxi feature" description="Commands: /taxi and /locations" version="0.1"/>
+     <script src="taxi_c.lua" type="client"/>
+	 <script src="taxi_s.lua"/>
+	 <map src="taxiLocations.map"/>
+</meta>

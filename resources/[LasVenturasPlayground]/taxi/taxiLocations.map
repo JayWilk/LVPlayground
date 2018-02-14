@@ -1,0 +1,7 @@
+<map>
+	<taxiLocation locationX="2017.037109375" locationY="1545.2744140625" locationZ="10.830101966858" rotation="" name="Pirate Ship"/>
+	<taxiLocation locationX="2289.6435546875" locationY="2451.318359375" locationZ="10.8203125" rotation="" name="LV Police Station"/>
+	<taxiLocation locationX="1667.6923828125" locationY="1621.078125" locationZ="10.8203125" rotation="" name="LV Airport"/>
+	<taxiLocation locationX="-2312.3095703125" locationY="-1654.638671875" locationZ="483.69476318359" rotation="" name="Mt. Chiliad"/>
+	<taxiLocation locationX="2534.6884765625" locationY="2069.66796875" locationZ="10.8203125" rotation="" name="AmmuNation"/>
+</map>
