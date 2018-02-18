@@ -1,0 +1,13 @@
+backups/
+databases/
+logs/
+resource-cache/
+*.db
+*.dll
+*.keys
+*.zip
+editor.conf
+vehiclecolors.conf
+editor_acl.xml
+settings.xml
+local.conf
