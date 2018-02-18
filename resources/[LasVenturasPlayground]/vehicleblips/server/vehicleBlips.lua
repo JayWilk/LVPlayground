@@ -1,7 +1,8 @@
+function updateVehicleBlipRadius()
+	outputDebugString("Updating vehicle blip radius to " ..tostring(get("blipStreamRadius")))
+	triggerClientEvent("onClientReceiveBlipRadiusInformation", resourceRoot, get("blipStreamRadius"))
+end
+
 addEvent("onClientRequestVehicleBlipRadiusValue", true)
-addEventHandler("onClientRequestVehicleBlipRadiusValue", resourceRoot,
-	function()
-		outputDebugString("Updating vehicle blip radius to " ..tostring(get("blipStreamRadius")))
-		triggerClientEvent("onClientReceiveBlipRadiusInformation", resourceRoot, get("blipStreamRadius"))
-	end
-)
+addEventHandler("onClientRequestVehicleBlipRadiusValue", resourceRoot, updateVehicleBlipRadius)
+addEventHandler("onSettingChange", resourceRoot, updateVehicleBlipRadius)

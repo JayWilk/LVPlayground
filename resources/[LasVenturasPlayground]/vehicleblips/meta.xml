@@ -8,7 +8,7 @@
 			accept="*"
 			examples="150, 200"
 			group="Gameplay"
-			desc="Change the stream radius of vehicle blips (requires resource restart)"
+			desc="Change the stream radius of vehicle blips"
 		/>
 	 </settings>
 </meta>
