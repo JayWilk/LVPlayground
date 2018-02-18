@@ -1,4 +1,14 @@
 <meta>
 	<info name="vehicleblips" author="Jay" version="0.1" type="script" />
-	<script src="vehicleblips.lua" type="client" />
+	<script src="client/vehicleBlips.lua" type="client" />
+	<script src="server/vehicleBlips.lua" />
+	<settings>
+		<setting name="*blipStreamRadius" value="150"
+			friendlyname="Blip Radius"
+			accept="*"
+			examples="150, 200"
+			group="Gameplay"
+			desc="Change the stream radius of vehicle blips (requires resource restart)"
+		/>
+	 </settings>
 </meta>
