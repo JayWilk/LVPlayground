@@ -1,7 +1,7 @@
 <meta>
      <info author="Jay" name="LVP Radio" description="Replace car radio with a custom radio stream" version="0.1"/>
-     <script src="radio_c.lua" type="client" />
-	 <script src="radio_s.lua" />
+     <script src="client/radio_c.lua" type="client" />
+	 <script src="server/radio_s.lua" />
 	 <settings>
 		<setting name="*streamName" value="LVP RADIO"
 					friendlyname="Radio Stream Name"
