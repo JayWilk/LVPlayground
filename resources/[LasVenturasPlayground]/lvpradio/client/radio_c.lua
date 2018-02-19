@@ -26,7 +26,7 @@ addEventHandler("onClientRender", root,
 )
 
 addEvent("onClientReceiveRadioStreamUrlInformation", true)
-addEventHandler("onClientReceiveRadioStreamUrlInformation", root,  
+addEventHandler("onClientReceiveRadioStreamUrlInformation", localPlayer,  
 	function(theUrl)
 		radioUrl = theUrl
 		if(radioPlaying) then 
@@ -37,7 +37,7 @@ addEventHandler("onClientReceiveRadioStreamUrlInformation", root,
 )
 
 addEvent("onClientReceiveRadioStreamTitleInformation", true)
-addEventHandler("onClientReceiveRadioStreamTitleInformation", root,
+addEventHandler("onClientReceiveRadioStreamTitleInformation", localPlayer,
 	function(theName)
 		radioStreamName = theName
 	end
