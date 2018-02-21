@@ -3,11 +3,10 @@ rampVisbilityTime = nil
 rampObject = nil
 rampTimer = nil
 rampControlKey = nil
+rampSpawnDistance = nil
 
 function spawnRamp()
 
-	outputDebugString("spawnRamp")
-	
 	if rampObject then
 		destroyElement(rampObject)
 		if(rampTimer) then
@@ -19,7 +18,7 @@ function spawnRamp()
 	local x, y, z = getElementPosition(theVehicle)
 	local rx, ry, rz = getElementRotation(theVehicle)
 	
-	x,y = getXYInFrontOfPlayer(20) -- todo: manage distance setting
+	x,y = getXYInFrontOfPlayer(rampSpawnDistance)
 	
 	rampObject = createObject(rampModelId, x, y, z, 0, 0, rz)
 	rampTimer = setTimer(destroyRamp, rampVisbilityTime, 1)
@@ -46,14 +45,14 @@ addEventHandler("onClientVehicleEnter", root,
 	function()
 		if(getVehicleType(source) == "Automobile" or getVehicleType(source) == "Bike" or getVehicleType(source) == "BMX"
 		or getVehicleType(source) == "Monster Truck" or getVehicleType(source) == "Quad") then 
-			bindKey("lctrl", "down", spawnRamp)
+			bindKey(rampControlKey, "down", spawnRamp)
 		end
 	end 
 )	
 
 addEventHandler("onClientVehicleExit", root, 
 	function()
-		unbindKey("lctrl", "down", spawnRamp)
+		unbindKey(rampControlKey, "down", spawnRamp)
 	end 
 )
 
@@ -74,8 +73,18 @@ addEventHandler("onServerProvideRampingTimeInformation", resourceRoot,
 addEvent("onServerProvideRampingControlInformation", true)
 addEventHandler("onServerProvideRampingControlInformation", resourceRoot,
 	function(theKey)
+		if(rampControlKey) then 
+			-- Remove any existsing binds in case this is being updated
+			unbindKey(rampControlKey, "down", spawnRamp)
+		end
 		rampControlKey = theKey
-		outputDebugString("The ramp key : " ..theKey)
+	end 
+)
+
+addEvent("onServerProvideRampingSpawnDistanceInformation", true)
+addEventHandler("onServerProvideRampingSpawnDistanceInformation", resourceRoot,
+	function(theDistance)
+		rampSpawnDistance = theDistance
 	end 
 )
 
@@ -84,5 +93,6 @@ addEventHandler("onClientResourceStart", root,
 		triggerServerEvent("onClientRequestRampingObjectId", resourceRoot)
 		triggerServerEvent("onClientRequestRampingVisbilityTime", resourceRoot)
 		triggerServerEvent("onClientRequestRampingControlKey", resourceRoot)
+		triggerServerEvent("onClientRequestRampingSpawnDistance", resourceRoot)
 	end
 )

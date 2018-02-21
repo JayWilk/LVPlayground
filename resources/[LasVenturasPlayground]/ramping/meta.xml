@@ -5,6 +5,7 @@
 	<settings>
 		<setting name="*rampObjectId" value="1655" friendlyname="Ramp Object Id" accept="*" group="Gameplay"/>
 		<setting name="*rampVisibilityTime" value="3000" friendlyname="Time in milliseconds the ramp is visible for" accept="*" group="Gameplay"/>
-		<setting name="*rampControlKey" value="fire" friendlyname="The control key used to spawn a ramp" examples="enter, space, F2, fire, accelerate" accept="*" group="Gameplay"/>
+		<setting name="*rampControlKey" value="lctrl" friendlyname="The control key used to spawn a ramp" examples="enter, space, F2, fire, accelerate, lctrl" accept="*" group="Gameplay"/>
+		<setting name="*rampSpawnDistance" value="20" friendlyname="Distance in meters that the ramp will spawn in front of the player" accept="*" group="Gameplay" examples="20, 30"/>
 	 </settings>
 </meta>
