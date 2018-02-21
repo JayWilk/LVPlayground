@@ -1,7 +1,8 @@
 <meta>
 	<info name="Ramping" author="Jay" version="0.1" type="script" />
 	<script src="client/ramping_c.lua" type="client" />
-	<script src="server/ramping_s.lua" />
+	<script src="client/ramping_game_c.lua" type="client" />
+	<script src="server/ramping_s.lua"/>
 	<settings>
 		<setting name="*rampObjectId" value="1655" friendlyname="Ramp Object Id" accept="*" group="Gameplay"/>
 		<setting name="*rampVisibilityTime" value="3000" friendlyname="Time in milliseconds the ramp is visible for" accept="*" group="Gameplay"/>

@@ -1,9 +1,12 @@
-rampModelId = nil
-rampVisbilityTime = nil
+rampModelId = 0
+rampVisbilityTime = 0
 rampObject = nil
 rampTimer = nil
 rampControlKey = nil
 rampSpawnDistance = nil
+rampLastCollisionTime = nil
+numberOfConsecutiveRampsClimbed = 0
+checkToEndRampingTimer = nil
 
 function spawnRamp()
 
@@ -39,6 +42,43 @@ function getXYInFrontOfPlayer( distance )
     x = x - ( math.sin(rotation) * distance ) 
     y = y + ( math.cos(rotation) * distance ) 
     return x, y 
+end 
+
+addEventHandler("onClientVehicleCollision", root, 
+	function(theHitElement)
+		if(theHitElement and source == getPedOccupiedVehicle(localPlayer) and getPedOccupiedVehicleSeat(localPlayer) == 0) then
+			if getElementModel(theHitElement) == tonumber(rampModelId) then
+			
+				if(rampLastCollisionTime) then 
+				
+					local timeSinceLastRampCollision = getTickCount() - rampLastCollisionTime
+					if(timeSinceLastRampCollision > 500 and timeSinceLastRampCollision < 3000) then
+							numberOfConsecutiveRampsClimbed = numberOfConsecutiveRampsClimbed + 1
+							triggerEvent("onClientPerformRamping", root, numberOfConsecutiveRampsClimbed)
+					end 
+				else  
+					triggerEvent("onClientStartRamping", localPlayer)
+				    checkToEndRampingTimer = setTimer(checkToEndRamping, 100, 0)
+				end 
+				
+				rampLastCollisionTime = getTickCount()
+			end 
+		end
+	end 
+)
+
+function checkToEndRamping()
+
+	if(getTickCount() - rampLastCollisionTime > rampSpawnDistance * 100) then
+	
+		triggerEvent("onClientEndRamping", localPlayer, numberOfConsecutiveRampsClimbed)
+		killTimer(checkToEndRampingTimer)
+		
+		numberOfConsecutiveRampsClimbed = 0
+		checkToEndRampingTimer = nil
+		rampLastCollisionTime = nil
+	end 
+	
 end 
 
 addEventHandler("onClientVehicleEnter", root,
