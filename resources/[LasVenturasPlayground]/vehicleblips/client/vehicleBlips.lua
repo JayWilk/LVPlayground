@@ -9,10 +9,6 @@ function vehicleStreamInHandler()
 	if isVehicleBlown(source) then
 		return
 	end
-	
-	if getVehicleOccupant(source) ~= false then
-		return
-	end
 
 	local blip = createBlipAttachedTo(source, 0, 1, 150, 150, 150, 255, 0, blipRadius)
 	setElementParent(blip, source)
