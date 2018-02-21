@@ -1,4 +1,5 @@
 -- PirateShip resource version 0.1 by Jay
+pedWeaponSlotBeforeEnteringShip = nil
 
 addEventHandler("onClientResourceStart", root, 
 	function(startedResource)
@@ -15,26 +16,30 @@ addEventHandler("onClientElementColShapeHit", root,
 	function(theShape)
 		if (theShape == shipRamp and not isElementWithinColShape(source, shipDeck)) or (theShape == shipDeck and not isElementWithinColShape(source, shipRamp)) then
 			if getElementType(source) == "player" and source == localPlayer then
+
+				pedWeaponSlotBeforeEnteringShip = getPedWeaponSlot(localPlayer)
 			
-				toggleControl("fire", false)
-				toggleControl("aim_weapon", false)
-				toggleControl("next_weapon", false)
-				toggleControl("previous_weapon", false)
-				setPedWeaponSlot(source, 0)
-				
+				-- Workaround for what appears to be a bug with MTA's toggleControl()
+				-- function failing to work when applied immediately after setElementPosition
+				-- TODO: Report it
+				setTimer( function () 
+					toggleControl("fire", false)
+					toggleControl("aim_weapon", false)
+					toggleControl("next_weapon", false)
+					toggleControl("previous_weapon", false)
+					setPedWeaponSlot(localPlayer, 0)
+				end, 50, 1)
+									
 				timeEnteredShip = getTickCount()
-				
-				outputDebugString("Player " ..getPlayerName(source) .. " entered the pirate ship collision area")
-				
+
 				shipMoneyTimer = setTimer( function() 
 					givePlayerMoney(1)
 				end, 5000, 0)
-				
 
 			elseif(getElementType(source) == "vehicle") then
 				blowVehicle(source)
 			end 
-		end 
+		end
 	end
 )
 
@@ -53,7 +58,11 @@ addEventHandler("onClientElementColShapeLeave", root,
 			killTimer(shipMoneyTimer)
 			shipMoneyTimer = nil
 			
-			outputDebugString("Player " ..getPlayerName(source) .." left the pirate collision area")
+			if(pedWeaponSlotBeforeEnteringShip) then
+				setPedWeaponSlot(localPlayer, pedWeaponSlotBeforeEnteringShip)
+				pedWeaponSlotBeforeEnteringShip = nil
+			end 
+			
 		end 
 	end
 )
