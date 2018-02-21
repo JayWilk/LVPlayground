@@ -11,3 +11,9 @@ vehiclecolors.conf
 editor_acl.xml
 settings.xml
 local.conf
+resources/[LasVenturasPlayground]/colshapeeditor/
+resources/customblips/
+resources/dance_tap/
+resources/jay_graffiti/
+resources/misc/
+resources/show_pos/
