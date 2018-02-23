@@ -73,5 +73,4 @@
     <vehicle id="vehicle (Club) (1)" paintjob="3" interior="0" alpha="255" model="589" plate="CZDA XLY" dimension="0" posX="1539" posY="1191.9" posZ="10.5" rotX="0" rotY="0" rotZ="0" color="76,117,183,76,117,183,0,0,0,0,0,0"></vehicle>
     <vehicle id="vehicle (Tug) (1)" paintjob="3" interior="0" alpha="255" model="583" plate="1ED2 0WO" dimension="0" posX="1656.6" posY="1621.2" posZ="10.3" rotX="0" rotY="0" rotZ="180" color="245,245,245,245,245,245,0,0,0,0,0,0"></vehicle>
     <vehicle id="vehicle (PCJ-600) (1)" paintjob="3" interior="0" alpha="255" model="461" plate="Y06S 20H" dimension="0" posX="1687.8" posY="1643.7" posZ="10.5" rotX="0" rotY="0" rotZ="90" color="145,115,71,245,245,245,0,0,0,0,0,0"></vehicle>
-    <vehicle id="vehicle (Nevada) (1)" paintjob="3" interior="0" alpha="255" model="553" plate="MD0K RAW" dimension="0" posX="1537.3" posY="1839.5" posZ="13.1" rotX="0" rotY="0" rotZ="148" color="54,65,85,57,90,131,0,0,0,0,0,0"></vehicle>
 </map>

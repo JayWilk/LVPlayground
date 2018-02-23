@@ -8,7 +8,7 @@ rampLastCollisionTime = nil
 numberOfConsecutiveRampsClimbed = 0
 checkToEndRampingTimer = nil
 
-function spawnRamp()
+function spawnRampInfrontOfPlayer()
 
 	if rampObject then
 		destroyElement(rampObject)
@@ -17,14 +17,17 @@ function spawnRamp()
 		end 
 	end 
 
-	local theVehicle = getPedOccupiedVehicle(localPlayer)
-	local x, y, z = getElementPosition(theVehicle)
-	local rx, ry, rz = getElementRotation(theVehicle)
+	local rx, ry, rz = getElementRotation(getPedOccupiedVehicle(localPlayer))
+	local x, y, z = getElementPosition( localPlayer ) 
 	
-	x,y = getXYInFrontOfPlayer(rampSpawnDistance)
+    local rotation = getPedRotation( localPlayer ) 
+    rotation = rotation / 180 * math.pi
+    x = x - ( math.sin(rotation) * rampSpawnDistance ) 
+    y = y + ( math.cos(rotation) * rampSpawnDistance ) 
 	
 	rampObject = createObject(rampModelId, x, y, z, 0, 0, rz)
 	rampTimer = setTimer(destroyRamp, rampVisbilityTime, 1)
+	
 end 
 
 function destroyRamp()
@@ -35,14 +38,84 @@ function destroyRamp()
 	rampObject = nil
 end 
 
-function getXYInFrontOfPlayer( distance ) 
-    local x,y,z = getElementPosition( localPlayer ) 
-    local rotation = getPlayerRotation( localPlayer ) 
-    rotation = rotation/180*3.141592 
-    x = x - ( math.sin(rotation) * distance ) 
-    y = y + ( math.cos(rotation) * distance ) 
-    return x, y 
-end 
+
+
+addEvent("onClientStartRamping")
+addEventHandler("onClientStartRamping", root,
+	function()
+	end 
+)
+
+addEvent("onClientEndRamping")
+addEventHandler("onClientEndRamping", root,
+	function()
+	end 
+)
+
+addEvent("onClientPerformRamping")
+addEventHandler("onClientPerformRamping", root, 
+	function(numberOfConsecutiveRamps) 
+		if(numberOfConsecutiveRamps > 1) then -- todo: manage settings
+			playSFX("genrl", 52, 18, false)
+		end 
+	end
+)
+
+addEventHandler("onClientVehicleEnter", root,
+	function()
+		if(getVehicleType(source) == "Automobile" or getVehicleType(source) == "Bike" or getVehicleType(source) == "BMX"
+		or getVehicleType(source) == "Monster Truck" or getVehicleType(source) == "Quad") then 
+			bindKey(rampControlKey, "down", spawnRampInfrontOfPlayer)
+		end
+	end 
+)	
+
+addEventHandler("onClientVehicleExit", root, 
+	function()
+		unbindKey(rampControlKey, "down", spawnRampInfrontOfPlayer)
+	end 
+)
+
+addEvent("onServerProvideRampingObjectIdInformation", true)
+addEventHandler("onServerProvideRampingObjectIdInformation", resourceRoot,
+	function(therampModelId)
+		rampModelId = therampModelId
+	end 
+)
+
+addEvent("onServerProvideRampingTimeInformation", true)
+addEventHandler("onServerProvideRampingTimeInformation", resourceRoot,
+	function(theTime)
+		rampVisbilityTime = theTime
+	end 
+)
+
+addEvent("onServerProvideRampingControlInformation", true)
+addEventHandler("onServerProvideRampingControlInformation", resourceRoot,
+	function(theKey)
+		if(rampControlKey) then 
+			-- Remove any existsing binds in case this is being updated
+			unbindKey(rampControlKey, "down", spawnRampInfrontOfPlayer)
+		end
+		rampControlKey = theKey
+	end 
+)
+
+addEvent("onServerProvideRampingSpawnDistanceInformation", true)
+addEventHandler("onServerProvideRampingSpawnDistanceInformation", resourceRoot,
+	function(theDistance)
+		rampSpawnDistance = theDistance
+	end 
+)
+
+addEventHandler("onClientResourceStart", root,
+	function()
+		triggerServerEvent("onClientRequestRampingObjectId", resourceRoot)
+		triggerServerEvent("onClientRequestRampingVisbilityTime", resourceRoot)
+		triggerServerEvent("onClientRequestRampingControlKey", resourceRoot)
+		triggerServerEvent("onClientRequestRampingSpawnDistance", resourceRoot)
+	end
+)
 
 addEventHandler("onClientVehicleCollision", root, 
 	function(theHitElement)
@@ -67,9 +140,9 @@ addEventHandler("onClientVehicleCollision", root,
 	end 
 )
 
-function checkToEndRamping()
 
-	if(getTickCount() - rampLastCollisionTime > rampSpawnDistance * 100) then
+function checkToEndRamping()
+	if(not getPedOccupiedVehicle(localPlayer) or (getTickCount() - rampLastCollisionTime > rampSpawnDistance * 100)) then
 	
 		triggerEvent("onClientEndRamping", localPlayer, numberOfConsecutiveRampsClimbed)
 		killTimer(checkToEndRampingTimer)
@@ -78,61 +151,4 @@ function checkToEndRamping()
 		checkToEndRampingTimer = nil
 		rampLastCollisionTime = nil
 	end 
-	
 end 
-
-addEventHandler("onClientVehicleEnter", root,
-	function()
-		if(getVehicleType(source) == "Automobile" or getVehicleType(source) == "Bike" or getVehicleType(source) == "BMX"
-		or getVehicleType(source) == "Monster Truck" or getVehicleType(source) == "Quad") then 
-			bindKey(rampControlKey, "down", spawnRamp)
-		end
-	end 
-)	
-
-addEventHandler("onClientVehicleExit", root, 
-	function()
-		unbindKey(rampControlKey, "down", spawnRamp)
-	end 
-)
-
-addEvent("onServerProvideRampingObjectIdInformation", true)
-addEventHandler("onServerProvideRampingObjectIdInformation", resourceRoot,
-	function(therampModelId)
-		rampModelId = therampModelId
-	end 
-)
-
-addEvent("onServerProvideRampingTimeInformation", true)
-addEventHandler("onServerProvideRampingTimeInformation", resourceRoot,
-	function(theTime)
-		rampVisbilityTime = theTime
-	end 
-)
-
-addEvent("onServerProvideRampingControlInformation", true)
-addEventHandler("onServerProvideRampingControlInformation", resourceRoot,
-	function(theKey)
-		if(rampControlKey) then 
-			-- Remove any existsing binds in case this is being updated
-			unbindKey(rampControlKey, "down", spawnRamp)
-		end
-		rampControlKey = theKey
-	end 
-)
-
-addEvent("onServerProvideRampingSpawnDistanceInformation", true)
-addEventHandler("onServerProvideRampingSpawnDistanceInformation", resourceRoot,
-	function(theDistance)
-		rampSpawnDistance = theDistance
-	end 
-)
-
-addEventHandler("onClientResourceStart", root,
-	function()
-		triggerServerEvent("onClientRequestRampingObjectId", resourceRoot)
-		triggerServerEvent("onClientRequestRampingVisbilityTime", resourceRoot)
-		triggerServerEvent("onClientRequestRampingControlKey", resourceRoot)
-		triggerServerEvent("onClientRequestRampingSpawnDistance", resourceRoot)
-	end
-)
