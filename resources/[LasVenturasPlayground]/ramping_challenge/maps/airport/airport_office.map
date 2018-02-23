@@ -1,0 +1,7 @@
+<map> 
+	<marker id="rampChallengeSignupMarker" type="cylinder" color="#00FEEFFF" size="1.5" interior="0" dimension="0" alpha="255" posX="1534.9" posY="1849" posZ="9.8" rotX="0" rotY="0" rotZ="0"></marker>
+    <object id="object (trailer_large1_01) (1)" breakable="true" interior="0" alpha="255" model="3167" doublesided="false" scale="1" dimension="-1" posX="1537.7" posY="1852.5" posZ="9.8" rotX="0" rotY="0" rotZ="180"></object>
+    <object id="object (waterjumpx2) (1)" breakable="true" interior="0" alpha="255" model="1655" doublesided="false" scale="1" dimension="-1" posX="1526.7" posY="1855.2" posZ="9.6" rotX="0" rotY="0" rotZ="266"></object>
+    <ped id="rampSchoolTeacher" dimension="0" model="309" interior="0" rotZ="92.004" frozen="true" alpha="255" posX="1535.4" posY="1847.2" posZ="10.8" rotX="0" rotY="0"></ped>
+    <object id="object (waterjump1) (1)" breakable="true" interior="0" alpha="255" model="1632" doublesided="false" scale="1" dimension="-1" posX="1541.9" posY="1841.3" posZ="9.1" rotX="358" rotY="0" rotZ="354"></object>
+</map>

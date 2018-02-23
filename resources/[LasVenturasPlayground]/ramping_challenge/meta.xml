@@ -1,0 +1,13 @@
+<meta>
+	<info name="Ramping Challenge" author="Jay" version="0.1" type="script" />
+
+	<file src="client/img/ramp_challenge.png"/>
+	
+	<script src="client/ramping_challenge_c.lua" type="client" />
+	<script src="client/gui_c.lua" type="client" />
+	<script src="client/tutorial_c.lua" type="client" />
+	<script src="server/ramping_challenge_s.lua"/>
+	
+	<map src="maps/airport/airport.map"/>
+	<map src="maps/airport/airport_office.map"/>
+</meta>
