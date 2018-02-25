@@ -2,12 +2,17 @@
 	<info name="Ramping Challenge" author="Jay" version="0.1" type="script" />
 
 	<file src="client/img/ramp_challenge.png"/>
+	<file src="client/audio/level1.mp3"/>
 	
 	<script src="client/ramping_challenge_c.lua" type="client" />
-	<script src="client/gui_c.lua" type="client" />
 	<script src="client/tutorial_c.lua" type="client" />
+	
+	<script src="client/interface/gui_c.lua" type="client" />
+	
 	<script src="server/ramping_challenge_s.lua"/>
 	
 	<map src="maps/airport/airport.map"/>
 	<map src="maps/airport/airport_office.map"/>
+	
+	<export function="hasPlayerCompletedRampingChallenge" type="client"/>
 </meta>
