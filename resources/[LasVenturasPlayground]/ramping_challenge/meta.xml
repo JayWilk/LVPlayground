@@ -6,13 +6,19 @@
 	
 	<script src="client/ramping_challenge_c.lua" type="client" />
 	<script src="client/tutorial_c.lua" type="client" />
-	
+	<script src="client/api_c.lua" type="client"/>
 	<script src="client/interface/gui_c.lua" type="client" />
 	
 	<script src="server/ramping_challenge_s.lua"/>
+	<script src="server/utils_s.lua"/>
 	
 	<map src="maps/airport/airport.map"/>
 	<map src="maps/airport/airport_office.map"/>
 	
 	<export function="hasPlayerCompletedRampingChallenge" type="client"/>
+	
+	<settings>
+		<!-- Used for dimension id calculation. In theory, dimension Ids can range from the offset, to the maximum player count. e.g 200 - 232 -->
+		<setting name="*dimensionIdOffset" value="200" friendlyname="Dimension Id offset" accept="*" group="Gameplay" desc="Sets the dimension offset" />
+	</settings>
 </meta>

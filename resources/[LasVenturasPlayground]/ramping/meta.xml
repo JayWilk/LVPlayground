@@ -1,6 +1,12 @@
 <meta>
 	<info name="Ramping" author="Jay" version="0.1" type="script" />
+	
 	<script src="client/ramping_c.lua" type="client" />
+	<script src="client/api_c.lua" type="client" />
+	
+	<export function="isRampingEnabled" type="client" />
+	<export function="toggleRamping" type="client" />
+	
 	<script src="server/ramping_s.lua"/>
 
 	<settings>
@@ -8,5 +14,6 @@
 		<setting name="*rampVisibilityTime" value="3000" friendlyname="Time in milliseconds the ramp is visible for" accept="*" group="Gameplay"/>
 		<setting name="*rampControlKey" value="lctrl" friendlyname="The control key used to spawn a ramp" examples="enter, space, F2, fire, accelerate, lctrl" accept="*" group="Gameplay"/>
 		<setting name="*rampSpawnDistance" value="20" friendlyname="Distance in meters that the ramp will spawn in front of the player" accept="*" group="Gameplay" examples="20, 30"/>
+		<setting name="*rampCost" value="5" friendlyname="Ramp price" accept="*" group="Gameplay" examples="5,10,15,20"/>
 	 </settings>
 </meta>

@@ -19,7 +19,6 @@ addEventHandler("onClientEnterRampingChallengeSignupMarker", localPlayer,
 		
 		rampSignupPosX, rampSignupPosY, rampSignupPosZ = getElementPosition(localPlayer)
 		
-		
 		showRampingChallengeSignupDialog()
 		playSFX("genrl", 52, 18, false)
 	end
@@ -51,7 +50,7 @@ addEventHandler("onClientVehicleEnter", resourceRoot,
 			hideRampingChallengeInstructions()
 			triggerServerEvent("onClientRequestRampingChallengeVehicleMarkerAndBlipDestroy", resourceRoot, source)
 			triggerEvent("onClientReadyToBeginRampingChallenge", localPlayer)
-
+			exports.ramping:toggleRamping(false)
 			
 			if(rampingChallengeRaceCheckpoints) then 
 				if #rampingChallengeRaceCheckpoints > 0 then
@@ -62,7 +61,8 @@ addEventHandler("onClientVehicleEnter", resourceRoot,
 					z = getElementData(rampingChallengeRaceCheckpoints[1], "posZ")
 					size = getElementData(rampingChallengeRaceCheckpoints[1], "size")
 					
-					createMarker(x, y, z, "checkpoint", size, 255, 0, 0, 0)
+					local marker = createMarker(x, y, z, "checkpoint", size, 255, 0, 0, 0)
+					setElementDimension(marker, getElementData(localPlayer, "rampingChallengeDimensionId"))
 				end
 			end
 			
@@ -85,10 +85,13 @@ addEventHandler("onClientMarkerHit", resourceRoot,
 		if(rampingChallengeRaceCheckpointsHit == #rampingChallengeRaceCheckpoints + 1) then
 			showRampingChallengeInstructions("Press LCTRL to Spawn a ramp!", 3000) -- todo: manage!
 			
+			-- activate ramping
+			exports.ramping:toggleRamping(true)
+			
 			-- todo: improve! slow game speed etc
 			rampStartTimeoutTimer = setTimer(
 				function()
-					showRampingChallengeInstructions("You didn't reach a ramp in time!!")
+					showRampingChallengeInstructions("You didn't reach it to a ramp!")
 					setGameSpeed(0.5)
 					
 					setTimer(
@@ -96,9 +99,9 @@ addEventHandler("onClientMarkerHit", resourceRoot,
 							setGameSpeed(1.0)
 							triggerEvent("onClientEndRampingChallenge", localPlayer)
 						end,
-					8000, 1)
+					3000, 1)
 					
-				end, 8000, 1)
+				end, 4000, 1)
 			
 		else
 			local x, y, z, size
@@ -107,7 +110,8 @@ addEventHandler("onClientMarkerHit", resourceRoot,
 			z = getElementData(rampingChallengeRaceCheckpoints[rampingChallengeRaceCheckpointsHit], "posZ")
 			size = getElementData(rampingChallengeRaceCheckpoints[rampingChallengeRaceCheckpointsHit], "size")
 		
-			createMarker(x, y, z, "checkpoint", size, 255, 0, 0, 0)
+			local marker = createMarker(x, y, z, "checkpoint", size, 255, 0, 0, 0)
+			setElementDimension(marker, getElementData(localPlayer, "rampingChallengeDimensionId"))
 		end 
 	
 	end 
@@ -123,7 +127,7 @@ addEventHandler("onClientReadyToBeginRampingChallenge", localPlayer,
 		togglePlayerRampingChallengeCountdownControlRestrictions(true)
 		outputChatBox("get ready!")
 		
-		--toggleControl("enter_exit", false)
+		toggleControl("enter_exit", false)
 		
 		-- todo: manage text, and sort out the "LCTRL" reference so it pulls it in from the ramping API
 		showRampingChallengeInstructions("Follow the #ff0000checkpoints#FFFFFF to the first ramp at the end of the runway,\n and then press LCTRL to start ramping in mid-air.", 8000)
@@ -135,8 +139,19 @@ addEventHandler("onClientReadyToBeginRampingChallenge", localPlayer,
 				setTimer(
 					function()
 						outputChatBox(tostring(countdown))
-
-						if(countdown == 0) then
+						
+						if(countdown > 1) then
+						
+							playSFX("script", 16, 5, false)
+							
+						elseif (countdown == 1) then
+						
+							playSFX("script", 16, 1, false)
+							
+						elseif(countdown == 0) then
+						
+							playSFX("script", 6, 1, false)
+							
 							triggerEvent("onClientBeginRampingChallenge", localPlayer)
 						end
 						
@@ -148,14 +163,21 @@ addEventHandler("onClientReadyToBeginRampingChallenge", localPlayer,
 	end
 )	
 	
+
 -- Countdown is done, the player is ready to go!
 addEvent("onClientBeginRampingChallenge")
 addEventHandler("onClientBeginRampingChallenge", localPlayer,
 	function()
 		togglePlayerRampingChallengeCountdownControlRestrictions(false)
+		
 		outputChatBox("******** GO GO GO *********", 255, 0, 0)
 		
 		rampingMusic = playSound("client/audio/level1.mp3", true)
+		
+		setPedCanBeKnockedOffBike(localPlayer, false)
+		
+		local theVehicle = getPedOccupiedVehicle(localPlayer)
+		setVehicleDamageProof(theVehicle, true)
 	end
 )
 	
@@ -221,6 +243,11 @@ addEventHandler("onClientStartRamping", localPlayer,
 		if(playerInRampingChallenge) then
 			showRampingChallengeInstructions("#00FF00Good job!", 3000)
 			
+			setPedCanBeKnockedOffBike(localPlayer, true)
+			
+			local theVehicle = getPedOccupiedVehicle(localPlayer)
+			setVehicleDamageProof(theVehicle, false)
+			
 			if(rampStartTimeoutTimer) then
 				killTimer(rampStartTimeoutTimer)
 				rampStartTimeoutTimer = nil
@@ -263,6 +290,10 @@ function removePlayerFromRampingChallenge()
 	hideRampingChallengeInstructions()
 	exports.lvpRadio:toggleStreamRadio(true)
 	
+	toggleControl("enter_exit", true)
+	setPedCanBeKnockedOffBike(localPlayer, true)
+	
+	
 	if(rampingMusic) then
 		stopSound(rampingMusic)
 		rampingMusic = nil
@@ -278,7 +309,9 @@ function removePlayerFromRampingChallenge()
 	
 	togglePlayerRampingChallengeControlRestrictions(false)
 
-	setElementDimension(localPlayer, 0)
+	-- update dimension ids both server and client side
+	triggerServerEvent("onClientRequestDimensionRestore", resourceRoot)
+	setElementDimension(localPlayer, 0 )
 	
 	if(rampSignupPosX) then
 		setElementPosition(localPlayer, rampSignupPosX, rampSignupPosY, rampSignupPosZ)

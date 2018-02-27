@@ -3,8 +3,9 @@ local playerCompletedRampingChallenge = false
 
 
 -- Todo: document!
-function hasPlayerCompletedRampingChallenge(thePlayer)
-	return playerPassedRampingChallenge
+function hasPlayerCompletedRampingChallenge()
+	outputDebugString("hasPlayerCompletedRampingChallenge() " ..tostring(playerCompletedRampingChallenge))
+	return playerCompletedRampingChallenge
 end 
 
 

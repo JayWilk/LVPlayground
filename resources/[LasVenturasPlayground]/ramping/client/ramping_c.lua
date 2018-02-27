@@ -6,39 +6,7 @@ rampControlKey = nil
 rampSpawnDistance = nil
 rampLastCollisionTime = nil
 numberOfConsecutiveRampsClimbed = 0
-checkToEndRampingTimer = nil
-
-function spawnRampInfrontOfPlayer()
-
-	if rampObject then
-		destroyElement(rampObject)
-		if(rampTimer) then
-			killTimer(rampTimer)
-		end 
-	end 
-
-	local rx, ry, rz = getElementRotation(getPedOccupiedVehicle(localPlayer))
-	local x, y, z = getElementPosition( localPlayer ) 
-	
-    local rotation = getPedRotation( localPlayer ) 
-    rotation = rotation / 180 * math.pi
-    x = x - ( math.sin(rotation) * rampSpawnDistance ) 
-    y = y + ( math.cos(rotation) * rampSpawnDistance ) 
-	
-	rampObject = createObject(rampModelId, x, y, z, 0, 0, rz)
-	rampTimer = setTimer(destroyRamp, rampVisbilityTime, 1)
-	
-end 
-
-function destroyRamp()
-	destroyElement(rampObject)
-	killTimer(rampTimer)
-	
-	rampTimer = nil
-	rampObject = nil
-end 
-
-
+checkToEndRampingSequenceTimer = nil
 
 addEvent("onClientStartRamping")
 addEventHandler("onClientStartRamping", root,
@@ -73,6 +41,7 @@ addEventHandler("onClientVehicleEnter", root,
 addEventHandler("onClientVehicleExit", root, 
 	function()
 		unbindKey(rampControlKey, "down", spawnRampInfrontOfPlayer)
+		unbindKey(rampControlKey, "down", showRampingInformationToPlayer)
 	end 
 )
 
@@ -131,7 +100,7 @@ addEventHandler("onClientVehicleCollision", root,
 					end 
 				else  
 					triggerEvent("onClientStartRamping", localPlayer)
-				    checkToEndRampingTimer = setTimer(checkToEndRamping, 100, 0)
+				    checkToEndRampingSequenceTimer = setTimer(checkToEndRampingSequence, 100, 0)
 				end 
 				
 				rampLastCollisionTime = getTickCount()
@@ -140,15 +109,52 @@ addEventHandler("onClientVehicleCollision", root,
 	end 
 )
 
+function spawnRampInfrontOfPlayer()
 
-function checkToEndRamping()
+	if not isRampingEnabled() then
+		return
+	end
+
+	if rampObject then
+		destroyElement(rampObject)
+		if(rampTimer) then
+			killTimer(rampTimer)
+		end 
+	end 
+
+	local rx, ry, rz = getElementRotation(getPedOccupiedVehicle(localPlayer))
+	local x, y, z = getElementPosition( localPlayer ) 
+	
+    local rotation = getPedRotation( localPlayer ) 
+    rotation = rotation / 180 * math.pi
+    x = x - ( math.sin(rotation) * rampSpawnDistance ) 
+    y = y + ( math.cos(rotation) * rampSpawnDistance ) 
+	
+	rampObject = createObject(rampModelId, x, y, z, 0, 0, rz)
+	setObjectDimension(rampObject, getElementDimension(localPlayer))
+	
+	rampTimer = setTimer(destroyRamp, rampVisbilityTime, 1)
+	
+end 
+
+
+function destroyRamp()
+	destroyElement(rampObject)
+	killTimer(rampTimer)
+	
+	rampTimer = nil
+	rampObject = nil
+end 
+
+function checkToEndRampingSequence()
 	if(not getPedOccupiedVehicle(localPlayer) or (getTickCount() - rampLastCollisionTime > rampSpawnDistance * 100)) then
 	
 		triggerEvent("onClientEndRamping", localPlayer, numberOfConsecutiveRampsClimbed)
-		killTimer(checkToEndRampingTimer)
+		killTimer(checkToEndRampingSequenceTimer)
 		
 		numberOfConsecutiveRampsClimbed = 0
-		checkToEndRampingTimer = nil
+		checkToEndRampingSequenceTimer = nil
 		rampLastCollisionTime = nil
 	end 
 end 
+

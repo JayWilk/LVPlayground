@@ -1,0 +1,94 @@
+Environment:
+- A ramping office which looks presentable
+- A ped
+  - Ped should be frozen, and cannot be shot at and killed
+  - The ped skin should be janitor
+
+- A lightblue marker for starting the ramping challenge
+  - When entered, marker disappears and plays a GTA sound, and a dialog is presented
+  - The marker reappears when leaving the area 
+
+Dialog:
+- When entering the marker, a dialog should appear to start ramping
+  - The dialog should be positioned centrally on the players screen
+  - When the dialog is showing for the user, the cursor should be available
+  - The player should be frozen, unable to use world controls, whilst the dialog is showing
+
+- The dialog should contain a clear image of the ramping challenge
+- The text in the dialog should be clear, no spelling mistakes or grammar issues
+
+- Two buttons, yes/no
+  - Yes will proceed with the pre ramping state. 
+      - The players screen should fade in
+      - Prompt with another dialog, asking if they wish to start the tutorial
+      - Yes/No options
+          - Yes to start the tutorial -- TODO
+          - No to skip, and immediately proceed to the PrepareToStart phase
+
+PrepareToStart:
+- Player should be teleported to a position near the start point
+- Player should be facing the objective, and the camera should be behind them
+- Players screen should fade out
+- Player should not be able to inflict any damage (for the remainder of the ramping challenge)
+- Teleported to a new, unique dimension
+   - No other entities should ever be in this dimension (including other players - extra testing needed)
+- A ramping vehicle should spawn, with a red marker and a red map icon (blip) attached to it
+- The ramping map should be visible (fences along the runway and a ramp at the end)
+
+- Instructional text should render for the player
+  - The text should be positioned at the bottom of the screen, centrally
+  - It should explain to the player to get in the vehicle, with clear grammar and spelling
+  - The vehicle name should be highlighted in red inline with the map icon and marker attached to the vehicle
+  - It should be clear what the player needs to do to proceed
+
+- The player:
+
+  - Should have their armed weapon set to fist
+  - Should not be able to switch weapons
+  - Should not be able to fire or aim a weapon or punch
+  - Should not be able to enter any other vehicle (as none should be available)
+  - Should not be able to enter any vehicle as passenger
+
+ Upon entering the vehicle:
+
+   - No radio should be playing (including stream radio)
+   - It should not be possible to switch radio stations  
+   - It should not be possible to driveby
+   - It should not be possible to spawn a ramp
+   - The vehicle should be frozen 
+   - The first race checkpoint should be visible
+   - Further instructions should be presented
+	- Clear spelling grammar
+	- Clear on what the player needs to do
+        - Shown on screen for 8 seconds
+   - After 8 seconds have passed, a countdown should start. 
+   - The countdown
+	- Should play a sound for each second that passes
+	- Play a higher pitched sound on 1 second
+	- Play an airhorn sound on "Go"
+   - When the countdown is finished:
+	- The player should be able to move and control the vehicle
+	- Should still, as before, be unable to spawn a ramp
+	- Should not be able to exit the vehicle
+	- If the vehicle is a motorbike, should not be able to fall off the motorbike
+	- The vehicle, at this point, should have unlimited health
+	- The player should have 30 seconds to get to the last red checkpoint
+   - When the player enters the last red checkpoint:
+        - Their vehicle no longer has unlimited health
+	- It's possible again to fall off if its a motorcycle
+	- The player has 5 seconds to start ramping
+
+
+
+
+   - If the player fails to start ramping after 5 seconds:
+
+ 
+   - If the player succeeds to start ramping after 5 seconds:
+
+
+
+ 
+
+
+

@@ -133,6 +133,13 @@ addEventHandler("onClientRequestRampingChallengeObjectsDestroy", resourceRoot,
 	end
 )
 
+addEvent("onClientRequestDimensionRestore", true)
+addEventHandler("onClientRequestDimensionRestore", resourceRoot,
+	function()
+		setElementDimension(client, 0)
+	end
+)
+
 function spawnPlayerAtRampingChallengeStartPos(thePlayer, rampChallengeStartPos)
 	
 	if(thePlayer and rampChallengeStartPos) then
@@ -150,10 +157,35 @@ end
 
 function findEmptyDimensionId()
 
-	-- TODO: Logic to calculate a relevant dimension Id,
-	-- Based on any available slots (taking into consideration other players on the challenge)
-	return 0
+	local dimensionIdOffset = tonumber(get("dimensionIdOffset"))
+	outputDebugString("dimension id offset: " ..tostring(dimensionIdOffset))
+	local iter = 0
+	
+	if(not dimensionIdOffset) then
+		outputDebugString("Unable to obtain dimensionIdOffset", 1 )
+	end 
+	
+	while(iter ~= getPlayerCount()) do
+	
+		local dimensionId = dimensionIdOffset + iter
+		local players = getElementsInDimension("player", dimensionId)
+		
+		if(#players == 0) then
+			return dimensionId
+		else
+			outputDebugString("No of players in dimension Id "..tostring(dimensionId) .. ": " ..tostring(#players))
+		end 
+
+		iter = iter + 1
+	end 
+	
+	-- should, in theory, be impossible to ever get here. And if we do ever get here, it means
+	-- someone else is using our dimension ids for other activities. 
+	outputDebugString("No available dimension Ids were found for the ramping challenge", 1 )
+	return false
 end 
+
+
 
 function spawnRampingChallengeVehicleWithMarkerAndBlip(rampChallengeVehicle, thePlayer)
 
@@ -176,4 +208,6 @@ function spawnRampingChallengeVehicleWithMarkerAndBlip(rampChallengeVehicle, the
 	
 	return theVehicle
 end 
+
+
 
