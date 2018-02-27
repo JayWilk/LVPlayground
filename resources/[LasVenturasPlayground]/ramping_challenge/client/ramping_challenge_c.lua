@@ -1,37 +1,3 @@
---[[
-	--The ramping challenge--
-	
-	Lots to document here, so popping some notes in the header for now.
-	
-	TODO:
-	- Sort out documentation as a whole
-	- Look into LUA docs? 
-	- Put a process in place and streamline documentation policies across resources for consistency 
-	- Sort out text so that its localised
-	- Change the "LCTRL" ramping reference
-	
-	events:
-	
-	onClientEnterRampingChallengeSignupMarker
-		--showRampingChallengeSignupDialog
-		--hideRampingChallengeSignupDialog
-		
-	onClientStartRampingChallengeTutorial
-	onClientSkipRampingChallengeTutorial
-	onClientFinishRampingChallengeTutorial
-	
-	onClientPrepareToBeginRampingChallenge - this occurs after the tutorial, when the player is instructed to go and get on the bike 
-	onClientReadyToBeginRampingChallenge - when the client has got on the bike, and all is ready. 
-	onClientBeginRampingChallenge - this occurs after the countdown has finished, and the challenge begins
-	
-	
-	-- Need to think about better naming conventions here, as it's not clear. 
-	
-	onClientStartRampingChallenge - the difference between this, and the begin() event, is that this is triggered when the client starts the actual ramping 
-	onClientFailRampingChallenge  - the client has failed the ramping challenge 
-	onClientCompleteRampingChallenge - the client has finished the challenge. 
-]]
-
 playerInRampingChallenge = false
 rampingChallengeRaceCheckpoints = { }
 rampingChallengeRaceCheckpointsHit = 1
@@ -68,6 +34,8 @@ addEventHandler("onClientPrepareToBeginRampingChallenge", localPlayer,
 		showRampingChallengeInstructions("Get in the #ff0000FCR-900#FFFFFF!")
 		playerInRampingChallenge = true
 		triggerServerEvent("onClientRequestRampingChallengeEnvironmentInitialise", resourceRoot)
+		-- Disable stream radio
+		exports.lvpRadio:toggleStreamRadio(false)
 	end
 )
 	
@@ -233,7 +201,7 @@ addEventHandler("onClientEndRamping", localPlayer,
 				rampingMusic = nil
 			end
 			
-			setGameSpeed(0.5)
+			setGameSpeed(0.4)
 			fadeCamera(false, 1)
 			
 			setTimer(
@@ -242,7 +210,7 @@ addEventHandler("onClientEndRamping", localPlayer,
 					triggerEvent("onClientEndRampingChallenge", localPlayer)
 					fadeCamera(true)
 				end, 
-			15000, 1)
+			6000, 1)
 			
 		end 
 	end
@@ -293,6 +261,7 @@ function removePlayerFromRampingChallenge()
 	playerInRampingChallenge = false
 	rampingChallengeRaceCheckpointsHit = 1
 	hideRampingChallengeInstructions()
+	exports.lvpRadio:toggleStreamRadio(true)
 	
 	if(rampingMusic) then
 		stopSound(rampingMusic)

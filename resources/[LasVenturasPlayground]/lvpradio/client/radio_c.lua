@@ -53,7 +53,6 @@ addEventHandler("onClientResourceStart", root,
 
 
 function startStreamRadio()
-	outputDebugString("startStreamRadio: name: "..tostring(radioStreamName) .. " Url: " ..tostring(radioUrl))
 	if(radioUrl and sound == nil) then
 		sound = playSound(radioUrl)
 		radioPlaying = true
@@ -70,7 +69,7 @@ function stopStreamRadio()
 end
 
 
-addEventHandler("onClientPlayerVehicleEnter", root
+addEventHandler("onClientPlayerVehicleEnter", root,
 	function()
 		if(isStreamRadioEnabled()) then
 			startStreamRadio()
