@@ -30,8 +30,8 @@ addEventHandler("onClientReceiveRadioStreamUrlInformation", localPlayer,
 	function(theUrl)
 		radioUrl = theUrl
 		if(radioPlaying) then 
-			stopRadio()
-			startRadio()
+			stopStreamRadio()
+			startStreamRadio()
 		end 
 	end 
 )
@@ -52,8 +52,8 @@ addEventHandler("onClientResourceStart", root,
 )
 
 
-function startRadio()
-	outputDebugString("startRadio: name: "..tostring(radioStreamName) .. " Url: " ..tostring(radioUrl))
+function startStreamRadio()
+	outputDebugString("startStreamRadio: name: "..tostring(radioStreamName) .. " Url: " ..tostring(radioUrl))
 	if(radioUrl and sound == nil) then
 		sound = playSound(radioUrl)
 		radioPlaying = true
@@ -61,7 +61,7 @@ function startRadio()
 	end 
 end
 
-function stopRadio()
+function stopStreamRadio()
 	if  sound then 
 		stopSound(sound)
 		sound = nil
@@ -70,9 +70,16 @@ function stopRadio()
 end
 
 
-addEventHandler("onClientPlayerVehicleEnter", root, startRadio)
-addEventHandler("onClientVehicleStartExit", root, stopRadio)
-addEventHandler("onClientVehicleExit", root, stopRadio)
-addEventHandler("onClientPlayerDeath", root, stopRadio)
-addEventHandler("onClientPlayerWasted", root, stopRadio)
-addEventHandler("onClientPlayerSpawn", root, stopRadio)
+addEventHandler("onClientPlayerVehicleEnter", root
+	function()
+		if(isStreamRadioEnabled()) then
+			startStreamRadio()
+		end 
+	end 
+
+)
+addEventHandler("onClientVehicleStartExit", root, stopStreamRadio)
+addEventHandler("onClientVehicleExit", root, stopStreamRadio)
+addEventHandler("onClientPlayerDeath", root, stopStreamRadio)
+addEventHandler("onClientPlayerWasted", root, stopStreamRadio)
+addEventHandler("onClientPlayerSpawn", root, stopStreamRadio)
