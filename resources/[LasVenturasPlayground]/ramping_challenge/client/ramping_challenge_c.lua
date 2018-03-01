@@ -29,6 +29,7 @@ addEventHandler("onClientEnterRampingChallengeSignupMarker", localPlayer,
 addEvent("onClientPrepareToBeginRampingChallenge")
 addEventHandler("onClientPrepareToBeginRampingChallenge", localPlayer, 
 	function()
+		setCameraTarget(localPlayer)
 		togglePlayerRampingChallengeControlRestrictions(true)
 		showRampingChallengeInstructions("Get in the #ff0000FCR-900#FFFFFF!")
 		playerInRampingChallenge = true

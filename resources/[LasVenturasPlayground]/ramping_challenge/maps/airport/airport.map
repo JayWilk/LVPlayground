@@ -1,6 +1,6 @@
 <map>
 	<!-- Ramping course -->
-	<rampChallengeStartPos posX="1537.2" posY="1840" posZ="10.9" rotZ="90"/>
+	<rampChallengeStartPos posX="1537.2978515625" posY="1839.9794921875" posZ="10.9" rotZ="90"/>
 	<rampChallengeVehicle model="521" posX="1477.2" posY="1837.3" posZ="10.5" rotZ="180"/>
 	
 

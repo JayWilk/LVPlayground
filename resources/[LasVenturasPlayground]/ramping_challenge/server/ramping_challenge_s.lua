@@ -152,6 +152,8 @@ function spawnPlayerAtRampingChallengeStartPos(thePlayer, rampChallengeStartPos)
 
 		setElementPosition(thePlayer, x, y, z)
 		setElementRotation(thePlayer, 0, 0, rz)
+		
+		setTimer(setCameraTarget, 100, 1, thePlayer, thePlayer)
 	end 
 end 
 
