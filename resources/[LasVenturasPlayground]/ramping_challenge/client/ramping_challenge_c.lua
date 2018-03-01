@@ -2,12 +2,14 @@ playerInRampingChallenge = false
 rampingChallengeRaceCheckpoints = { }
 rampingChallengeRaceCheckpointsHit = 1
 rampingMusic = nil
-
-rampSignupPosX = nil
-rampSignupPosY = nil
-rampSignupPosZ = nil
-
 rampStartTimeoutTimer = nil
+
+addCommandHandler("gotoramp", 
+	function()
+		setElementPosition(localPlayer, 1520.736328125, 1847.427734375, 10.8203125)
+	end
+)
+
 
 addEvent("onClientEnterRampingChallengeSignupMarker", true)
 addEventHandler("onClientEnterRampingChallengeSignupMarker", localPlayer, 
@@ -16,8 +18,6 @@ addEventHandler("onClientEnterRampingChallengeSignupMarker", localPlayer,
 		if(getElementDimension(localPlayer)) ~= 0 then
 			return
 		end
-		
-		rampSignupPosX, rampSignupPosY, rampSignupPosZ = getElementPosition(localPlayer)
 		
 		showRampingChallengeSignupDialog()
 		playSFX("genrl", 52, 18, false)
@@ -29,7 +29,6 @@ addEventHandler("onClientEnterRampingChallengeSignupMarker", localPlayer,
 addEvent("onClientPrepareToBeginRampingChallenge")
 addEventHandler("onClientPrepareToBeginRampingChallenge", localPlayer, 
 	function()
-		setCameraTarget(localPlayer)
 		togglePlayerRampingChallengeControlRestrictions(true)
 		showRampingChallengeInstructions("Get in the #ff0000FCR-900#FFFFFF!")
 		playerInRampingChallenge = true
@@ -89,20 +88,11 @@ addEventHandler("onClientMarkerHit", resourceRoot,
 			-- activate ramping
 			exports.ramping:toggleRamping(true)
 			
-			-- todo: improve! slow game speed etc
 			rampStartTimeoutTimer = setTimer(
 				function()
-					showRampingChallengeInstructions("You didn't reach it to a ramp!")
-					setGameSpeed(0.5)
-					
-					setTimer(
-						function()
-							setGameSpeed(1.0)
-							triggerEvent("onClientEndRampingChallenge", localPlayer)
-						end,
-					3000, 1)
-					
-				end, 4000, 1)
+					triggerEvent("onClientEndRampingChallenge", localPlayer, "fail", true)
+				end, 
+			4000, 1)
 			
 		else
 			local x, y, z, size
@@ -185,12 +175,42 @@ addEventHandler("onClientBeginRampingChallenge", localPlayer,
 -- Called when the client ENDS the ramping challenge (but not finished it)
 addEvent("onClientEndRampingChallenge")
 addEventHandler("onClientEndRampingChallenge", localPlayer,
-	function()	
-		outputChatBox("You ended ramping without finishing. Awwh.")
-		removePlayerFromRampingChallenge()
-		cleanupRampingEnvironment()
+	function(reason, tryAgainOption)	
+		-- if the reason is provided, show it with a nice fade effect
+		if(reason) then
+
+			showRampingChallengeGameText(reason)
+			killRampingChallengeMusic()
+			
+			setGameSpeed(0.4)
+			fadeCamera(false)
+			
+			setTimer(
+				function()
+		
+					hideRampingChallengeGameText()
+					
+					if(tryAgainOption) then
+						showRampingChallengeTryAgainDialog()
+					else
+						fadeCamera(false)
+						spawnPlayerAtRampEndedPos()
+					end 
+
+					removePlayerFromRampingChallenge()
+					cleanupRampingEnvironment()
+					setGameSpeed(1)
+				end, 3000, 1)
+				
+				
+		else -- otherwise just remove the player immediately
+			removePlayerFromRampingChallenge()
+			cleanupRampingEnvironment()
+			spawnPlayerAtRampEndedPos()
+		end
 	end
 )
+
 
 -- Called when the client FINISHES the ramping challenge
 addEvent("onClientFinishRampingChallenge")
@@ -200,6 +220,7 @@ addEventHandler("onClientFinishRampingChallenge", localPlayer,
 		
 		removePlayerFromRampingChallenge()
 		cleanupRampingEnvironment()
+		spawnPlayerAtRampEndedPos()
 	end
 )
 
@@ -214,27 +235,7 @@ addEventHandler("onClientPlayerWasted", localPlayer,
 addEventHandler("onClientEndRamping", localPlayer,
 	function()
 		if(playerInRampingChallenge) then
-		
-			-- todo: improve
-			outputChatBox("******* FAIL! *********", 255, 0, 0)
-			showRampingChallengeInstructions("#FF0000FAIL!", 15000) 
-			
-			if(rampingMusic) then
-				stopSound(rampingMusic)
-				rampingMusic = nil
-			end
-			
-			setGameSpeed(0.4)
-			fadeCamera(false, 1)
-			
-			setTimer(
-				function()
-					setGameSpeed(1)
-					triggerEvent("onClientEndRampingChallenge", localPlayer)
-					fadeCamera(true)
-				end, 
-			6000, 1)
-			
+			triggerEvent("onClientEndRampingChallenge", localPlayer, "fail", true)
 		end 
 	end
 )
@@ -294,11 +295,8 @@ function removePlayerFromRampingChallenge()
 	toggleControl("enter_exit", true)
 	setPedCanBeKnockedOffBike(localPlayer, true)
 	
-	
-	if(rampingMusic) then
-		stopSound(rampingMusic)
-		rampingMusic = nil
-	end
+	killRampingChallengeMusic()
+
 	
 	for theKey, theElement in ipairs(rampingChallengeRaceCheckpoints) do 
 		if isElement(theElement) then
@@ -313,11 +311,18 @@ function removePlayerFromRampingChallenge()
 	-- update dimension ids both server and client side
 	triggerServerEvent("onClientRequestDimensionRestore", resourceRoot)
 	setElementDimension(localPlayer, 0 )
-	
-	if(rampSignupPosX) then
-		setElementPosition(localPlayer, rampSignupPosX, rampSignupPosY, rampSignupPosZ)
-		rampSignupPosX, rampSignupPosY, rampSignupPosZ = nil
-	end 
+end 
+
+function spawnPlayerAtRampEndedPos()
+	triggerServerEvent("onClientRequestSpawnAtRampingEndedPos", resourceRoot)
+end 
+
+
+function killRampingChallengeMusic()
+	if(rampingMusic) then
+		stopSound(rampingMusic)
+		rampingMusic = nil
+	end
 end 
 
 

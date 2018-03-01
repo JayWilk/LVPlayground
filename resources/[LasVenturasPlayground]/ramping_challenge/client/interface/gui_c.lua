@@ -7,6 +7,8 @@ GUIEditor = {
 
 instructionTextShowing = false
 instructionText = nil
+rampingChallengeGameText = nil
+
 
 -- TODO: Sort, localise the text
 addEventHandler("onClientResourceStart", resourceRoot, 
@@ -48,10 +50,22 @@ addEventHandler("onClientResourceStart", resourceRoot,
         GUIEditor.button[4] = guiCreateButton(201, 90, 112, 38, "No", false, GUIEditor.window[2])    
 		
 		
+		-- try again dialog
+		 GUIEditor.window[3] = guiCreateWindow((screenW - 319) / 2, (screenH - 130) / 2, 319, 130, "Ramping Challenge", false)
+        guiWindowSetMovable(GUIEditor.window[3], false)
+        guiWindowSetSizable(GUIEditor.window[3], false)
+        GUIEditor.label[5] = guiCreateLabel(55, 37, 218, 33, "Would you like to try again?", false, GUIEditor.window[3])
+        guiLabelSetHorizontalAlign(GUIEditor.label[5], "center", true)
+        guiLabelSetVerticalAlign(GUIEditor.label[5], "center")
+        GUIEditor.button[5] = guiCreateButton(0.05, 0.62, 0.37, 0.19, "Yes", true, GUIEditor.window[3])
+        GUIEditor.button[6] = guiCreateButton(192, 80, 117, 25, "No", false, GUIEditor.window[3])    
+		
+		
 		guiSetInputMode("allow_binds")
 		
 		guiSetVisible(GUIEditor.window[1], false)
 		guiSetVisible(GUIEditor.window[2], false)
+		guiSetVisible(GUIEditor.window[3], false)
 		
 		-- EVENT HANDLERS - button click 
 		addEventHandler("onClientGUIClick", GUIEditor.button[2], hideRampingChallengeSignupDialog, false)
@@ -77,6 +91,23 @@ addEventHandler("onClientResourceStart", resourceRoot,
 			end
 		)
 		
+		-- try again - yes 
+		addEventHandler("onClientGUIClick", GUIEditor.button[5], 
+			function()
+				hideRampingChallengeTryAgainDialog()
+				fadeCamera(true)
+				triggerEvent("onClientPrepareToBeginRampingChallenge", localPlayer)
+			end, 
+		false)
+		
+		-- try again - no
+		addEventHandler("onClientGUIClick", GUIEditor.button[6], 
+			function()
+				hideRampingChallengeTryAgainDialog()
+				fadeCamera(true)
+				spawnPlayerAtRampEndedPos()
+			end, 
+		false)
 		
 	end 
 )
@@ -91,6 +122,12 @@ addEventHandler("onClientRender", root,
 			--dxDrawText ( instructionText, 0 + 3, g_screenY * 0.75 + 3, g_screenX, g_screenY, shadowColor, 2, "default", "center", "top", false, true, false, true )
 			dxDrawText ( instructionText, 0, g_screenY*0.75, g_screenX, g_screenY, color, 2, "default", "center", "top", false, true, false, true )
 		end 
+		
+		if(rampingChallengeGameText) then
+			local screenW, screenH = guiGetScreenSize()
+			dxDrawText(rampingChallengeGameText, (screenW - 408) / 2, (screenH - 92) / 2, ((screenW - 408) / 2) + 408, ( (screenH - 92) / 2) + 92, tocolor(255, 255, 255, 255), 4.00, "pricedown", "center", "center", true, false, false, false, false)
+		end 
+		
 	end 
 )
 
@@ -116,6 +153,17 @@ function hideRampingChallengeTutorialSkipDialog()
 	guiSetVisible(GUIEditor.window[2], false)
 end 
 
+function showRampingChallengeTryAgainDialog()
+	guiSetInputMode("no_binds")
+	guiSetVisible(GUIEditor.window[3], true)
+	showCursor(true)
+end 
+
+function hideRampingChallengeTryAgainDialog()
+	guiSetInputMode("allow_binds")
+	guiSetVisible(GUIEditor.window[3], false)
+	showCursor(false)
+end 
 
 function showRampingChallengeInstructions(text, time)
 	instructionTextShowing = true
@@ -132,6 +180,15 @@ function hideRampingChallengeInstructions()
 	instructionTextShowing = false
 end 
 
+function showRampingChallengeGameText(text)
+	rampingChallengeGameText = text 
+end 
+
+function hideRampingChallengeGameText()
+	rampingChallengeGameText = nil
+end 
+
+
 --[[
 addEventHandler("onClientRender", root,
     function()
@@ -144,6 +201,19 @@ addEventHandler("onClientRender", root,
 			dxDrawText(tostring(rampsClimbed) .. " / 250 ramps climbed!", 512, 139, 864, 176, tocolor(255, 255, 255, 255), 1.00, "bankgothic", "center", "top", false, false, false, false, false)
 			dxDrawText("Altitude: "..getAltitudeString(), 649, 176, 730, 190, tocolor(255, 255, 255, 255), 1.00, "default", "center", "top", false, false, false, false, false)
 		end 
+		
+
     end
 )
 ]]
+
+
+
+
+addEventHandler("onClientResourceStart", resourceRoot,
+    function()
+local screenW, screenH = guiGetScreenSize()
+       
+    end
+)
+

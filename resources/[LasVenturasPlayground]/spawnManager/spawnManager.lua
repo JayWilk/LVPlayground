@@ -49,7 +49,8 @@ function spawnPlayerAtRandomPosition(thePlayer)
 	spawnPlayer( thePlayer, spawns[rnd].x, spawns[rnd].y, spawns[rnd].z, math.floor(spawns[rnd].r))
 
 	fadeCamera(thePlayer, true)
-	setCameraTarget(thePlayer) 
+	
+	setTimer(setCameraTarget, 50, 1, thePlayer, thePlayer)
 end
 
 

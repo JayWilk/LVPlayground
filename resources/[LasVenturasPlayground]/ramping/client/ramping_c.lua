@@ -131,7 +131,7 @@ function spawnRampInfrontOfPlayer()
     y = y + ( math.cos(rotation) * rampSpawnDistance ) 
 	
 	rampObject = createObject(rampModelId, x, y, z, 0, 0, rz)
-	setObjectDimension(rampObject, getElementDimension(localPlayer))
+	setElementDimension(rampObject, getElementDimension(localPlayer))
 	
 	rampTimer = setTimer(destroyRamp, rampVisbilityTime, 1)
 	

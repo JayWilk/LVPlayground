@@ -53,8 +53,6 @@ addEventHandler("onClientRequestRampingChallengeEnvironmentInitialise", resource
 		setElementData(client, "rampingChallengeDimensionId", dimensionId)
 		setElementData(client, "rampingChallengeVehicle", theVehicle)
 		
-		setCameraTarget(client, theVehicle)
-		
 		local rampChallengeObjectElements = getElementsByType("rampChallengeObject")
 		
 		for theKey, theElement in ipairs(rampChallengeObjectElements) do
@@ -140,6 +138,7 @@ addEventHandler("onClientRequestDimensionRestore", resourceRoot,
 	end
 )
 
+
 function spawnPlayerAtRampingChallengeStartPos(thePlayer, rampChallengeStartPos)
 	
 	if(thePlayer and rampChallengeStartPos) then
@@ -153,9 +152,37 @@ function spawnPlayerAtRampingChallengeStartPos(thePlayer, rampChallengeStartPos)
 		setElementPosition(thePlayer, x, y, z)
 		setElementRotation(thePlayer, 0, 0, rz)
 		
-		setTimer(setCameraTarget, 100, 1, thePlayer, thePlayer)
+		setTimer(setCameraTarget, 75, 1, thePlayer, thePlayer)
 	end 
 end 
+
+function spawnPlayerAtRampingChallengeEndedPos(thePlayer)
+	
+	if(thePlayer) then
+		local endPos = getElementByIndex("rampChallengeEndedPos", 0)
+		
+		if(endPos) then
+			local x, y, z, rz
+			x = getElementData(endPos, "posX")
+			y = getElementData(endPos, "posY")
+			z = getElementData(endPos, "posZ")
+			rz = getElementData(endPos, "rotZ")
+			
+			setElementPosition(thePlayer, x, y, z)
+			setElementRotation(thePlayer, 0, 0, rz)
+			
+			setTimer(setCameraTarget, 75, 1, thePlayer, thePlayer)
+		end 
+	end 
+end 
+
+addEvent("onClientRequestSpawnAtRampingEndedPos", true)
+addEventHandler("onClientRequestSpawnAtRampingEndedPos", resourceRoot, 
+	function()
+		spawnPlayerAtRampingChallengeEndedPos(client)
+	end
+)
+
 
 function findEmptyDimensionId()
 
