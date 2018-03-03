@@ -3,6 +3,10 @@ rampingChallengeRaceCheckpoints = { }
 rampingChallengeRaceCheckpointsHit = 1
 rampingMusic = nil
 rampStartTimeoutTimer = nil
+timeToGetInVehicleMissionTimer = nil
+timeToFirstRampMissionTimer = nil
+timeToCompleteChallengeMissionTimer = nil
+
 
 addCommandHandler("gotoramp", 
 	function()
@@ -33,8 +37,18 @@ addEventHandler("onClientPrepareToBeginRampingChallenge", localPlayer,
 		showRampingChallengeInstructions("Get in the #ff0000FCR-900#FFFFFF!")
 		playerInRampingChallenge = true
 		triggerServerEvent("onClientRequestRampingChallengeEnvironmentInitialise", resourceRoot)
+	
 		-- Disable stream radio
 		exports.lvpRadio:toggleStreamRadio(false)
+		
+		timeToGetInVehicleMissionTimer = exports.missiontimer:createMissionTimer (15000, true, "Time: %m:%s", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
+	end
+)
+	
+-- Any the challenge if any mission timers elapse
+addEventHandler("onClientMissionTimerElapsed", resourceRoot, 
+	function()
+		triggerEvent("onClientEndRampingChallenge", localPlayer, "times up", true)
 	end
 )
 	
@@ -51,6 +65,11 @@ addEventHandler("onClientVehicleEnter", resourceRoot,
 			triggerServerEvent("onClientRequestRampingChallengeVehicleMarkerAndBlipDestroy", resourceRoot, source)
 			triggerEvent("onClientReadyToBeginRampingChallenge", localPlayer)
 			exports.ramping:toggleRamping(false)
+			
+			if(timeToGetInVehicleMissionTimer) then
+				destroyElement(timeToGetInVehicleMissionTimer)
+				timeToGetInVehicleMissionTimer = nil
+			end 
 			
 			if(rampingChallengeRaceCheckpoints) then 
 				if #rampingChallengeRaceCheckpoints > 0 then
@@ -124,7 +143,6 @@ addEventHandler("onClientReadyToBeginRampingChallenge", localPlayer,
 		-- todo: manage text, and sort out the "LCTRL" reference so it pulls it in from the ramping API
 		showRampingChallengeInstructions("Follow the #ff0000checkpoints#FFFFFF to the first ramp at the end of the runway,\n and then press LCTRL to start ramping in mid-air.", 8000)
 		
-		-- wait 2 seconds before starting the countdown!
 		setTimer(
 			function()
 				local countdown = 3 -- todo: manage
@@ -149,7 +167,7 @@ addEventHandler("onClientReadyToBeginRampingChallenge", localPlayer,
 						
 						countdown = countdown - 1
 					end, 
-				1000, 6)
+				1000, 4)
 			end, 
 		8000, 1)
 	end
@@ -168,10 +186,17 @@ addEventHandler("onClientBeginRampingChallenge", localPlayer,
 		
 		setPedCanBeKnockedOffBike(localPlayer, false)
 		
+				
 		local theVehicle = getPedOccupiedVehicle(localPlayer)
 		setVehicleDamageProof(theVehicle, true)
+		
+		timeToFirstRampMissionTimer = exports.missiontimer:createMissionTimer (20000, true, "Time to start ramping: %m:%s", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
 	end
 )
+
+
+
+
 	
 -- Called when the client ENDS the ramping challenge (but not finished it)
 addEvent("onClientEndRampingChallenge")
@@ -182,6 +207,8 @@ addEventHandler("onClientEndRampingChallenge", localPlayer,
 
 			showRampingChallengeGameText(reason)
 			killRampingChallengeMusic()
+			killMissionTimers()
+			hideRampingChallengeInstructions()
 			
 			setGameSpeed(0.4)
 			fadeCamera(false)
@@ -255,6 +282,13 @@ addEventHandler("onClientStartRamping", localPlayer,
 				killTimer(rampStartTimeoutTimer)
 				rampStartTimeoutTimer = nil
 			end
+			
+			if(timeToFirstRampMissionTimer) then
+				destroyElement(timeToFirstRampMissionTimer)
+				timeToFirstRampMissionTimer = nil
+			end 
+			
+			timeToCompleteChallengeMissionTimer = exports.missiontimer:createMissionTimer (120000, true, "Time to complete challenge: %m:%s", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
 		end
 	end 
 )
@@ -297,6 +331,7 @@ function removePlayerFromRampingChallenge()
 	
 	killRampingChallengeMusic()
 
+	killMissionTimers()
 	
 	for theKey, theElement in ipairs(rampingChallengeRaceCheckpoints) do 
 		if isElement(theElement) then
@@ -323,6 +358,25 @@ function killRampingChallengeMusic()
 		stopSound(rampingMusic)
 		rampingMusic = nil
 	end
+end 
+
+function killMissionTimers()
+
+	if(timeToFirstRampMissionTimer) then
+		destroyElement(timeToFirstRampMissionTimer)
+		timeToFirstRampMissionTimer = nil
+	end 
+	
+	if(timeToGetInVehicleMissionTimer) then
+		destroyElement(timeToGetInVehicleMissionTimer)
+		timeToGetInVehicleMissionTimer = nil
+	end 
+	
+	if(timeToCompleteChallengeMissionTimer) then	
+		destroyElement(timeToCompleteChallengeMissionTimer)
+		timeToCompleteChallengeMissionTimer = nil
+	end
+	
 end 
 
 
