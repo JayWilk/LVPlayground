@@ -76,6 +76,7 @@ addEventHandler("onClientMarkerHit", resourceRoot,
 		if not playerInRampingChallenge then
 			return
 		end
+		
 		playSFX("genrl", 52, 18, false)
 		destroyElement(source)
 		
@@ -194,11 +195,11 @@ addEventHandler("onClientEndRampingChallenge", localPlayer,
 						showRampingChallengeTryAgainDialog()
 					else
 						fadeCamera(false)
-						spawnPlayerAtRampEndedPos()
 					end 
 
 					removePlayerFromRampingChallenge()
 					cleanupRampingEnvironment()
+					spawnPlayerAtRampEndedPos()
 					setGameSpeed(1)
 				end, 3000, 1)
 				
@@ -268,7 +269,7 @@ addEventHandler("onServerProvideRampingChallengeMarkers", localPlayer,
 )
 
 -- prevent any damage inflict 
-addEventHandler("onClientPedDamage", localPlayer, 
+addEventHandler("onClientPedDamage", root, 
 	function()
 		if(source == localPlayer and playerInRampingChallenge) then 
 			cancelEvent()
@@ -281,7 +282,6 @@ function cleanupRampingEnvironment()
 	triggerServerEvent("onClientRequestRampingChallengeVehicleDestroy", resourceRoot, getElementData(localPlayer, "rampingChallengeVehicle"))
 	triggerServerEvent("onClientRequestRampingChallengeDimensionDestroy", resourceRoot, getElementData(localPlayer, "rampingChallengeDimensionId"))
 	triggerServerEvent("onClientRequestRampingChallengeObjectsDestroy", resourceRoot)
-	hideRampingChallengeSignupDialog()
 end 
 
 
