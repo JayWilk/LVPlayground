@@ -127,7 +127,7 @@ addEventHandler("onClientReadyToBeginRampingChallenge", localPlayer,
 		-- wait 2 seconds before starting the countdown!
 		setTimer(
 			function()
-				local countdown = 5
+				local countdown = 3 -- todo: manage
 				setTimer(
 					function()
 						outputChatBox(tostring(countdown))

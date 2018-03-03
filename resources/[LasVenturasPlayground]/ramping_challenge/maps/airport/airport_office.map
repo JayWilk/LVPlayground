@@ -1,4 +1,5 @@
 <map> 
+	<blip id="rampingOfficeBlip" posX="1534.9" posY="1849" posZ="10" icon="34" color="#FFFFFF" dimension="0" ordering="1"/>
 	<marker id="rampChallengeSignupMarker" type="cylinder" color="#00FEEFFF" size="1.5" interior="0" dimension="0" alpha="255" posX="1534.9" posY="1849" posZ="9.8" rotX="0" rotY="0" rotZ="0"></marker>
     <object id="object (trailer_large1_01) (1)" breakable="true" interior="0" alpha="255" model="3167" doublesided="false" scale="1" dimension="-1" posX="1537.7" posY="1852.5" posZ="9.8" rotX="0" rotY="0" rotZ="180"></object>
     <object id="object (waterjumpx2) (1)" breakable="true" interior="0" alpha="255" model="1655" doublesided="false" scale="1" dimension="-1" posX="1526.7" posY="1855.2" posZ="9.6" rotX="0" rotY="0" rotZ="266"></object>

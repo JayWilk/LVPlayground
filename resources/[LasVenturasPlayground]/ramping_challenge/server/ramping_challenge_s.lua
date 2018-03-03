@@ -1,6 +1,17 @@
 markers = {}
 rampChallengeObjects = {}
 
+addEventHandler("onResourceStart", resourceRoot,
+	function()
+		local blip = getElementByIndex("blip", 1)
+
+		if(blip and getElementID(blip) == "rampingOfficeBlip") then
+			setBlipVisibleDistance(blip, 200) -- todo: manage settings
+		end 
+	end 
+)
+
+
 addEventHandler("onMarkerHit", resourceRoot, 
 	function(hitElement)
 		if(getElementType(hitElement) ~= "player") then
@@ -112,9 +123,6 @@ addEvent("onClientRequestRampingChallengeDimensionDestroy", true)
 addEventHandler("onClientRequestRampingChallengeDimensionDestroy", resourceRoot,
 	function(dimensionId)
 		if(dimensionId) then
-		
-			-- TODO: Dimension cleanup logic 
-		
 			removeElementData(client, "rampingChallengeDimensionId")
 		end 
 	end 
