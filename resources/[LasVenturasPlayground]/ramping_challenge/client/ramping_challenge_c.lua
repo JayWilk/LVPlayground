@@ -8,6 +8,9 @@ timeToFirstRampMissionTimer = nil
 timeToCompleteChallengeMissionTimer = nil
 
 
+
+
+
 addCommandHandler("gotoramp", 
 	function()
 		setElementPosition(localPlayer, 1520.736328125, 1847.427734375, 10.8203125)
@@ -41,7 +44,8 @@ addEventHandler("onClientPrepareToBeginRampingChallenge", localPlayer,
 		-- Disable stream radio
 		exports.lvpRadio:toggleStreamRadio(false)
 		
-		timeToGetInVehicleMissionTimer = exports.missiontimer:createMissionTimer (15000, true, "Time: %m:%s", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
+		timeToGetInVehicleMissionTimer = exports.missiontimer:createMissionTimer (15000, true, "Time: %s:%cs", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
+		exports.missiontimer:setMissionTimerHurryTime(timeToGetInVehicleMissionTimer, 5000)
 	end
 )
 	
@@ -136,43 +140,26 @@ addEventHandler("onClientReadyToBeginRampingChallenge", localPlayer,
 	function()
 
 		togglePlayerRampingChallengeCountdownControlRestrictions(true)
-		outputChatBox("get ready!")
-		
 		toggleControl("enter_exit", false)
 		
 		-- todo: manage text, and sort out the "LCTRL" reference so it pulls it in from the ramping API
 		showRampingChallengeInstructions("Follow the #ff0000checkpoints#FFFFFF to the first ramp at the end of the runway,\n and then press LCTRL to start ramping in mid-air.", 8000)
 		
+		-- wait 8 seconds for the above instructions to clear then start the countdown!
 		setTimer(
 			function()
-				local countdown = 3 -- todo: manage
-				setTimer(
-					function()
-						outputChatBox(tostring(countdown))
-						
-						if(countdown > 1) then
-						
-							playSFX("script", 16, 5, false)
-							
-						elseif (countdown == 1) then
-						
-							playSFX("script", 16, 1, false)
-							
-						elseif(countdown == 0) then
-						
-							playSFX("script", 6, 1, false)
-							
-							triggerEvent("onClientBeginRampingChallenge", localPlayer)
-						end
-						
-						countdown = countdown - 1
-					end, 
-				1000, 4)
-			end, 
+				startRampingChallengeCountdown()
+			end,
 		8000, 1)
 	end
 )	
 	
+addEventHandler("onClientRampingCountdownFinish", resourceRoot, 
+	function()
+		iprint("finished")
+		triggerEvent("onClientBeginRampingChallenge", localPlayer)
+	end 
+)	
 
 -- Countdown is done, the player is ready to go!
 addEvent("onClientBeginRampingChallenge")
@@ -190,7 +177,8 @@ addEventHandler("onClientBeginRampingChallenge", localPlayer,
 		local theVehicle = getPedOccupiedVehicle(localPlayer)
 		setVehicleDamageProof(theVehicle, true)
 		
-		timeToFirstRampMissionTimer = exports.missiontimer:createMissionTimer (20000, true, "Time to start ramping: %m:%s", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
+		timeToFirstRampMissionTimer = exports.missiontimer:createMissionTimer (20000, true, "Time to start ramping: %m:%s:%cs", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
+		exports.missiontimer:setMissionTimerHurryTime(timeToFirstRampMissionTimer, 6000)
 	end
 )
 
@@ -202,7 +190,13 @@ addEventHandler("onClientBeginRampingChallenge", localPlayer,
 addEvent("onClientEndRampingChallenge")
 addEventHandler("onClientEndRampingChallenge", localPlayer,
 	function(reason, tryAgainOption)	
-		-- if the reason is provided, show it with a nice fade effect
+		-- check to kill the timeout first
+		if(rampStartTimeoutTimer) then
+			killTimer(rampStartTimeoutTimer)
+			rampStartTimeoutTimer = nil
+		end 
+	
+		-- if the reason is provided, show it with a nice fade effect		
 		if(reason) then
 
 			showRampingChallengeGameText(reason)
@@ -330,7 +324,6 @@ function removePlayerFromRampingChallenge()
 	setPedCanBeKnockedOffBike(localPlayer, true)
 	
 	killRampingChallengeMusic()
-
 	killMissionTimers()
 	
 	for theKey, theElement in ipairs(rampingChallengeRaceCheckpoints) do 
@@ -343,6 +336,11 @@ function removePlayerFromRampingChallenge()
 	
 	togglePlayerRampingChallengeControlRestrictions(false)
 
+	if(rampStartTimeoutTimer) then
+		killTimer(rampStartTimeoutTimer)
+		rampStartTimeoutTimer = nil
+	end 
+	
 	-- update dimension ids both server and client side
 	triggerServerEvent("onClientRequestDimensionRestore", resourceRoot)
 	setElementDimension(localPlayer, 0 )
