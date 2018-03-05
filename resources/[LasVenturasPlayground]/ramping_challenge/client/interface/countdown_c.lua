@@ -24,16 +24,13 @@ addEventHandler("onClientResourceStart", resourceRoot,
 )
 
 
-addEvent("onClientRampingCountdownFinish", true)
-
 function startRampingChallengeCountdown()
 
 	local countdown = 3 -- todo: manage
 	
 	setTimer(
 		function()
-			outputChatBox(tostring(countdown))
-
+		
 			if(countdown ~= 3) then 
 				guiSetVisible(countdownGuiImages[countdown + 1], false)
 			end 	
@@ -54,7 +51,7 @@ function startRampingChallengeCountdown()
 			
 				playSFX("script", 6, 1, false)
 				iprint("triggering event!")
-				triggerEvent("onClientRampingCountdownFinish", resourceRoot)
+				triggerEvent("onClientRampingCountdownFinish", localPlayer)
 			end
 		
 			countdown = countdown - 1

@@ -2,13 +2,11 @@
 	<info name="Ramping Challenge" author="Jay" version="0.1" type="script" />
 
 	<file src="client/img/ramp_challenge.png"/>
-	<file src="client/img/blip3.png"/>
 	<file src="client/img/countdown_3.png"/>
 	<file src="client/img/countdown_2.png"/>
 	<file src="client/img/countdown_1.png"/>
 	<file src="client/img/countdown_0.png"/>
-	<file src="client/img/hurry.png"/>
-	
+
 	
 	<file src="client/audio/level1.mp3"/>
 	

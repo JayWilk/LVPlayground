@@ -14,6 +14,7 @@ timeToCompleteChallengeMissionTimer = nil
 addCommandHandler("gotoramp", 
 	function()
 		setElementPosition(localPlayer, 1520.736328125, 1847.427734375, 10.8203125)
+		setElementDimension(localPlayer, 0)
 	end
 )
 
@@ -39,10 +40,13 @@ addEventHandler("onClientPrepareToBeginRampingChallenge", localPlayer,
 		togglePlayerRampingChallengeControlRestrictions(true)
 		showRampingChallengeInstructions("Get in the #ff0000FCR-900#FFFFFF!")
 		playerInRampingChallenge = true
+		
 		triggerServerEvent("onClientRequestRampingChallengeEnvironmentInitialise", resourceRoot)
 	
 		-- Disable stream radio
 		exports.lvpRadio:toggleStreamRadio(false)
+		
+		toggleControl("enter_exit", true)
 		
 		timeToGetInVehicleMissionTimer = exports.missiontimer:createMissionTimer (15000, true, "Time: %s:%cs", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
 		exports.missiontimer:setMissionTimerHurryTime(timeToGetInVehicleMissionTimer, 5000)
@@ -107,7 +111,13 @@ addEventHandler("onClientMarkerHit", resourceRoot,
 		
 		-- is this the last marker? 
 		if(rampingChallengeRaceCheckpointsHit == #rampingChallengeRaceCheckpoints + 1) then
+			
 			showRampingChallengeInstructions("Press LCTRL to Spawn a ramp!", 3000) -- todo: manage!
+			
+			if(timeToFirstRampMissionTimer) then
+				destroyElement(timeToFirstRampMissionTimer)
+				timeToFirstRampMissionTimer = nil
+			end 
 			
 			-- activate ramping
 			exports.ramping:toggleRamping(true)
@@ -154,9 +164,9 @@ addEventHandler("onClientReadyToBeginRampingChallenge", localPlayer,
 	end
 )	
 	
-addEventHandler("onClientRampingCountdownFinish", resourceRoot, 
+addEvent("onClientRampingCountdownFinish")
+addEventHandler("onClientRampingCountdownFinish", localPlayer, 
 	function()
-		iprint("finished")
 		triggerEvent("onClientBeginRampingChallenge", localPlayer)
 	end 
 )	
@@ -167,13 +177,10 @@ addEventHandler("onClientBeginRampingChallenge", localPlayer,
 	function()
 		togglePlayerRampingChallengeCountdownControlRestrictions(false)
 		
-		outputChatBox("******** GO GO GO *********", 255, 0, 0)
-		
 		rampingMusic = playSound("client/audio/level1.mp3", true)
 		
 		setPedCanBeKnockedOffBike(localPlayer, false)
 		
-				
 		local theVehicle = getPedOccupiedVehicle(localPlayer)
 		setVehicleDamageProof(theVehicle, true)
 		
@@ -276,11 +283,6 @@ addEventHandler("onClientStartRamping", localPlayer,
 				killTimer(rampStartTimeoutTimer)
 				rampStartTimeoutTimer = nil
 			end
-			
-			if(timeToFirstRampMissionTimer) then
-				destroyElement(timeToFirstRampMissionTimer)
-				timeToFirstRampMissionTimer = nil
-			end 
 			
 			timeToCompleteChallengeMissionTimer = exports.missiontimer:createMissionTimer (120000, true, "Time to complete challenge: %m:%s", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
 		end
