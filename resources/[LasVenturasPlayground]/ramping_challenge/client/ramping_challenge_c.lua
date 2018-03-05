@@ -190,8 +190,6 @@ addEventHandler("onClientBeginRampingChallenge", localPlayer,
 )
 
 
-
-
 	
 -- Called when the client ENDS the ramping challenge (but not finished it)
 addEvent("onClientEndRampingChallenge")
@@ -252,6 +250,21 @@ addEventHandler("onClientFinishRampingChallenge", localPlayer,
 		spawnPlayerAtRampEndedPos()
 	end
 )
+
+addEvent("onClientRequestRampingChallengeTryAgain")
+addEventHandler("onClientRequestRampingChallengeTryAgain", localPlayer, 
+	function(tryAgain)
+	
+		fadeCamera(true)
+
+		if(tryAgain) then
+			triggerEvent("onClientPrepareToBeginRampingChallenge", localPlayer)
+		else
+			spawnPlayerAtRampEndedPos()
+		end 
+	end
+)
+
 
 addEventHandler("onClientPlayerWasted", localPlayer,
 	function()

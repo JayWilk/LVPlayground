@@ -17,7 +17,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
 	
 		local screenW, screenH = guiGetScreenSize()
 	
-	
+		-- Ramping school signup dialog
 		GUIEditor.window[1] = guiCreateWindow(0.30, 0.27, 0.41, 0.47, "Ramping School", true)
 		guiWindowSetMovable(GUIEditor.window[1], false)
 		guiWindowSetSizable(GUIEditor.window[1], false)
@@ -95,8 +95,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
 		addEventHandler("onClientGUIClick", GUIEditor.button[5], 
 			function()
 				hideRampingChallengeTryAgainDialog()
-				fadeCamera(true)
-				triggerEvent("onClientPrepareToBeginRampingChallenge", localPlayer)
+				triggerEvent("onClientRequestRampingChallengeTryAgain", localPlayer, true)
 			end, 
 		false)
 		
@@ -104,8 +103,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
 		addEventHandler("onClientGUIClick", GUIEditor.button[6], 
 			function()
 				hideRampingChallengeTryAgainDialog()
-				fadeCamera(true)
-				spawnPlayerAtRampEndedPos()
+				triggerEvent("onClientRequestRampingChallengeTryAgain", localPlayer, false)
 			end, 
 		false)
 		
@@ -189,6 +187,8 @@ function hideRampingChallengeGameText()
 end 
 
 
+
+
 --[[
 addEventHandler("onClientRender", root,
     function()
@@ -209,11 +209,4 @@ addEventHandler("onClientRender", root,
 
 
 
-
-addEventHandler("onClientResourceStart", resourceRoot,
-    function()
-local screenW, screenH = guiGetScreenSize()
-       
-    end
-)
 
