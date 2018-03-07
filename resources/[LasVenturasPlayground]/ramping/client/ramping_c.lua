@@ -21,7 +21,7 @@ addEventHandler("onClientEndRamping", root,
 )
 
 addEvent("onClientPerformRamping")
-addEventHandler("onClientPerformRamping", root, 
+addEventHandler("onClientPerformRamping", localPlayer, 
 	function(numberOfConsecutiveRamps) 
 		if(numberOfConsecutiveRamps > 1) then -- todo: manage settings
 			playSFX("genrl", 52, 18, false)
@@ -96,7 +96,7 @@ addEventHandler("onClientVehicleCollision", root,
 					local timeSinceLastRampCollision = getTickCount() - rampLastCollisionTime
 					if(timeSinceLastRampCollision > 500 and timeSinceLastRampCollision < 3000) then
 							numberOfConsecutiveRampsClimbed = numberOfConsecutiveRampsClimbed + 1
-							triggerEvent("onClientPerformRamping", root, numberOfConsecutiveRampsClimbed)
+							triggerEvent("onClientPerformRamping", localPlayer, numberOfConsecutiveRampsClimbed)
 					end 
 				else  
 					triggerEvent("onClientStartRamping", localPlayer)

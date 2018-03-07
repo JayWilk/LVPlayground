@@ -6,9 +6,26 @@ rampStartTimeoutTimer = nil
 timeToGetInVehicleMissionTimer = nil
 timeToFirstRampMissionTimer = nil
 timeToCompleteChallengeMissionTimer = nil
+numberOfRampsClimbed = 0
 
 
+addEventHandler("onClientResourceStart", resourceRoot, 
+	function()
+		triggerServerEvent("onClientRequestResourceSettings", resourceRoot)
+	end 
+)
 
+addEvent("onServerProvideResourceSettings", true)
+addEventHandler("onServerProvideResourceSettings", resourceRoot,
+	function(theSettings)
+	
+		iprint("Settings provided: "..inspect(theSettings))
+	
+		for i, node in ipairs(theSettings) do
+			local attributes = xmlNodeGetAttributes(theSettings)
+		end 
+	end
+)
 
 
 addCommandHandler("gotoramp", 
@@ -28,7 +45,6 @@ addEventHandler("onClientEnterRampingChallengeSignupMarker", localPlayer,
 		end
 		
 		showRampingChallengeSignupDialog()
-		playSFX("genrl", 52, 18, false)
 	end
 )
 
@@ -37,19 +53,23 @@ addEventHandler("onClientEnterRampingChallengeSignupMarker", localPlayer,
 addEvent("onClientPrepareToBeginRampingChallenge")
 addEventHandler("onClientPrepareToBeginRampingChallenge", localPlayer, 
 	function()
-		togglePlayerRampingChallengeControlRestrictions(true)
-		showRampingChallengeInstructions("Get in the #ff0000FCR-900#FFFFFF!")
-		playerInRampingChallenge = true
+	
+		fadeCamera(true, 2)
 		
 		triggerServerEvent("onClientRequestRampingChallengeEnvironmentInitialise", resourceRoot)
+		
+		togglePlayerRampingChallengeControlRestrictions(true)
+		playerInRampingChallenge = true
+		
+		rampingMusic = playSound("client/audio/level2.mp3", true)
 	
-		-- Disable stream radio
 		exports.lvpRadio:toggleStreamRadio(false)
 		
 		toggleControl("enter_exit", true)
 		
 		timeToGetInVehicleMissionTimer = exports.missiontimer:createMissionTimer (15000, true, "Time: %s:%cs", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
 		exports.missiontimer:setMissionTimerHurryTime(timeToGetInVehicleMissionTimer, 5000)
+	
 	end
 )
 	
@@ -124,7 +144,7 @@ addEventHandler("onClientMarkerHit", resourceRoot,
 			
 			rampStartTimeoutTimer = setTimer(
 				function()
-					triggerEvent("onClientEndRampingChallenge", localPlayer, "fail", true)
+					triggerEvent("onClientEndRampingChallenge", localPlayer, "failed", true)
 				end, 
 			4000, 1)
 			
@@ -177,8 +197,6 @@ addEventHandler("onClientBeginRampingChallenge", localPlayer,
 	function()
 		togglePlayerRampingChallengeCountdownControlRestrictions(false)
 		
-		rampingMusic = playSound("client/audio/level1.mp3", true)
-		
 		setPedCanBeKnockedOffBike(localPlayer, false)
 		
 		local theVehicle = getPedOccupiedVehicle(localPlayer)
@@ -188,6 +206,13 @@ addEventHandler("onClientBeginRampingChallenge", localPlayer,
 		exports.missiontimer:setMissionTimerHurryTime(timeToFirstRampMissionTimer, 6000)
 	end
 )
+
+addEventHandler("onClientPerformRamping", localPlayer, 
+	function(numberOfConsecutiveRamps) 
+		numberOfRampsClimbed = numberOfConsecutiveRamps
+	end
+)
+
 
 
 	
@@ -208,6 +233,7 @@ addEventHandler("onClientEndRampingChallenge", localPlayer,
 			killRampingChallengeMusic()
 			killMissionTimers()
 			hideRampingChallengeInstructions()
+			hideRampingChallengeProgressText()
 			
 			setGameSpeed(0.4)
 			fadeCamera(false)
@@ -254,12 +280,11 @@ addEventHandler("onClientFinishRampingChallenge", localPlayer,
 addEvent("onClientRequestRampingChallengeTryAgain")
 addEventHandler("onClientRequestRampingChallengeTryAgain", localPlayer, 
 	function(tryAgain)
-	
-		fadeCamera(true)
 
 		if(tryAgain) then
 			triggerEvent("onClientPrepareToBeginRampingChallenge", localPlayer)
 		else
+			fadeCamera(true, 2)
 			spawnPlayerAtRampEndedPos()
 		end 
 	end
@@ -277,7 +302,7 @@ addEventHandler("onClientPlayerWasted", localPlayer,
 addEventHandler("onClientEndRamping", localPlayer,
 	function()
 		if(playerInRampingChallenge) then
-			triggerEvent("onClientEndRampingChallenge", localPlayer, "fail", true)
+			triggerEvent("onClientEndRampingChallenge", localPlayer, "failed", true)
 		end 
 	end
 )
@@ -285,9 +310,11 @@ addEventHandler("onClientEndRamping", localPlayer,
 addEventHandler("onClientStartRamping", localPlayer,
 	function()
 		if(playerInRampingChallenge) then
-			showRampingChallengeInstructions("#00FF00Good job!", 3000)
+			showRampingChallengeInstructions("Good job - carry on!", 3000) -- todo: sort
 			
 			setPedCanBeKnockedOffBike(localPlayer, true)
+			
+			showRampingChallengeProgressText()
 			
 			local theVehicle = getPedOccupiedVehicle(localPlayer)
 			setVehicleDamageProof(theVehicle, false)
@@ -297,11 +324,18 @@ addEventHandler("onClientStartRamping", localPlayer,
 				rampStartTimeoutTimer = nil
 			end
 			
-			timeToCompleteChallengeMissionTimer = exports.missiontimer:createMissionTimer (120000, true, "Time to complete challenge: %m:%s", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
+			timeToCompleteChallengeMissionTimer = exports.missiontimer:createMissionTimer (120000, true, "Time to complete challenge: %m:%s:%cs", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
+			
 		end
 	end 
 )
 
+addEvent("onServerProvideVehicleInformation", true)
+addEventHandler("onServerProvideVehicleInformation", localPlayer,
+	function(theVehicle)
+		showRampingChallengeInstructions("Get in the #ff0000" ..getVehicleName(theVehicle) .."#FFFFFF!") -- todo: localize
+	end 
+)
 
 -- give the client the markers \o
 addEvent("onServerProvideRampingChallengeMarkers", true)
@@ -320,6 +354,10 @@ addEventHandler("onClientPedDamage", root,
 	end 
 )
 
+
+function getNumberOfRampsClimbed()
+	return numberOfRampsClimbed
+end 
 
 function cleanupRampingEnvironment()
 	triggerServerEvent("onClientRequestRampingChallengeVehicleDestroy", resourceRoot, getElementData(localPlayer, "rampingChallengeVehicle"))
@@ -348,6 +386,7 @@ function removePlayerFromRampingChallenge()
 	end 
 	
 	rampingChallengeRaceCheckpoints = {}
+	numberOfRampsClimbed = 0
 	
 	togglePlayerRampingChallengeControlRestrictions(false)
 

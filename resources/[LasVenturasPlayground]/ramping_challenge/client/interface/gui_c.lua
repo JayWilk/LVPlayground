@@ -8,7 +8,7 @@ GUIEditor = {
 instructionTextShowing = false
 instructionText = nil
 rampingChallengeGameText = nil
-
+rampingChallengeProgressText = nil
 
 -- TODO: Sort, localise the text
 addEventHandler("onClientResourceStart", resourceRoot, 
@@ -68,11 +68,17 @@ addEventHandler("onClientResourceStart", resourceRoot,
 		guiSetVisible(GUIEditor.window[3], false)
 		
 		-- EVENT HANDLERS - button click 
-		addEventHandler("onClientGUIClick", GUIEditor.button[2], hideRampingChallengeSignupDialog, false)
+		addEventHandler("onClientGUIClick", GUIEditor.button[2], 
+			function()
+				hideRampingChallengeSignupDialog()
+				playSFX("genrl", 53, 1, false)
+			end,
+		false)
 		
 		addEventHandler("onClientGUIClick", GUIEditor.button[1], 
 			function() 
 				hideRampingChallengeSignupDialog()
+				playSFX("genrl", 53, 6, false)
 				triggerEvent("onClientRequestStartRampingSchoolChallengeTutorial", localPlayer)
 			end, 
 		false)
@@ -80,6 +86,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
 		-- tutorial start
 		addEventHandler("onClientGUIClick", GUIEditor.button[3], 
 			function()
+				playSFX("genrl", 53, 6, false)
 				triggerEvent("onClientStartRampingSchoolChallengeTutorial", localPlayer)
 			end
 		)
@@ -87,6 +94,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
 		-- tutorial skip
 		addEventHandler("onClientGUIClick", GUIEditor.button[4], 
 			function()
+				playSFX("genrl", 53, 1, false)
 				triggerEvent("onClientSkipRampingSchoolChallengeTutorial", localPlayer)
 			end
 		)
@@ -94,6 +102,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
 		-- try again - yes 
 		addEventHandler("onClientGUIClick", GUIEditor.button[5], 
 			function()
+				playSFX("genrl", 53, 6, false)
 				hideRampingChallengeTryAgainDialog()
 				triggerEvent("onClientRequestRampingChallengeTryAgain", localPlayer, true)
 			end, 
@@ -102,6 +111,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
 		-- try again - no
 		addEventHandler("onClientGUIClick", GUIEditor.button[6], 
 			function()
+				playSFX("genrl", 53, 1, false)
 				hideRampingChallengeTryAgainDialog()
 				triggerEvent("onClientRequestRampingChallengeTryAgain", localPlayer, false)
 			end, 
@@ -126,14 +136,38 @@ addEventHandler("onClientRender", root,
 			dxDrawText(rampingChallengeGameText, (screenW - 408) / 2, (screenH - 92) / 2, ((screenW - 408) / 2) + 408, ( (screenH - 92) / 2) + 92, tocolor(255, 255, 255, 255), 4.00, "pricedown", "center", "center", true, false, false, false, false)
 		end 
 		
+		
+		if(rampingChallengeProgressText) then
+			dxDrawText("RAMPING CHALLENGE", 512 - 1, 77 - 1, 864 - 1, 139 - 1, tocolor(0, 0, 0, 255), 2.00, "pricedown", "center", "top", false, false, false, false, false)
+			dxDrawText("RAMPING CHALLENGE", 512 + 1, 77 - 1, 864 + 1, 139 - 1, tocolor(0, 0, 0, 255), 2.00, "pricedown", "center", "top", false, false, false, false, false)
+			dxDrawText("RAMPING CHALLENGE", 512 - 1, 77 + 1, 864 - 1, 139 + 1, tocolor(0, 0, 0, 255), 2.00, "pricedown", "center", "top", false, false, false, false, false)
+			dxDrawText("RAMPING CHALLENGE", 512 + 1, 77 + 1, 864 + 1, 139 + 1, tocolor(0, 0, 0, 255), 2.00, "pricedown", "center", "top", false, false, false, false, false)
+			dxDrawText("RAMPING CHALLENGE", 512, 77, 864, 139, tocolor(0, 255, 0, 255), 2.00, "pricedown", "center", "top", false, false, false, false, false)
+			dxDrawText(tostring(getNumberOfRampsClimbed()) .. " / 250 ramps climbed!", 512, 139, 864, 176, tocolor(255, 255, 255, 255), 1.00, "bankgothic", "center", "top", false, false, false, false, false)
+			dxDrawText("Altitude: "..getAltitudeString(), 649, 176, 730, 190, tocolor(255, 255, 255, 255), 1.00, "default", "center", "top", false, false, false, false, false)
+		end
+		
 	end 
 )
 
+function getAltitudeString()
+	local x, y z = getElementPosition(localPlayer)
+	return tostring(z)
+end 
 
+
+function showRampingChallengeProgressText()
+	rampingChallengeProgressText = true
+end 
+
+function hideRampingChallengeProgressText()
+	rampingChallengeProgressText = false
+end 
 
 function showRampingChallengeSignupDialog()
 	guiSetInputMode("no_binds")
 	guiSetVisible(GUIEditor.window[1], true)
+	playSFX("genrl", 52, 18, false)
 end
 
 function hideRampingChallengeSignupDialog()
@@ -155,6 +189,7 @@ function showRampingChallengeTryAgainDialog()
 	guiSetInputMode("no_binds")
 	guiSetVisible(GUIEditor.window[3], true)
 	showCursor(true)
+	playSFX("genrl", 52, 18, false)
 end 
 
 function hideRampingChallengeTryAgainDialog()
@@ -187,25 +222,6 @@ function hideRampingChallengeGameText()
 end 
 
 
-
-
---[[
-addEventHandler("onClientRender", root,
-    function()
-		if(isPlayerPlayingRampingChallenge) then 
-			dxDrawText("RAMPING CHALLENGE", 512 - 1, 77 - 1, 864 - 1, 139 - 1, tocolor(0, 0, 0, 255), 2.00, "pricedown", "center", "top", false, false, false, false, false)
-			dxDrawText("RAMPING CHALLENGE", 512 + 1, 77 - 1, 864 + 1, 139 - 1, tocolor(0, 0, 0, 255), 2.00, "pricedown", "center", "top", false, false, false, false, false)
-			dxDrawText("RAMPING CHALLENGE", 512 - 1, 77 + 1, 864 - 1, 139 + 1, tocolor(0, 0, 0, 255), 2.00, "pricedown", "center", "top", false, false, false, false, false)
-			dxDrawText("RAMPING CHALLENGE", 512 + 1, 77 + 1, 864 + 1, 139 + 1, tocolor(0, 0, 0, 255), 2.00, "pricedown", "center", "top", false, false, false, false, false)
-			dxDrawText("RAMPING CHALLENGE", 512, 77, 864, 139, tocolor(0, 255, 0, 255), 2.00, "pricedown", "center", "top", false, false, false, false, false)
-			dxDrawText(tostring(rampsClimbed) .. " / 250 ramps climbed!", 512, 139, 864, 176, tocolor(255, 255, 255, 255), 1.00, "bankgothic", "center", "top", false, false, false, false, false)
-			dxDrawText("Altitude: "..getAltitudeString(), 649, 176, 730, 190, tocolor(255, 255, 255, 255), 1.00, "default", "center", "top", false, false, false, false, false)
-		end 
-		
-
-    end
-)
-]]
 
 
 

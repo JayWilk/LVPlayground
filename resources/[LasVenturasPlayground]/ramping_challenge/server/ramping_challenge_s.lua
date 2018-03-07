@@ -1,13 +1,20 @@
 markers = {}
 rampChallengeObjects = {}
 
-addEventHandler("onResourceStart", resourceRoot,
-	function()
-		local blip = getElementByIndex("blip", 1)
 
-		if(blip and getElementID(blip) == "rampingOfficeBlip") then
-			setBlipVisibleDistance(blip, 200) -- todo: manage settings
+addEvent("onClientRequestResourceSettings", true)
+addEventHandler("onClientRequestResourceSettings", resourceRoot,
+	function()		
+
+		local xml = xmlLoadFile("meta.xml")             	
+		local settingsNode = xmlFindChild(xml, "settings", 0)
+		
+		if(settingsNode) then
+			local settings = xmlNodeGetChildren(settingsNode)   
+			triggerClientEvent(client, "onServerProvideResourceSettings", resourceRoot, settings)
 		end 
+		
+        xmlUnloadFile(xml)    
 	end 
 )
 
@@ -86,6 +93,7 @@ addEventHandler("onClientRequestRampingChallengeEnvironmentInitialise", resource
 		
 		-- provide the markers to the client
 		triggerClientEvent(client, "onServerProvideRampingChallengeMarkers", client, getElementsByType("rampChallengeMarker"))
+		triggerClientEvent(client, "onServerProvideVehicleInformation", client, theVehicle)
 	end 
 )
 
@@ -195,7 +203,6 @@ addEventHandler("onClientRequestSpawnAtRampingEndedPos", resourceRoot,
 function findEmptyDimensionId()
 
 	local dimensionIdOffset = tonumber(get("dimensionIdOffset"))
-	outputDebugString("dimension id offset: " ..tostring(dimensionIdOffset))
 	local iter = 0
 	
 	if(not dimensionIdOffset) then
@@ -209,8 +216,6 @@ function findEmptyDimensionId()
 		
 		if(#players == 0) then
 			return dimensionId
-		else
-			outputDebugString("No of players in dimension Id "..tostring(dimensionId) .. ": " ..tostring(#players))
 		end 
 
 		iter = iter + 1
@@ -234,7 +239,7 @@ function spawnRampingChallengeVehicleWithMarkerAndBlip(rampChallengeVehicle, the
 	posZ = getElementData(rampChallengeVehicle, "posZ")
 	rotZ = getElementData(rampChallengeVehicle, "rotZ")
 		
-	local theVehicle = createVehicle(model, posX, posY, posZ, 0, 0, rotZ, "R3MP-ME")
+	local theVehicle = createVehicle(model, posX, posY, posZ, 0, 0, rotZ, get("rampVehiclePlate"))
 	local vehicleMarker = createMarker(posX, posY, posZ + 6, "arrow", 1.0, 255, 0, 0, 150, thePlayer)
 	local vehicleBlip = createBlipAttachedTo(theVehicle, 0, 2, 255, 0, 0, 255, 1, 9999, thePlayer)
 	
@@ -246,5 +251,16 @@ function spawnRampingChallengeVehicleWithMarkerAndBlip(rampChallengeVehicle, the
 	return theVehicle
 end 
 
+
+function setBlipDrawDistance()
+	local blip = getElementByIndex("blip", 1)
+
+	if(blip and getElementID(blip) == "rampingOfficeBlip") then
+		setBlipVisibleDistance(blip, get("blipVisibleDistance")) 
+	end 
+end 
+
+addEventHandler("onResourceStart", resourceRoot, setBlipDrawDistance)
+addEventHandler("onPlayerConnect", resourceRoot, setBlipDrawDistance) --workaround for an issue for new players connecting not having the draw distance synced
 
 

@@ -9,6 +9,7 @@
 
 	
 	<file src="client/audio/level1.mp3"/>
+	<file src="client/audio/level2.mp3"/>
 	
 	<script src="client/ramping_challenge_c.lua" type="client" />
 	<script src="client/tutorial_c.lua" type="client" />
@@ -27,5 +28,13 @@
 	<settings>
 		<!-- Used for dimension id calculation. In theory, dimension Ids can range from the offset, to the maximum player count. e.g 200 - 232 -->
 		<setting name="*dimensionIdOffset" value="200" friendlyname="Dimension Id offset" accept="*" group="Gameplay" desc="Sets the dimension offset" />
+		<setting name="*blipVisibleDistance" value="100" friendlyname="Ramping Challenge Blip Stream Distance" accept="*" group="Environment" desc="Sets the visible streaming distance for the blip (requires restart)" />
+		<setting name="*rampVehiclePlate" value="R3MP M3" friendlyname="Vehicle number plate" accept="*" group="Environment" desc="Configure the ramping challenge vehicle number plate"/>
+		
+		<!-- Mission timers -->
+		<setting name="*timeToGetInVehicle" value="15000" friendlyname="Time to get in vehicle (ms)" accept="*" group="Mission Timers"/>
+		<setting name="*timeToFirstRamp" value="20000" friendlyname="Time to reach first ramp (ms)" accept="*" group="Mission Timers"/>
+		<setting name="*timeToCompleteChallenge" value="120000" friendlyname="Time to complete challenge (ms)" accept="*" group="Mission Timers"/>
+		
 	</settings>
 </meta>

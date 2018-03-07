@@ -17,7 +17,6 @@ addEvent("onClientSkipRampingSchoolChallengeTutorial")
 addEventHandler("onClientSkipRampingSchoolChallengeTutorial", localPlayer,
 	function()
 		hideRampingChallengeTutorialSkipDialog()
-		fadeCamera(true)
 		triggerEvent("onClientPrepareToBeginRampingChallenge", localPlayer)
 	end 
 )
@@ -28,7 +27,6 @@ addEvent("onClientStartRampingSchoolChallengeTutorial")
 addEventHandler("onClientStartRampingSchoolChallengeTutorial", localPlayer,
 	function()
 		iprint("tutorial starting!")
-		fadeCamera(true)
 		setElementDimension(localPlayer, tutorialDimension)
 		
 		-- todo: tutorial
@@ -40,8 +38,7 @@ addEventHandler("onClientStartRampingSchoolChallengeTutorial", localPlayer,
 addEvent("onClientFinishRampingSchoolChallengeTutorial")
 addEventHandler("onClientFinishRampingSchoolChallengeTutorial", localPlayer,
 	function()
-		iprint("tutorial finished!")
-		fadeCamera(true)
+		iprint("tutorial finished!!!!!!!")
 		triggerEvent("onClientPrepareToBeginRampingChallenge", localPlayer)
 	end 
 )
