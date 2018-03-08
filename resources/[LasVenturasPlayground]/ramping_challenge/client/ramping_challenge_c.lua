@@ -7,7 +7,9 @@ timeToGetInVehicleMissionTimer = nil
 timeToFirstRampMissionTimer = nil
 timeToCompleteChallengeMissionTimer = nil
 numberOfRampsClimbed = 0
-
+rampChallengeStartTime = nil
+resourceSettings = {}
+playerFinished = nil
 
 addEventHandler("onClientResourceStart", resourceRoot, 
 	function()
@@ -18,12 +20,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
 addEvent("onServerProvideResourceSettings", true)
 addEventHandler("onServerProvideResourceSettings", resourceRoot,
 	function(theSettings)
-	
-		iprint("Settings provided: "..inspect(theSettings))
-	
-		for i, node in ipairs(theSettings) do
-			local attributes = xmlNodeGetAttributes(theSettings)
-		end 
+		resourceSettings = theSettings
 	end
 )
 
@@ -67,8 +64,9 @@ addEventHandler("onClientPrepareToBeginRampingChallenge", localPlayer,
 		
 		toggleControl("enter_exit", true)
 		
-		timeToGetInVehicleMissionTimer = exports.missiontimer:createMissionTimer (15000, true, "Time: %s:%cs", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
-		exports.missiontimer:setMissionTimerHurryTime(timeToGetInVehicleMissionTimer, 5000)
+		local vehicleTimerTime = tonumber(resourceSettings["timeToGetInVehicle"])
+		timeToGetInVehicleMissionTimer = exports.missiontimer:createMissionTimer (vehicleTimerTime, true, "Time: %s:%cs", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
+		exports.missiontimer:setMissionTimerHurryTime(timeToGetInVehicleMissionTimer, math.floor(vehicleTimerTime / 3))
 	
 	end
 )
@@ -202,20 +200,23 @@ addEventHandler("onClientBeginRampingChallenge", localPlayer,
 		local theVehicle = getPedOccupiedVehicle(localPlayer)
 		setVehicleDamageProof(theVehicle, true)
 		
-		timeToFirstRampMissionTimer = exports.missiontimer:createMissionTimer (20000, true, "Time to start ramping: %m:%s:%cs", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
-		exports.missiontimer:setMissionTimerHurryTime(timeToFirstRampMissionTimer, 6000)
+		local toFirstRampTime = tonumber(resourceSettings["timeToFirstRamp"])
+		timeToFirstRampMissionTimer = exports.missiontimer:createMissionTimer (toFirstRampTime, true, "Time to start ramping: %m:%s:%cs", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
+		exports.missiontimer:setMissionTimerHurryTime(timeToFirstRampMissionTimer, math.floor(toFirstRampTime / 3))
 	end
 )
 
 addEventHandler("onClientPerformRamping", localPlayer, 
 	function(numberOfConsecutiveRamps) 
 		numberOfRampsClimbed = numberOfConsecutiveRamps
+		
+		if tostring(numberOfConsecutiveRamps) == tostring(resourceSettings["level1NumberOfRampsToComplete"]) then
+			triggerEvent("onClientFinishRampingChallenge", localPlayer)
+		end 
 	end
 )
 
 
-
-	
 -- Called when the client ENDS the ramping challenge (but not finished it)
 addEvent("onClientEndRampingChallenge")
 addEventHandler("onClientEndRampingChallenge", localPlayer,
@@ -269,11 +270,34 @@ addEventHandler("onClientEndRampingChallenge", localPlayer,
 addEvent("onClientFinishRampingChallenge")
 addEventHandler("onClientFinishRampingChallenge", localPlayer,
 	function()
-		outputChatBox("You finished ramping, wooo")
+	
+		playerFinished = true
+	
+		setGameSpeed(0.4)
+		fadeCamera(false)
 		
-		removePlayerFromRampingChallenge()
-		cleanupRampingEnvironment()
-		spawnPlayerAtRampEndedPos()
+		killRampingChallengeMusic()
+		killMissionTimers()
+		hideRampingChallengeProgressText()
+		exports.ramping:toggleRamping(false)
+		showRampingChallengeGameText("finished")
+		
+		setTimer(
+			function()
+				hideRampingChallengeInstructions()
+				removePlayerFromRampingChallenge()
+				cleanupRampingEnvironment()
+				spawnPlayerAtRampEndedPos()
+				setGameSpeed(1)
+				fadeCamera(true)
+				
+				setTimer(
+					function()
+						showRampingChallengeCompleteDialog()
+					end, 
+				1000, 1)
+			end, 
+		3000, 1)
 	end
 )
 
@@ -301,7 +325,7 @@ addEventHandler("onClientPlayerWasted", localPlayer,
 
 addEventHandler("onClientEndRamping", localPlayer,
 	function()
-		if(playerInRampingChallenge) then
+		if(playerInRampingChallenge and not playerFinished) then
 			triggerEvent("onClientEndRampingChallenge", localPlayer, "failed", true)
 		end 
 	end
@@ -324,8 +348,9 @@ addEventHandler("onClientStartRamping", localPlayer,
 				rampStartTimeoutTimer = nil
 			end
 			
-			timeToCompleteChallengeMissionTimer = exports.missiontimer:createMissionTimer (120000, true, "Time to complete challenge: %m:%s:%cs", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
-			
+			toCompleteMissionTime = resourceSettings["timeToCompleteChallenge"]
+			timeToCompleteChallengeMissionTimer = exports.missiontimer:createMissionTimer (toCompleteMissionTime, true, "Time to complete challenge: %m:%s:%cs", 0.5, 20, true, "default-bold", 1, 255, 255, 255) -- todo: manage text
+			exports.missiontimer:setMissionTimerHurryTime(timeToCompleteChallengeMissionTimer, math.floor(toCompleteMissionTime / 4))
 		end
 	end 
 )
@@ -337,7 +362,6 @@ addEventHandler("onServerProvideVehicleInformation", localPlayer,
 	end 
 )
 
--- give the client the markers \o
 addEvent("onServerProvideRampingChallengeMarkers", true)
 addEventHandler("onServerProvideRampingChallengeMarkers", localPlayer,
 	function(theElements)
@@ -387,8 +411,11 @@ function removePlayerFromRampingChallenge()
 	
 	rampingChallengeRaceCheckpoints = {}
 	numberOfRampsClimbed = 0
-	
+	rampChallengeStartTime = nil
+	playerFinished = nil
+	exports.ramping:toggleRamping(true)
 	togglePlayerRampingChallengeControlRestrictions(false)
+	showRampingChallengeGameText(false)
 
 	if(rampStartTimeoutTimer) then
 		killTimer(rampStartTimeoutTimer)

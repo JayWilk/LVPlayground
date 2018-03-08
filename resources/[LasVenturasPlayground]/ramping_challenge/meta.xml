@@ -6,7 +6,8 @@
 	<file src="client/img/countdown_2.png"/>
 	<file src="client/img/countdown_1.png"/>
 	<file src="client/img/countdown_0.png"/>
-
+	<file src="client/img/ramp_finished.png"/>
+	<file src="client/img/smashedit.png"/>
 	
 	<file src="client/audio/level1.mp3"/>
 	<file src="client/audio/level2.mp3"/>
@@ -25,6 +26,10 @@
 	
 	<export function="hasPlayerCompletedRampingChallenge" type="client"/>
 	
+	<include resource="ramping"/>
+	<include resource="missiontimer"/>
+	<include resource="display"/>
+	
 	<settings>
 		<!-- Used for dimension id calculation. In theory, dimension Ids can range from the offset, to the maximum player count. e.g 200 - 232 -->
 		<setting name="*dimensionIdOffset" value="200" friendlyname="Dimension Id offset" accept="*" group="Gameplay" desc="Sets the dimension offset" />
@@ -35,6 +40,8 @@
 		<setting name="*timeToGetInVehicle" value="15000" friendlyname="Time to get in vehicle (ms)" accept="*" group="Mission Timers"/>
 		<setting name="*timeToFirstRamp" value="20000" friendlyname="Time to reach first ramp (ms)" accept="*" group="Mission Timers"/>
 		<setting name="*timeToCompleteChallenge" value="120000" friendlyname="Time to complete challenge (ms)" accept="*" group="Mission Timers"/>
+		
+		<setting name="*level1NumberOfRampsToComplete" value="50" friendlyname="Number of ramps (level 1)" accept="*" group="Level 1"/>
 		
 	</settings>
 </meta>

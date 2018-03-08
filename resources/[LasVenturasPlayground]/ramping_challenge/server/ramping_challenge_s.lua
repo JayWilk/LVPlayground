@@ -10,10 +10,20 @@ addEventHandler("onClientRequestResourceSettings", resourceRoot,
 		local settingsNode = xmlFindChild(xml, "settings", 0)
 		
 		if(settingsNode) then
-			local settings = xmlNodeGetChildren(settingsNode)   
-			triggerClientEvent(client, "onServerProvideResourceSettings", resourceRoot, settings)
-		end 
 		
+			local settingsNodes = xmlNodeGetChildren(settingsNode)   
+			local settingsList = { }
+			
+			for i, node in ipairs(settingsNodes) do
+				local settingsName = xmlNodeGetAttribute(node, "name")
+				local settingsValue = xmlNodeGetAttribute(node, "value")
+				
+				-- Subsitute the setting names access modifier 
+				settingsList[settingsName:sub(2)] = settingsValue
+			end 
+
+			triggerClientEvent(client, "onServerProvideResourceSettings", resourceRoot, settingsList)
+		end 
         xmlUnloadFile(xml)    
 	end 
 )
@@ -168,7 +178,7 @@ function spawnPlayerAtRampingChallengeStartPos(thePlayer, rampChallengeStartPos)
 		setElementPosition(thePlayer, x, y, z)
 		setElementRotation(thePlayer, 0, 0, rz)
 		
-		setTimer(setCameraTarget, 75, 1, thePlayer, thePlayer)
+		setTimer(setCameraTarget, 150, 1, thePlayer, thePlayer)
 	end 
 end 
 
@@ -187,7 +197,7 @@ function spawnPlayerAtRampingChallengeEndedPos(thePlayer)
 			setElementPosition(thePlayer, x, y, z)
 			setElementRotation(thePlayer, 0, 0, rz)
 			
-			setTimer(setCameraTarget, 75, 1, thePlayer, thePlayer)
+			setTimer(setCameraTarget, 150, 1, thePlayer, thePlayer)
 		end 
 	end 
 end 
@@ -241,7 +251,7 @@ function spawnRampingChallengeVehicleWithMarkerAndBlip(rampChallengeVehicle, the
 		
 	local theVehicle = createVehicle(model, posX, posY, posZ, 0, 0, rotZ, get("rampVehiclePlate"))
 	local vehicleMarker = createMarker(posX, posY, posZ + 6, "arrow", 1.0, 255, 0, 0, 150, thePlayer)
-	local vehicleBlip = createBlipAttachedTo(theVehicle, 0, 2, 255, 0, 0, 255, 1, 9999, thePlayer)
+	local vehicleBlip = createBlipAttachedTo(theVehicle, 0, 3, 255, 0, 0, 255, 5, 9999, thePlayer)
 	
 	setElementParent(vehicleMarker, theVehicle)
 	setElementParent(vehicleBlip, theVehicle)

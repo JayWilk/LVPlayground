@@ -60,12 +60,26 @@ addEventHandler("onClientResourceStart", resourceRoot,
         GUIEditor.button[5] = guiCreateButton(0.05, 0.62, 0.37, 0.19, "Yes", true, GUIEditor.window[3])
         GUIEditor.button[6] = guiCreateButton(192, 80, 117, 25, "No", false, GUIEditor.window[3])    
 		
+		-- finished dialog
+		GUIEditor.window[4] = guiCreateWindow((screenW - 600) / 2, (screenH - 359) / 2, 600, 359, "Ramping Challenge", false)
+        guiWindowSetMovable(GUIEditor.window[4], false)
+        guiWindowSetSizable(GUIEditor.window[4], false)
+
+        GUIEditor.staticimage[2] = guiCreateStaticImage(10, (359 - 278) / 2, 171, 278, ":ramping_challenge/client/img/ramp_finished.png", false, GUIEditor.window[4])
+        GUIEditor.label[6] = guiCreateLabel(203, 118, 347, 127, "Congratulations for passing the Ramping Challenge. \n\n\nKeep an eye out around Las Venturas and Bone County Desert, as there may be more.\n\nRemember: you need to complete all ramping challenges to unlock the Ramping License feature.", false, GUIEditor.window[4])
+        guiLabelSetHorizontalAlign(GUIEditor.label[6], "left", true)
+        GUIEditor.button[7] = guiCreateButton(201, 277, 350, 49, "Close", false, GUIEditor.window[4])
+        GUIEditor.staticimage[3] = guiCreateStaticImage(213, 42, 333, 45, ":ramping_challenge/client/img/smashedit.png", false, GUIEditor.window[4])    
+
+		
+		
 		
 		guiSetInputMode("allow_binds")
 		
 		guiSetVisible(GUIEditor.window[1], false)
 		guiSetVisible(GUIEditor.window[2], false)
 		guiSetVisible(GUIEditor.window[3], false)
+		guiSetVisible(GUIEditor.window[4], false)
 		
 		-- EVENT HANDLERS - button click 
 		addEventHandler("onClientGUIClick", GUIEditor.button[2], 
@@ -117,6 +131,18 @@ addEventHandler("onClientResourceStart", resourceRoot,
 			end, 
 		false)
 		
+		-- complete dialog 
+		addEventHandler("onClientGUIClick", GUIEditor.button[7], 
+			function()
+				hideRampingChallengeCompleteDialog()
+				setTimer(
+					function()
+						exports.display:showTextBox("You can revist the ramping challenge office at any time and try and beat your record!")
+					end,
+				4000, 1)
+			end,
+		false)
+		
 	end 
 )
 
@@ -138,12 +164,15 @@ addEventHandler("onClientRender", root,
 		
 		
 		if(rampingChallengeProgressText) then
+		
+			local rampsToClimb = resourceSettings["level1NumberOfRampsToComplete"]
+		
 			dxDrawText("RAMPING CHALLENGE", 512 - 1, 77 - 1, 864 - 1, 139 - 1, tocolor(0, 0, 0, 255), 2.00, "pricedown", "center", "top", false, false, false, false, false)
 			dxDrawText("RAMPING CHALLENGE", 512 + 1, 77 - 1, 864 + 1, 139 - 1, tocolor(0, 0, 0, 255), 2.00, "pricedown", "center", "top", false, false, false, false, false)
 			dxDrawText("RAMPING CHALLENGE", 512 - 1, 77 + 1, 864 - 1, 139 + 1, tocolor(0, 0, 0, 255), 2.00, "pricedown", "center", "top", false, false, false, false, false)
 			dxDrawText("RAMPING CHALLENGE", 512 + 1, 77 + 1, 864 + 1, 139 + 1, tocolor(0, 0, 0, 255), 2.00, "pricedown", "center", "top", false, false, false, false, false)
 			dxDrawText("RAMPING CHALLENGE", 512, 77, 864, 139, tocolor(0, 255, 0, 255), 2.00, "pricedown", "center", "top", false, false, false, false, false)
-			dxDrawText(tostring(getNumberOfRampsClimbed()) .. " / 250 ramps climbed!", 512, 139, 864, 176, tocolor(255, 255, 255, 255), 1.00, "bankgothic", "center", "top", false, false, false, false, false)
+			dxDrawText(tostring(getNumberOfRampsClimbed()) .. " / " ..rampsToClimb .." ramps climbed", 512, 139, 864, 176, tocolor(255, 255, 255, 255), 1.00, "bankgothic", "center", "top", false, false, false, false, false)
 			dxDrawText("Altitude: "..getAltitudeString(), 649, 176, 730, 190, tocolor(255, 255, 255, 255), 1.00, "default", "center", "top", false, false, false, false, false)
 		end
 		
@@ -152,7 +181,8 @@ addEventHandler("onClientRender", root,
 
 function getAltitudeString()
 	local x, y z = getElementPosition(localPlayer)
-	return tostring(z)
+	local feet = math.floor(z / 3.28084)
+	return tostring(feet)
 end 
 
 
@@ -189,7 +219,6 @@ function showRampingChallengeTryAgainDialog()
 	guiSetInputMode("no_binds")
 	guiSetVisible(GUIEditor.window[3], true)
 	showCursor(true)
-	playSFX("genrl", 52, 18, false)
 end 
 
 function hideRampingChallengeTryAgainDialog()
@@ -197,6 +226,19 @@ function hideRampingChallengeTryAgainDialog()
 	guiSetVisible(GUIEditor.window[3], false)
 	showCursor(false)
 end 
+
+function showRampingChallengeCompleteDialog()
+	guiSetVisible(GUIEditor.window[4], true)
+	guiSetInputMode("no_binds")
+	showCursor(true)
+end 
+
+function hideRampingChallengeCompleteDialog()
+	guiSetVisible(GUIEditor.window[4], false)
+	guiSetInputMode("allow_binds")
+	showCursor(false)
+end 
+
 
 function showRampingChallengeInstructions(text, time)
 	instructionTextShowing = true
