@@ -1,0 +1,23 @@
+<meta>
+
+    <info name="2048" author="Ali_Digitali" type="script" version="1.1.0"></info>
+
+    <script src="client/client_2048.lua" type="client"></script>
+    <script src="server/server_2048.lua" type="server"></script>
+
+	<map src="server/2048.map"/>
+	
+    <file src="client/images/background.png" />
+    <file src="client/images/0.png" />
+    <file src="client/images/2.png" />
+    <file src="client/images/4.png" />
+    <file src="client/images/8.png" />
+    <file src="client/images/16.png" />
+    <file src="client/images/32.png" />
+    <file src="client/images/64.png" />
+    <file src="client/images/128.png" />
+    <file src="client/images/256.png" />
+    <file src="client/images/512.png" />
+    <file src="client/images/1024.png" />
+    <file src="client/images/2048.png" />
+</meta>

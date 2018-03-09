@@ -1,7 +1,6 @@
 <meta>
 	<info author="Jay" name="Pirate Ship" version="0.1"/>
 	<script src="client/pirateShip_c.lua" type="client"/>
-	<script src="server/pirateShip_s.lua" />
-	<file src="client/img/nogun.jpg" />
-	<file src="client/img/rules.jpg" />
+	<!--<file src="client/img/nogun.jpg" />
+	<file src="client/img/rules.jpg" /> -->
 </meta>
