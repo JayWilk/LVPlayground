@@ -137,7 +137,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
 				hideRampingChallengeCompleteDialog()
 				setTimer(
 					function()
-						exports.display:showTextBox("You can revist the ramping challenge office at any time and try and beat your record!")
+						exports.display:showHint("You can revist the ramping challenge office at any time and try and beat your record!")
 					end,
 				4000, 1)
 			end,

@@ -1,10 +1,11 @@
 <meta>
      <info author="Jay" name="Display" description="Disables vehicle names, zone names and the player clock, and shows the LVP logo" version="0.1"/>
      <script src="display.lua" type="client"/>
-	 <script src="textBox.lua" type="client"/>
+	 <script src="client/hintBox_c.lua" type="client"/>
+	 <script src="client/api.lua" type="client"/>
 	 
-	 <export function="showTextBox" type="client"/>
-	 <export function="hideTextBox" type="client"/>
+	 <export function="showHint" type="client"/>
+ 
 	 
 	<file src="img/lvp_logo.png" />
 	
