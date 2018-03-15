@@ -7,4 +7,7 @@
 	 <export function="hideTextBox" type="client"/>
 	 
 	<file src="img/lvp_logo.png" />
+	
+	<export function="toggleDisplay" type="client"/>
+	
 </meta>

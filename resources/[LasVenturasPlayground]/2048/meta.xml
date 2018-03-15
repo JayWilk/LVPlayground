@@ -3,6 +3,7 @@
     <info name="2048" author="Ali_Digitali" type="script" version="1.1.0"></info>
 
     <script src="client/client_2048.lua" type="client"></script>
+	<script src="client/world.lua" type="client"></script>
     <script src="server/server_2048.lua" type="server"></script>
 
 	<map src="server/2048.map"/>
@@ -20,4 +21,5 @@
     <file src="client/images/512.png" />
     <file src="client/images/1024.png" />
     <file src="client/images/2048.png" />
+	<file src="client/images/2048_logo.png" />
 </meta>

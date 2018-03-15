@@ -90,6 +90,7 @@ addEventHandler("onClientPlayerPickupHit", localPlayer,
 			outputChatBox("* The PirateShip on Las Venturas Playground is a safety zone.", 255, 255, 0)
 			outputChatBox("* No shooting, deathmatch or killing is allowed.", 255, 255, 0)
 			outputChatBox("* If you idle here, you will earn money.", 255, 255, 0)
+			outputChatBox("* Hint: you can earn more idle money by playing some aracade games!")
 			
 		end 
 	end

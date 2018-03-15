@@ -13,6 +13,7 @@ GUIEditor = {
     edit = {},
 	staticimage = {}
 }
+gameMusic = nil
 
 addEventHandler("onClientResourceStart", resourceRoot,
     function()
@@ -20,6 +21,8 @@ addEventHandler("onClientResourceStart", resourceRoot,
 		GUIEditor.window[1] = guiCreateWindow(373, 136, 510, 600, "2048", false)
         guiWindowSetSizable(GUIEditor.window[1], false)
         guiSetAlpha(GUIEditor.window[1], 0.90)
+		guiWindowSetMovable(GUIEditor.window[1], false)
+		guiWindowSetSizable(GUIEditor.window[1], false)
 		
 		-- buttons
 		newGameButton = guiCreateButton(14, 540, 100, 50, "New Game", false, GUIEditor.window[1])
@@ -38,6 +41,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
 		
         -- background image
 		background = guiCreateStaticImage(5, 25, 500, 500, "images/background.png", false, GUIEditor.window[1])    
+				
 		
 		-- create a grid with empty squares
 		gridImage = {{},{},{},{}} -- one grid that contains all the images of the numbers
@@ -54,8 +58,6 @@ addEventHandler("onClientResourceStart", resourceRoot,
 		addEventHandler("onClientGUIClick", newGameButton, newGame, false)
 		addEventHandler("onClientGUIClick", closeButton, closeWindow, false)
 		
-		-- start a new game
-		newGame()
 	
 		-- hide the window
 		guiSetVisible(GUIEditor.window[1], false)
@@ -70,11 +72,18 @@ addEventHandler("onClientResourceStart", resourceRoot,
     end
 )
 
+addEvent("onStopPlaying2048")
+
 -- close the gui window
 function closeWindow()
 	setElementData(localPlayer,"2048_active",false,true)
 	guiSetVisible(GUIEditor.window[1], false)
 	showCursor(false)
+	triggerEvent("onStopPlaying2048", localPlayer)
+	fadeCamera(true)
+	exports.display:toggleDisplay(true)
+	stopSound(gameMusic)
+	gameMusic = nil
 end
 
 -- open/close the gui window
@@ -82,17 +91,34 @@ function showPollGuiHandler()
 	if (guiGetVisible(GUIEditor.window[1])) then -- if the window is visible
 		closeWindow() --close
 	else
-		guiSetVisible(GUIEditor.window[1], true) --else show the window
-		setElementData(localPlayer,"2048_active",true,true)
-		showCursor(true)
+
+		fadeCamera(false)
+		exports.display:toggleDisplay(false)
+
+		setTimer(
+			function()
+				newGame()
+				guiSetVisible(GUIEditor.window[1], true) --else show the window
+				setElementData(localPlayer,"2048_active",true,true)
+				showCursor(true)
+			end,
+		2000, 1)
 	end
 end
 
-addEvent("onServerRequest2048Start", true)
-addEventHandler("onServerRequest2048Start", localPlayer,
+addEvent("onClientRequest2048Start", true)
+addEventHandler("onClientRequest2048Start", localPlayer,
 	function()
-		iprint("Client: onServerRequest2048Start")
 		showPollGuiHandler()
+	end
+)
+
+addEventHandler("onClientRender", root,
+	function()
+		if guiGetVisible(GUIEditor.window[1]) then 
+			local screenW, screenH = guiGetScreenSize()
+			dxDrawImage(screenW * 0.4224, screenH * 0.0729, screenW * 0.1596, screenH * 0.0859, "client/images/2048_logo.png", 0, 0, 0, tocolor(255, 255, 255, 255), false)
+		end
 	end
 )
 -------------------------
@@ -202,6 +228,10 @@ function newGame() -- clear the grid and place random tiles on the board
 	for a=1,2 do
 		addRandomTile()
 	end
+	
+	if not gameMusic then
+		gameMusic = playSFX("script", 89, 0, true)
+	end 
 end
 
 -- returns all the indices of empty tiles in table form
@@ -254,6 +284,11 @@ function addRandomTile()
 		if not (checkUp or checkDown or checkLeft or checkRight) then -- if none return true you cannot make any moves and the game is over
 			guiLabelSetColor(gameState,255,0,0)
 			guiSetText(gameState,"Game Over!")
+			playSFX("script", 75, 4, false)
+			
+			stopSound(gameMusic)
+			gameMusic = nil
+			
 		end
 	end
 end
@@ -261,6 +296,7 @@ end
 function inputHandler(key,keystate,x,y)
 	if (guiGetVisible(GUIEditor.window[1])) and (allowMoves) then -- only move tiles if the window is visible
 		moveTiles(x,y)
+		playSFX("script", 75, 1, false)
 	end
 end
 

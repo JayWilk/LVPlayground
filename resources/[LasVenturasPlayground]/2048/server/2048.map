@@ -1,3 +1,3 @@
 <map>
-	<gameCheckpoint posX="2000.5" posY="1526" posZ="13.6"/> <!-- pirateship --> 
+	<gameMachine posX="2000.6" posY="1525" posZ="13.6" rotZ ="178"/> <!-- pirateship --> 
 </map>
