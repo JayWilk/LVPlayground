@@ -9,6 +9,8 @@
 	
 	<script src="server/ramping_s.lua"/>
 
+	<min_mta_version server="1.5.4-9.11305" client="1.1.1-9.03355" />
+	
 	<settings>
 		<setting name="*rampObjectId" value="1655" friendlyname="Ramp Object Id" accept="*" group="Gameplay"/>
 		<setting name="*rampVisibilityTime" value="3000" friendlyname="Time in milliseconds the ramp is visible for" accept="*" group="Gameplay"/>
