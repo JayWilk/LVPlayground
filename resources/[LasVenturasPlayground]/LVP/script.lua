@@ -1,87 +1,66 @@
-
-
-
-myCar = nill
-
--- create the function the command handler calls, with the arguments: thePlayer, command, vehicleModel
-function createVehicleForPlayer(thePlayer, command, vehicleModel)
-   
-   if(vehicleModel == nill) then 
-	outputChatBox("Use: /v [model number]");
-	return
-   end
-   
-   local carModel
-   
-   -- do we have a string? 
-   if(tonumber(vehicleModel) == nil) then
-       carModel = getVehicleModelFromName(vehicleModel)
-   else
-	  carModel = tonumber(vehicleModel)
-   end 
-   
-	if(carModel == nill or carModel == false ) then 
-		outputChatBox("No car found", thePlayer )
-		return
-	end 
-   -- create a vehicle and stuff
-   local x,y,z = getElementPosition(thePlayer)
-   
-   if(myCar ~= nill) then
-	destroyElement(myCar)
-   end
-   
-   myCar = createVehicle(carModel, x, y, z )
-   
-   if(myCar ~= false) then 
-		outputChatBox("The vehicle was created, wohoo", thePlayer)
-		warpPedIntoVehicle ( thePlayer, myCar)
-      end
-end
- 
--- create a command handler
-addCommandHandler("v", createVehicleForPlayer)
-
-function easyText(thePlayer, command, text)
-
-	if(text == nill) then
-		outputChatBox("USE: /text [text]", thePlayer)
-		return
-	end
-	
-	outputChatBox("attempting to output hehe", thePlayer)
-	displayMessageForPlayer ( thePlayer, 1, "test", 6000, 0.5, 0.5, 255, 255, 255, 255, 2 )
-	outputChatBox("done", thePlayer)
-end 
-addCommandHandler("text", easyText)
-	
-
 addCommandHandler("kill", 
 	function(thePlayer)
 		setElementHealth(thePlayer, 0)
 	end
-);
+)
 	
+playerVehicles = {}
 	
+addCommandHandler("v",
+	function(thePlayer, theCommand, vehicle)
+		if not vehicle then
+			outputChatBox("USE: /v [id/name]", thePlayer, 255, 0, 0)
+			return
+		end 
+	
+		local theVehicle = nil
+	
+		theVehicle = getVehicleModelFromName(vehicle)
+		
+		if not theVehicle then
+			theVehicle = tonumber(vehicle)
+		end 
+		
+		if theVehicle < 400 or theVehicle > 612 then
+			outputChatBox("Vehicle not found", thePlayer, 255, 0, 0)
+		end 
+		
+		if playerVehicles[thePlayer] ~= nil then
+			destroyElement(playerVehicles[thePlayer])
+		end 
+
+		local x, y, z = getElementPosition(thePlayer)
+		local rx, ry, rz = getElementRotation(thePlayer)
+		
+		playerVehicles[thePlayer] = createVehicle(theVehicle, x, y, z, rx, ry, rz, getPlayerName(thePlayer))
+		warpPedIntoVehicle(thePlayer, playerVehicles[thePlayer])
+	end 
+)
 	
 addEventHandler("onPlayerJoin", getRootElement(), 
 	function()
-		outputChatBox("Welcome to Las Venturas Playground MTA. There are 3 commands: /v /text /kill. More to come! ;)")
+		local thePlayer = source
+		setTimer(
+			function()
+				exports.display:showHint(thePlayer, "Welcome to LVP MTA. This is an early build, and there will be bugs.")
+				exports.display:showHint(thePlayer, "If you need to spawn an Infernus, use /v 411")
+				exports.display:showHint(thePlayer, "Other Commands: /taxi, /locations, /kill")
+				exports.display:showHint(thePlayer, "There are multiple features such as The Pirate Ship, LVP Radio, Ramping Challenge, 2048 Game, Dancing, Graffiti, and More.")
+				exports.display:showHint(thePlayer, "Any problems, speak to Jay. Have fun!")
+			end,
+		8000, 1)
 	end
 );
 
-addEventHandler("onResourceStart", getRootElement(),
+addEventHandler("onResourceStart", resourceRoot,
 	function(res)
-		if res == getThisResource() then
-			setDevelopmentMode(true)
-		end 
-		outputChatBox("Resource " .. getResourceName(res) .. " just started.")
+		setDevelopmentMode(true)
 		outputDebugString(getResourceName(res) .. ": onResourceStart()")
 	end
 );
 
+
 function respawnExplodedVehicle()
 	setTimer(respawnVehicle, 15000, 1, source)
-	setVehicleFuelTankExplodable(source, true)
 end
 addEventHandler("onVehicleExplode", getRootElement(), respawnExplodedVehicle)

@@ -10,8 +10,8 @@ function createHintBoxClient( x, y, text, time, textColour, boxColour, scale, fo
 		end
 		hintBox = { }   
 		if not text then text = "" end
-		if not scale then scale = 2 end
-		if not time then time = 8000 end
+		if not scale then scale = 1.2 end
+		if not time then time = 10000 end
 		if not font then font = "default-bold" end
 		if not textColour then textColour = {r = 170, g = 168, b = 162, a = 230} end
 		if not boxColour then boxColour = {r = 0, g = 0, b = 0, a = 180} end
@@ -27,7 +27,7 @@ function createHintBoxClient( x, y, text, time, textColour, boxColour, scale, fo
 			hintBox.pages = text:sub(e+1)
 			hintBox.text = text:sub(1,s-1)
 		end		
-		hintBox.width = 250      
+		hintBox.width = 200      
 		local lines = {}   
 		if type(x) == "string" then
 			local calculation = tostring(string.gsub(x,"sx",tostring(sx)))
@@ -38,7 +38,7 @@ function createHintBoxClient( x, y, text, time, textColour, boxColour, scale, fo
 			_,y = pcall(loadstring("return "..calculation))        
 		end
 		hintBox.border = border
-		hintBox.height, lines = dxGetTextHeight(250,hintBox.text,scale,font,true)
+		hintBox.height, lines = dxGetTextHeight(200,hintBox.text,scale,font,true)
 		hintBox.x = x
 		hintBox.y = y
 		hintBox.textColour = textColour
@@ -56,19 +56,28 @@ function createHintBoxClient( x, y, text, time, textColour, boxColour, scale, fo
 				if hintBox.pages then
 					createHintBoxClient( hintBox.x, hintBox.y, hintBox.pages, hintBox.time, hintBox.textColour, hintBox.boxColour, hintBox.scale, hintBox.font, hintBox.border )
 				else
+					triggerEvent("onHintBoxExpire", localPlayer, hintBox)
 					hintBox = {} 
 				end
 			end, 
 		time, 1)
 	end
 end
+
+addEvent("onHintBoxExpire", true)
+addEventHandler("onHintBoxExpire", localPlayer, 
+	function()
+	
+	end
+)
+
 addEvent( "createHintBoxClient", true )
 addEventHandler( "createHintBoxClient", root, createHintBoxClient )
 
 addEvent( 'clientHintBox', true )
 addEventHandler( 'clientHintBox', localPlayer,
     function( ... )
-	    createHintBoxClient(20,"(sy/6)*2",table.concat({...}," "),7000)	
+	    createHintBoxClient(20,"(sy/7.5)*2",table.concat({...}," "),7000)	
 	end
 )
 

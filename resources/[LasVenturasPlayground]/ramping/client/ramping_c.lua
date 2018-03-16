@@ -31,10 +31,12 @@ addEventHandler("onClientPerformRamping", localPlayer,
 
 addEventHandler("onClientVehicleEnter", root,
 	function()
-		if(getVehicleType(source) == "Automobile" or getVehicleType(source) == "Bike" or getVehicleType(source) == "BMX"
-		or getVehicleType(source) == "Monster Truck" or getVehicleType(source) == "Quad") then 
-			bindKey(rampControlKey, "down", spawnRampInfrontOfPlayer)
+		if(getVehicleType(source) == "Helicopter" or getVehicleType(source) == "Plane" or getVehicleType(source) == "Boat"
+		or getVehicleType(source) == "Train" or getVehicleType(source) == "Trailer") then 
+			return
 		end
+		
+		bindKey(rampControlKey, "down", spawnRampInfrontOfPlayer)
 	end 
 )	
 
