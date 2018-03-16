@@ -4,5 +4,6 @@
 	<script src="client/pirateShip_c.lua" type="client"/>
 	
 	<include resource="display"/>
+	<map src="pirateShip.map"/>
 
 </meta>
