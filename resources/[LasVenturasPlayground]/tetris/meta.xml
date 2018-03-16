@@ -1,0 +1,24 @@
+<meta>
+	<info author="Zipper/Jay" type="misc" version="1.0.2" name="Tetris" />
+	
+	<file src="client/images/black.bmp" />
+	<file src="client/images/white.bmp" />
+	<file src="client/images/blue.bmp" />
+	<file src="client/images/green.bmp" />
+	<file src="client/images/orange.bmp" />
+	<file src="client/images/red.bmp" />
+	<file src="client/images/yellow.bmp" />
+	<file src="client/images/left.bmp" />
+	<file src="client/images/right.bmp" />
+	<file src="client/audio/theme.ogg" />
+	
+	<script src="client/classes_client.lua" type="client" />
+	<script src="client/tetris_client.lua" type="client" />
+	<script src="client/world_c.lua" type="client"/>
+	
+	<script src="server/tetris_s.lua"/>
+	<map src="server/tetris.map"/>
+	
+	<include resource="display"/>
+	
+</meta>

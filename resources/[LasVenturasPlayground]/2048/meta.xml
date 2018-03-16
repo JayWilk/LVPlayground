@@ -1,12 +1,14 @@
 <meta>
 
-    <info name="2048" author="Ali_Digitali" type="script" version="1.1.0"></info>
+    <info name="2048" author="Ali_Digitali" type="script" version="1.2"></info>
 
     <script src="client/client_2048.lua" type="client"></script>
 	<script src="client/world.lua" type="client"></script>
     <script src="server/server_2048.lua" type="server"></script>
 
 	<map src="server/2048.map"/>
+	
+	<include resource="display"/>
 	
     <file src="client/images/background.png" />
     <file src="client/images/0.png" />

@@ -82,8 +82,10 @@ function closeWindow()
 	triggerEvent("onStopPlaying2048", localPlayer)
 	fadeCamera(true)
 	exports.display:toggleDisplay(true)
-	stopSound(gameMusic)
-	gameMusic = nil
+	if(gameMusic) then 
+		stopSound(gameMusic)
+		gameMusic = nil
+	end
 end
 
 -- open/close the gui window
