@@ -51,8 +51,8 @@ addEventHandler("onClientElementColShapeLeave", root,
 			toggleControl("aim_weapon", true)
 			toggleControl("next_weapon", true)
 			toggleControl("previous_weapon", true)
-			
-			outputChatBox("You idled on the ship for " ..tostring( (getTickCount() - timeEnteredShip) / 1000) .." seconds")
+		
+			exports.display:showHint("You idled on the PirateShip for " ..tostring( (getTickCount() - timeEnteredShip) / 1000) .." seconds")
 			timeEnteredShip = nil
 			
 			killTimer(shipMoneyTimer)
@@ -80,17 +80,11 @@ addEventHandler("onClientPlayerPickupHit", localPlayer,
 		if getElementType(source) == "player" and thePickup == shipPickup then
 		
 			destroyElement(shipPickup)
-			playSoundFrontEnd(101)
 			
-			setTimer ( function()
-				shipPickup = createPickup(2017.150390625, 1545.4384765625, 10.830858230591, 3, 1239)
-			end, 60000, 1 )
-			
-			-- todo: improve!
-			outputChatBox("* The PirateShip on Las Venturas Playground is a safety zone.", 255, 255, 0)
-			outputChatBox("* No shooting, deathmatch or killing is allowed.", 255, 255, 0)
-			outputChatBox("* If you idle here, you will earn money.", 255, 255, 0)
-			outputChatBox("* Hint: you can earn more idle money by playing some aracade games!")
+			exports.display:showHint("The PirateShip on Las Venturas Playground is a safety zone. No weapons, shooting, fighting, deathmatch or any killing is allowed.")
+			exports.display:showHint("If you idle on the Pirate Ship, you will earn a small amount of money.")
+			exports.display:showHint("You can increase this idle money by completing arcade game challenges such as 2048 by walking up to the Arcade Machine.")
+			exports.display:showHint("You can get a taxi to the PirateShip at any time by using the command /taxi 0.")
 			
 		end 
 	end
