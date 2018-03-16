@@ -12,24 +12,22 @@ addEventHandler("onPlayerWasted", getRootElement(),
 	function()
 		setTimer( function(thePlayer) 
 			fadeCamera(thePlayer, false)
-		end, 5000, 1, source )
+		end, 3000, 1, source )
 
 		setTimer(function(thePlayer)
 			spawnPlayerAtRandomPosition(thePlayer)
 			setPlayerDefaultSpawnSkin(thePlayer)
 			givePlayerDefaultSpawnWeapons(thePlayer)
-		end, 7000, 1, source)
+		end, 5000, 1, source)
 	end
 )
-addEventHandler("onResourceStart", getRootElement(), 
-	function(res)
-		if(res == getThisResource()) then
-			for id, thePlayer in ipairs(getElementsByType("player")) do 
-				spawnPlayerAtRandomPosition(thePlayer)
-				setPlayerDefaultSpawnSkin(thePlayer)
-				givePlayerDefaultSpawnWeapons(thePlayer)
-			end 
-		end
+addEventHandler("onResourceStart", resourceRoot, 
+	function()
+		for id, thePlayer in ipairs(getElementsByType("player")) do 
+			spawnPlayerAtRandomPosition(thePlayer)
+			setPlayerDefaultSpawnSkin(thePlayer)
+			givePlayerDefaultSpawnWeapons(thePlayer)
+		end 
 	end 
 )
 
@@ -50,7 +48,7 @@ function spawnPlayerAtRandomPosition(thePlayer)
 
 	fadeCamera(thePlayer, true)
 	
-	setTimer(setCameraTarget, 50, 1, thePlayer, thePlayer)
+	setTimer(setCameraTarget, 100, 1, thePlayer, thePlayer)
 end
 
 
