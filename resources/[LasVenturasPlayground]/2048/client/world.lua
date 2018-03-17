@@ -70,6 +70,10 @@ addEventHandler("onClientRender", root,
 		if isPlaying2048 then
 			return
 		end 
+		
+		if(isPedDead(localPlayer) then
+			return
+		end
 			
 		gameMachineCols = getElementChildren(gameMachineRootElement, "colshape")
 		

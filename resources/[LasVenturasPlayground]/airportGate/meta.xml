@@ -1,0 +1,4 @@
+<meta>
+	<map src="airportGate.map"/>
+	<script src="server/airportGate_s.lua"/>
+</meta>

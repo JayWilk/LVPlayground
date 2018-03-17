@@ -123,6 +123,15 @@ addEventHandler("onClientRender", root,
 		end
 	end
 )
+
+addEventHandler("onClientPlayerWasted", localPlayer,
+	function()
+		if (guiGetVisible(GUIEditor.window[1])) then
+			closeWindow() 
+		end
+	end 
+)
+
 -------------------------
 --	Gameplay Functions --
 -------------------------

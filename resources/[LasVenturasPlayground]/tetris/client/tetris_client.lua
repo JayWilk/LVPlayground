@@ -55,6 +55,9 @@ end
 addEvent("onClientRequestTetrisStart", true)
 addEventHandler("onClientRequestTetrisStart", localPlayer, startTetris)
 
+
+
+
 function stoptetris_func ()
 
 	for i = 1, 4 do
@@ -91,6 +94,14 @@ function stoptetris_func ()
 	triggerEvent("onClientStopPlayingTetris", localPlayer)
 	
 end
+
+addEventHandler("onClientPlayerWasted", localPlayer,
+	function()
+		if isElement ( gImage["Back"] ) then
+			stoptetris_func()
+		end 
+	end 
+)
 
 
 function createTetrisField ( parent )

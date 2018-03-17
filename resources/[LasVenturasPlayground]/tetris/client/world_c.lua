@@ -15,7 +15,6 @@ addEventHandler("onClientResourceStart", resourceRoot,
 addEvent("onServerProvideTetrisGameMachineElements", true)
 addEventHandler("onServerProvideTetrisGameMachineElements", resourceRoot,
 	function(theElements)
-		iprint("server provided wee")
 		for i, theElement in ipairs(theElements) do
 		
 			local x, y, z, rz = 
@@ -70,6 +69,10 @@ addEventHandler("onClientRender", root,
 		if isPlayingTetris then
 			return
 		end 
+		
+		if isPedDead(localPlayer) then
+			return
+		end
 			
 		gameMachineCols = getElementChildren(gameMachineRootElement, "colshape")
 		
