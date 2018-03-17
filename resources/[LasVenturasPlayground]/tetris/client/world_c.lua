@@ -4,11 +4,19 @@
 
 gameMachineRootElement = createElement("tetrisGameMachineRoot")
 isPlayingTetris = false
-
+gameText = nil
 
 addEventHandler("onClientResourceStart", resourceRoot, 
 	function()
 		triggerServerEvent("onClientRequestTetrisGameMachineElements", resourceRoot)
+		
+		local x, y = guiGetScreenSize()
+		gameText = dxText:create("Press enter to play Tetris", 0.5, 0.85)
+		gameText:font("pricedown")
+		gameText:scale(x / 1200)
+		gameText:type("border", 5, 0, 0, 0)
+		gameText:color(0, 255, 0, 255)
+		gameText:visible(false)
 	end 
 )
 
@@ -44,9 +52,11 @@ addEventHandler("onClientColShapeHit", gameMachineRootElement,
 		if(getElementType(theElement) ~= "player") then
 			return
 		end
+		
 		playSFX("script", 144, 0, false)
 		bindKey("enter", "down", startTetris)
 		toggleControl("enter_exit", false)
+		gameText:visible(true)
 	end
 )
 
@@ -59,30 +69,10 @@ addEventHandler("onClientColShapeLeave", gameMachineRootElement,
 		
 		unbindKey("enter", "down", startTetris)
 		toggleControl("enter_exit", true)
+		gameText:visible(false)
 	end
 )
 
-
-addEventHandler("onClientRender", root,
-	function()
-		
-		if isPlayingTetris then
-			return
-		end 
-		
-		if isPedDead(localPlayer) then
-			return
-		end
-			
-		gameMachineCols = getElementChildren(gameMachineRootElement, "colshape")
-		
-		for i, colShape in ipairs(gameMachineCols) do
-			if isElementWithinColShape(localPlayer, colShape) then
-				dxDrawText("Press Enter to play Tetris", 512, 631, 854, 667, tocolor(0, 253, 0, 255), 1.20, "pricedown", "left", "top", false, false, false, false, false)
-			end
-		end 
-	end
-)
 
 addEvent("onClientStopPlayingTetris", true)
 addEventHandler("onClientStopPlayingTetris", localPlayer,

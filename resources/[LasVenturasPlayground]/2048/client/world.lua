@@ -4,11 +4,19 @@
 
 gameMachineRootElement = createElement("gameMachineRoot")
 isPlaying2048 = false
-
+gameText = nil
 
 addEventHandler("onClientResourceStart", resourceRoot, 
 	function()
 		triggerServerEvent("onClientRequestGameMachineElements", resourceRoot)
+		
+		local x, y = guiGetScreenSize()
+		gameText = dxText:create("Press enter to play 2048", 0.5, 0.85)
+		gameText:font("pricedown")
+		gameText:scale(x / 1200)
+		gameText:type("border", 5, 0, 0, 0)
+		gameText:color(0, 253, 227, 255)
+		gameText:visible(false)
 	end 
 )
 
@@ -48,6 +56,7 @@ addEventHandler("onClientColShapeHit", gameMachineRootElement,
 		playSFX("script", 144, 0, false)
 		bindKey("enter", "down", start2048)
 		toggleControl("enter_exit", false)
+		gameText:visible(true)
 	end
 )
 
@@ -60,30 +69,10 @@ addEventHandler("onClientColShapeLeave", gameMachineRootElement,
 		
 		unbindKey("enter", "down", start2048)
 		toggleControl("enter_exit", true)
+		gameText:visible(false)
 	end
 )
 
-
-addEventHandler("onClientRender", root,
-	function()
-		
-		if isPlaying2048 then
-			return
-		end 
-		
-		if(isPedDead(localPlayer) then
-			return
-		end
-			
-		gameMachineCols = getElementChildren(gameMachineRootElement, "colshape")
-		
-		for i, colShape in ipairs(gameMachineCols) do
-			if isElementWithinColShape(localPlayer, colShape) then
-				dxDrawText("Press Enter to play 2048", 512, 631, 854, 667, tocolor(0, 253, 227, 255), 1.20, "pricedown", "left", "top", false, false, false, false, false)
-			end
-		end 
-	end
-)
 
 addEventHandler("onStopPlaying2048", localPlayer,
 	function()

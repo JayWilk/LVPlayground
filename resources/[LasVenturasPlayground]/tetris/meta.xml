@@ -12,6 +12,11 @@
 	<file src="client/images/right.bmp" />
 	<file src="client/audio/theme.ogg" />
 	
+	<script src="client/utils/textlib.lua" type="client"/>
+	<script src="client/utils/client_anim.lua" type="client" />
+	<script src="client/utils/textlib_anim.lua" type="client" />
+
+	
 	<script src="client/classes_client.lua" type="client" />
 	<script src="client/tetris_client.lua" type="client" />
 	<script src="client/world_c.lua" type="client"/>

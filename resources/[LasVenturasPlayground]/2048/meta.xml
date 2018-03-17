@@ -4,6 +4,10 @@
 
     <script src="client/client_2048.lua" type="client"></script>
 	<script src="client/world.lua" type="client"></script>
+	<script src="client/utils/textlib.lua" type="client"/>
+	<script src="client/utils/client_anim.lua" type="client" />
+	<script src="client/utils/textlib_anim.lua" type="client" />
+
     <script src="server/server_2048.lua" type="server"></script>
 
 	<map src="server/2048.map"/>

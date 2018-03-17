@@ -1,0 +1,57 @@
+<meta>
+	<info author="Jay" name="ammunation" version="0.1"/>
+	
+		<!-- weapon images -->
+	<file src="client/img/AK47.png"/>
+	<file src="client/img/BAT.png"/>
+	<file src="client/img/BRASSKNUCKLES.png"/>
+	<file src="client/img/CAMERA.png"/>
+	<file src="client/img/CANE.png"/>
+	<file src="client/img/CHAINSAW.png"/>
+	<file src="client/img/COLT45.png"/>
+	<file src="client/img/COMBAT.png"/>
+	<file src="client/img/DEAGLE.png"/>
+	<file src="client/img/DETONATOR.png"/>
+	<file src="client/img/DILDO1.png"/>
+	<file src="client/img/DILDO2.png"/>
+	<file src="client/img/FIREEXT.png"/>
+	<file src="client/img/FLAMETHROWER.png"/>
+	<file src="client/img/FLOWERS.png"/>
+	<file src="client/img/GOLF.png"/>
+	<file src="client/img/GRENADE.png"/>
+	<file src="client/img/HEATSEEK.png"/>
+	<file src="client/img/IRGOGGLES.png"/>
+	<file src="client/img/JETPACK.png"/>
+	<file src="client/img/KATANA.png"/>
+	<file src="client/img/KNIFE.png"/>
+	<file src="client/img/M4.png"/>
+	<file src="client/img/MICROUZI.png"/>
+	<file src="client/img/MINIGUN.png"/>
+	<file src="client/img/MOLOTOV.png"/>
+	<file src="client/img/MP5.png"/>
+	<file src="client/img/NITESTICK.png"/>
+	<file src="client/img/NVGOGGLES.png"/>
+	<file src="client/img/PARACHUTE.png"/>
+	<file src="client/img/POOLCUE.png"/>
+	<file src="client/img/RIFLE.png"/>
+	<file src="client/img/ROCKETLAUNCHER.png"/>
+	<file src="client/img/SACHTEL.png"/>
+	<file src="client/img/SAWNOFF.png"/>
+	<file src="client/img/SHOTGUN.png"/>
+	<file src="client/img/SHOVEL.png"/>
+	<file src="client/img/SILENCED.png"/>
+	<file src="client/img/SNIPER.png"/>
+	<file src="client/img/SPRAYCAN.png"/>
+	<file src="client/img/TEARGAS.png"/>
+	<file src="client/img/TEC9.png"/>
+	<file src="client/img/VIBE1.png"/>
+	<file src="client/img/VIBE2.png"/>
+	
+	<map src="shops.map"/>
+	
+	<script src="client/shops.lua" type="client"/>
+	<script src="client/ammu_peds.lua" type="client"/>
+	
+	<script src="server/shops.lua"/>
+
+</meta>

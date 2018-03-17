@@ -33,8 +33,14 @@ function displayNextHintBox()
 	if #hintBoxQueue > 0 then
 		setTimer(
 			function()
-				triggerEvent("clientHintBox", localPlayer, hintBoxQueue[1])
+				if hintBoxQueue then 
+					triggerEvent("clientHintBox", localPlayer, hintBoxQueue[1])
+				end 
 			end,
 		200, 1)
 	end 
+end 
+
+function clearHintboxQueue()
+	hintBoxQueue = {}
 end 

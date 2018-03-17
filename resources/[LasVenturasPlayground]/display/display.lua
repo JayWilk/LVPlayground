@@ -29,7 +29,8 @@ function toggleDisplay(show)
 		guiSetVisible(lvpLogo, false)
 		showChat(false)
 		setPlayerHudComponentVisible("all", false)
-
+		clearHintboxQueue()
+		destroyHintBoxClient()
 	end 
 
 end 

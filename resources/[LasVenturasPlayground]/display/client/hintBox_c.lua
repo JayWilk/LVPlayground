@@ -64,6 +64,11 @@ function createHintBoxClient( x, y, text, time, textColour, boxColour, scale, fo
 	end
 end
 
+function destroyHintBoxClient()
+	hintBox = {}
+end 
+
+
 addEvent("onHintBoxExpire", true)
 addEventHandler("onHintBoxExpire", localPlayer, 
 	function()
