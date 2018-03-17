@@ -1,0 +1,13 @@
+<meta>
+	<info name="barrels" author="Jay" version="0.1"/>
+
+	<map src="barrels.map"/>
+	
+	<script src="server/barrels_s.lua"/>
+	
+	<script src="client/barrels_c.lua" type="client"/>
+	<script src="client/textlib.lua" type="client"/>
+	<script src="client/client_anim.lua" type="client"/>
+	
+	
+</meta>

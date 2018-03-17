@@ -1,7 +1,8 @@
-local screenW, screenH = guiGetScreenSize()
 local radioPlaying = false
 local radioUrl = nil
 local radioStreamName = nil
+local radioText = nil
+
 setRadioChannel(0) 
 
 
@@ -12,18 +13,6 @@ addEventHandler("onClientPlayerRadioSwitch", root,
 		end
 	end
 ) 
-
-addEventHandler("onClientRender", root,
-    function()
-		if(radioPlaying) then
-			dxDrawText(radioStreamName, 588 - 1, 22 - 1, 771 - 1, 63 - 1, tocolor(0, 0, 0, 255), 1.00, "bankgothic", "center", "center", false, false, false, false, false)
-			dxDrawText(radioStreamName, 588 + 1, 22 - 1, 771 + 1, 63 - 1, tocolor(0, 0, 0, 255), 1.00, "bankgothic", "center", "center", false, false, false, false, false)
-			dxDrawText(radioStreamName, 588 - 1, 22 + 1, 771 - 1, 63 + 1, tocolor(0, 0, 0, 255), 1.00, "bankgothic", "center", "center", false, false, false, false, false)
-			dxDrawText(radioStreamName, 588 + 1, 22 + 1, 771 + 1, 63 + 1, tocolor(0, 0, 0, 255), 1.00, "bankgothic", "center", "center", false, false, false, false, false)
-			dxDrawText(radioStreamName, 588, 22, 771, 63, tocolor(163, 121, 16, 255), 1.00, "bankgothic", "center", "center", false, false, false, false, false)
-		end
-	end
-)
 
 addEvent("onClientReceiveRadioStreamUrlInformation", true)
 addEventHandler("onClientReceiveRadioStreamUrlInformation", localPlayer,  
@@ -40,23 +29,43 @@ addEvent("onClientReceiveRadioStreamTitleInformation", true)
 addEventHandler("onClientReceiveRadioStreamTitleInformation", localPlayer,
 	function(theName)
 		radioStreamName = theName
+		constructRadioGui()
 	end
 )
 
-addEventHandler("onClientResourceStart", root,
-	function(theResource)
-		if(theResource == resource) then 
-			triggerServerEvent("onClientRequestRadioStreamInformation", resourceRoot)
-		end 
+addEventHandler("onClientResourceStart", resourceRoot,
+	function() 
+		triggerServerEvent("onClientRequestRadioStreamInformation", resourceRoot)
 	end 
 )
 
+function constructRadioGui()
+
+	if radioText then
+		radioText:destroy()
+	end 
+
+	local x,y = guiGetScreenSize() 
+
+	radioText = dxText:create(radioStreamName, 0.5, 0.06)
+	radioText:font("bankgothic")
+	radioText:scale(x / 1280)
+	radioText:type("border", 5, 0, 0, 0)
+	radioText:color(163, 161, 16, 0)
+	radioText:visible(false)
+end 
+
 
 function startStreamRadio()
+
 	if(radioUrl and sound == nil) then
+	
 		sound = playSound(radioUrl)
 		radioPlaying = true
 		setRadioChannel(0) 
+
+		radioText:visible(true)
+		Animation.createAndPlay(radioText, Animation.presets.dxTextFadeIn(1000))
 	end 
 end
 
@@ -65,7 +74,10 @@ function stopStreamRadio()
 		stopSound(sound)
 		sound = nil
 	end
+	
 	radioPlaying = false
+	radioText:visible(false)
+	radioText:color(163, 161, 16, 0)
 end
 
 
