@@ -34,9 +34,10 @@ function onClientColShapeHitx( hitPlayer )
 	if( not num ) then return end
 	
 	if( shops[num].Marker == nil ) then
-		shops[num].Marker = createMarker( shops[num].PosX, shops[num].PosY, shops[num].PosZ, "cylinder", 1, 255, 0, 0, 200 )
+		shops[num].Marker = createMarker( shops[num].PosX, shops[num].PosY, shops[num].PosZ-1, "cylinder", 0.5, 255, 0, 0, 100 )
 		setElementParent( shops[num].Marker, shops[num].Col )
 		setElementDimension( shops[num].Marker, getElementDimension( _local ) )
+		setElementInterior( shops[num].Marker, getElementInterior(localPlayer) )
 	end
 end
 
@@ -54,7 +55,6 @@ end
 
 function onClientResourceStartx( res )
 	setTimer( triggerServerEvent, 3000, 1, "requestServicesShopMarkers", _local )
-
 end
 
 addEvent( "recieveServicesShopMarkers", true )
@@ -69,6 +69,7 @@ addEventHandler( "onClientResourceStart", getResourceRootElement(getThisResource
 local sMenu = nil
 local sButtons = { }
 local sImages = { }
+local sNoStockImages = { }
 local lastColumn = 0
 local lastRow = 0
 local columns
@@ -95,6 +96,11 @@ function destroyShopMenu( )
 	for k,v in pairs( RefFromID ) do
 		destroyElement( v.Image )
 		destroyElement( v.Button )
+		
+		if(isElement(v.NoStock)) then 
+			destroyElement( v.NoStock )
+		end 
+		
 		IDFromButton[ v.Button ] = nil
 		RefFromID[k] = nil
 		sButtons[k] = nil
@@ -109,9 +115,6 @@ function destroyShopMenu( )
 	if( WeaponsEnabled == false ) then
 		toggleControl( "fire", false )
 		toggleControl( "aim_weapon", false )
-		toggleControl( "next_weapon", false )
-		toggleControl( "previous_weapon", false )
-		setPedWeaponSlot( _local, 0 )
 	end
 end
 
@@ -145,7 +148,6 @@ function createShopWindow( type, cols, ros, name, id )
 		height = rows * 100
 	end
 	
-	
 	sMenu = guiCreateWindow ( x/2 - width/2, y - height - 20, width, height, name, false )
 		guiWindowSetMovable( sMenu, false )
 		guiWindowSetSizable( sMenu, false )
@@ -158,20 +160,41 @@ function createShopWindow( type, cols, ros, name, id )
 
 	guiSetVisible( sMenu, true )
 	showCursor( true )
+	
+	setTimer(setCameraTarget, 300, 1, localPlayer, localPlayer)
+	
 end
 
-function addShopArticle( img, name, price, articleID, additional )
+function addShopArticle( img, name, price, articleID, additional, enabled )
 	if( not sMenu ) then return end
 	
 	if( sType == "ammu" ) then
 		sImages[articleID] = guiCreateStaticImage( x/2 - width/2 + 110*lastColumn + 28, y - height - 2 + 120*lastRow, 64, 64, "client/img/"  .. img .. ".png", false, nil )
+		
+		if( enabled == "false" ) then 
+			sNoStockImages[articleID] = guiCreateStaticImage( x/2 - width/2 + 110*lastColumn + 28, y - height - 2 + 120*lastRow, 64, 64, "client/img/NOSTOCK.png", false, nil )
+		end 
+		
+		
 		local buttonText = ""
-		if( additional ) then 
-			buttonText = name .. "\n" .. tostring( additional ) .. " - $" .. tostring( price )
+		
+		if enabled == "false" then
+			buttonText = "Out of Stock"
 		else
-			buttonText = name .. "\n$" .. tostring( price )
+			if( additional ) then 
+				buttonText = name .. "\n" .. tostring( additional ) .. " - $" .. tostring( price )
+			else
+				buttonText = name .. "\n$" .. tostring( price )
+			end
 		end
+		
 		sButtons[articleID] = guiCreateButton( x/2 - width/2 + 110*lastColumn + 10, y - height + 70 + 120*lastRow, 100, 40, buttonText, false, nil )
+		
+		if enabled == "false" then
+			guiSetEnabled(sButtons[articleID], false)
+			guiSetEnabled(sImages[articleID], false)
+		end 
+		
 	end
 	
 	if( sButtons[articleID] ) then
@@ -185,7 +208,9 @@ function addShopArticle( img, name, price, articleID, additional )
 		-- some stuff for ease
 		RefFromID[ articleID ] = { }
 		RefFromID[ articleID ].Image = sImages[articleID]
+		RefFromID[ articleID ].NoStock = sNoStockImages[articleID]
 		RefFromID[ articleID ].Button = sButtons[articleID]
+		
 		
 		IDFromButton[ sButtons[articleID] ] = articleID
 		

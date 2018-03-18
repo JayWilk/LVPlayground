@@ -43,7 +43,7 @@ function onResourceStart(res)
 				shops[num].Articles[ sNum ].ID = getElementData( sv, "id" )
 				shops[num].Articles[ sNum ].Name = getElementData( sv, "name" )
 				shops[num].Articles[ sNum ].Price = tonumber( getElementData( sv, "price" ) )
-				
+				shops[num].Articles[ sNum ].Enabled = getElementData( sv, "enabledDefault" )
 				-- Ammu-Nation specific, others will have false
 				shops[num].Articles[ sNum ].Ammo = tonumber( getElementData( sv, "ammo" ) )
 				shops[num].Articles[ sNum ].WeaponID = tonumber( getElementData( sv, "weaponid" ) )
@@ -54,6 +54,7 @@ function onResourceStart(res)
 		-- create a marker & col-shape
 		shops[num].Col = createColTube( shops[num].PosX, shops[num].PosY, shops[num].PosZ - 1, 1, 3)
 		shopFromCol[ shops[num].Col ] = num
+		
 	end
 end
 
@@ -74,7 +75,7 @@ function onColShapeHit( hitPlayer, matching_dimension )
 			additional = tostring( shops[num].Articles[v].Ammo ) .. "x" 
 		end
 		
-		triggerClientEvent( hitPlayer, "addShopArticle", hitPlayer, shops[num].Articles[v].ID, shops[num].Articles[v].Name, shops[num].Articles[v].Price, v, additional )
+		triggerClientEvent( hitPlayer, "addShopArticle", hitPlayer, shops[num].Articles[v].ID, shops[num].Articles[v].Name, shops[num].Articles[v].Price, v, additional, shops[num].Articles[v].Enabled )
 	end
 	
 	setTimer( 
