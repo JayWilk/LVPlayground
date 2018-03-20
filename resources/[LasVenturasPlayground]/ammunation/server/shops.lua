@@ -101,9 +101,6 @@ end
 addEvent( "requestServicesShopMarkers", true )
 addEventHandler( "requestServicesShopMarkers", getRootElement(), requestServicesShopMarkers )
 
-
-
-
 function buyShopArticle( shopID, articleID )
 	-- get the article's ID
 	if( not shops[shopID] ) then return end
@@ -113,23 +110,22 @@ function buyShopArticle( shopID, articleID )
 
 	-- enough money?
 	if( getPlayerMoney( source ) < shops[shopID].Articles[articleID].Price ) then
-		outputChatBox("You don't have enough money for a " .. shops[shopID].Articles[articleID].Name .. "!", source, 255, 255, 0 )
+			playSoundFrontEnd( source, 4)
 		return
 	end
 
 	takePlayerMoney( source, shops[shopID].Articles[articleID].Price )
 	
-	-- give it
-	outputChatBox("You bought a " .. shops[shopID].Articles[articleID].Name .. "! Costs: $" .. shops[shopID].Articles[articleID].Price, source, 0, 255, 0)
-	
-
 	if( shops[shopID].Articles[articleID].WeaponID ) then
 		if( shops[shopID].Articles[articleID].Ammo and tonumber( shops[shopID].Articles[articleID].Ammo ) > 1 ) then
-			giveWeapon( source, shops[shopID].Articles[articleID].WeaponID, shops[shopID].Articles[articleID].Ammo, false )
+			giveWeapon( source, shops[shopID].Articles[articleID].WeaponID, shops[shopID].Articles[articleID].Ammo, true )
 		else
-			giveWeapon( source, shops[shopID].Articles[articleID].WeaponID, 1, false )
+			giveWeapon( source, shops[shopID].Articles[articleID].WeaponID, 1, true )
 		end
 	end
+	
+	playSoundFrontEnd( source, 1)
+	
 end
 
 addEvent( "buyShopArticle", true )
