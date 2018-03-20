@@ -1,24 +1,30 @@
 -- SpawnManager 0.1 by Jay --
 
+playerWeapons = {}
+
+
 addEventHandler("onPlayerJoin", getRootElement(), 
 	function()
 		spawnPlayerAtRandomPosition(source)
 		setPlayerDefaultSpawnSkin(source)
 		givePlayerDefaultSpawnWeapons(source)
+		playerSpawnWeapons[thePlayer] = nil
 	end
 );
 
 addEventHandler("onPlayerWasted", getRootElement(), 
 	function()
+	
+		savePlayerWeaponsAndAmmo(source)
+	
 		setTimer( function(thePlayer) 
 			fadeCamera(thePlayer, false)
 		end, 3000, 1, source )
 
 		setTimer(function(thePlayer)
 			spawnPlayerAtRandomPosition(thePlayer)
-			setPlayerDefaultSpawnSkin(thePlayer)
-			givePlayerDefaultSpawnWeapons(thePlayer)
 		end, 5000, 1, source)
+
 	end
 )
 addEventHandler("onResourceStart", resourceRoot, 
@@ -49,8 +55,38 @@ function spawnPlayerAtRandomPosition(thePlayer)
 	fadeCamera(thePlayer, true)
 	
 	setTimer(setCameraTarget, 100, 1, thePlayer, thePlayer)
+	
+	restorePlayerWeaponsAndAmmo(thePlayer)
 end
 
+
+function savePlayerWeaponsAndAmmo(thePlayer)
+
+		if ( not playerWeapons [ thePlayer ] ) then 
+            playerWeapons [ thePlayer ] = { } 
+        end 
+		
+        for slot = 0, 12 do 
+            local weapon = getPedWeapon ( thePlayer, slot ) 
+            if ( weapon > 0 ) then 
+                local ammo = getPedTotalAmmo ( thePlayer, slot ) 
+                if ( ammo > 0 ) then 
+                    playerWeapons [ thePlayer ] [ weapon ] = ammo 
+                end 
+            end 
+        end 
+end
+
+function restorePlayerWeaponsAndAmmo(thePlayer)
+
+	if ( playerWeapons [ thePlayer ] ) then 
+		for weapon, ammo in pairs ( playerWeapons [ thePlayer ] ) do 
+			giveWeapon ( thePlayer, tonumber ( weapon ), tonumber ( ammo ) ) 
+		end 
+	end 
+
+	playerWeapons [ thePlayer ] = nil 
+end 
 
 function setPlayerDefaultSpawnSkin(thePlayer)
 
@@ -69,3 +105,6 @@ function givePlayerDefaultSpawnWeapons(thePlayer)
 	giveWeapon(thePlayer, 26, 150)
 	giveWeapon(thePlayer, 32, 500)
 end
+
+
+
