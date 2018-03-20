@@ -9,9 +9,11 @@ addEventHandler("onClientResourceStart", resourceRoot,
 	function()
 		triggerServerEvent("onClientRequestRedBarrelElements", resourceRoot)
 		
+		local x, y = guiGetScreenSize()
+		
 		shotMessage = dxText:create("", 0.5, 0.35, true )
 		shotMessage:font("bankgothic")
-		shotMessage:scale(1.4)
+		shotMessage:scale(x / 600)
 		shotMessage:type("border",2,0,0,0)
 		shotMessage:color(190,190,190,255)
 		shotMessage:visible(false)
