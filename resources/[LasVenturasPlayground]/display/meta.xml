@@ -6,11 +6,15 @@
 	 <script src="client/hintBox_queue_c.lua" type="client"/>
 	 
 	 <script src="client/api_c.lua" type="client"/>
+	 <script src="client/objectiveText_c.lua" type="client"/>
 	 
 	 <script src="server/api_s.lua"/>
 	 
 	 <export function="showHint" type="client"/>
 	 <export function="showHint" />
+	 
+	 <export function="showObjectiveText" type="client"/>
+	 <export function="hideObjectiveText" type="client"/>
 	 
 	<file src="img/lvp_logo.png" />
 	

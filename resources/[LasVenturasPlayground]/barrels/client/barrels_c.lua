@@ -4,7 +4,6 @@ local numberOfBarrelsShot = 0
 local shotMessage = nil
 
 
-
 addEventHandler("onClientResourceStart", resourceRoot, 
 	function()
 		triggerServerEvent("onClientRequestRedBarrelElements", resourceRoot)
@@ -13,7 +12,7 @@ addEventHandler("onClientResourceStart", resourceRoot,
 		
 		shotMessage = dxText:create("", 0.5, 0.35, true )
 		shotMessage:font("bankgothic")
-		shotMessage:scale(x / 600)
+		shotMessage:scale(x / 1200)
 		shotMessage:type("border",2,0,0,0)
 		shotMessage:color(190,190,190,255)
 		shotMessage:visible(false)

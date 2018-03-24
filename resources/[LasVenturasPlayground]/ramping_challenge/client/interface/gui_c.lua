@@ -5,8 +5,6 @@ GUIEditor = {
     label = {}
 }
 
-instructionTextShowing = false
-instructionText = nil
 rampingChallengeGameText = nil
 rampingChallengeProgressText = nil
 
@@ -148,14 +146,6 @@ addEventHandler("onClientResourceStart", resourceRoot,
 
 addEventHandler("onClientRender", root, 
 	function()
-		if(instructionTextShowing) then 
-			local g_screenX,g_screenY = guiGetScreenSize()
-			local shadowColor = tocolor(0,0,0)
-			local color = tocolor(255,255,255)
-		
-			--dxDrawText ( instructionText, 0 + 3, g_screenY * 0.75 + 3, g_screenX, g_screenY, shadowColor, 2, "default", "center", "top", false, true, false, true )
-			dxDrawText ( instructionText, 0, g_screenY*0.75, g_screenX, g_screenY, color, 2, "default", "center", "top", false, true, false, true )
-		end 
 		
 		if(rampingChallengeGameText) then
 			local screenW, screenH = guiGetScreenSize()
@@ -240,20 +230,6 @@ function hideRampingChallengeCompleteDialog()
 end 
 
 
-function showRampingChallengeInstructions(text, time)
-	instructionTextShowing = true
-	instructionText = text
-	
-	if(time) then 
-		setTimer(hideRampingChallengeInstructions, time, 1)
-	end
-	
-end 
-
-function hideRampingChallengeInstructions()
-	instructionText = nil
-	instructionTextShowing = false
-end 
 
 function showRampingChallengeGameText(text)
 	rampingChallengeGameText = text 

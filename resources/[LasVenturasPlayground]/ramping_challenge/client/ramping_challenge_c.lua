@@ -61,6 +61,7 @@ addEventHandler("onClientPrepareToBeginRampingChallenge", localPlayer,
 		rampingMusic = playSound("client/audio/level2.mp3", true)
 	
 		exports.lvpRadio:toggleStreamRadio(false)
+		exports.display:toggleDisplay(false)
 		
 		toggleControl("enter_exit", true)
 		
@@ -87,7 +88,7 @@ addEventHandler("onClientVehicleEnter", resourceRoot,
 		if(rampingChallengeVehicle and source == rampingChallengeVehicle) then 
 		
 			fixVehicle(source)
-			hideRampingChallengeInstructions()
+			exports.display:hideObjectiveText()
 			triggerServerEvent("onClientRequestRampingChallengeVehicleMarkerAndBlipDestroy", resourceRoot, source)
 			triggerEvent("onClientReadyToBeginRampingChallenge", localPlayer)
 			exports.ramping:toggleRamping(false)
@@ -130,7 +131,7 @@ addEventHandler("onClientMarkerHit", resourceRoot,
 		-- is this the last marker? 
 		if(rampingChallengeRaceCheckpointsHit == #rampingChallengeRaceCheckpoints + 1) then
 			
-			showRampingChallengeInstructions("Press LCTRL to Spawn a ramp!", 3000) -- todo: manage!
+			exports.display:showObjectiveText("Press LCTRL to Spawn a ramp!", 3000)
 			
 			if(timeToFirstRampMissionTimer) then
 				destroyElement(timeToFirstRampMissionTimer)
@@ -171,7 +172,7 @@ addEventHandler("onClientReadyToBeginRampingChallenge", localPlayer,
 		toggleControl("enter_exit", false)
 		
 		-- todo: manage text, and sort out the "LCTRL" reference so it pulls it in from the ramping API
-		showRampingChallengeInstructions("Follow the #ff0000checkpoints#FFFFFF to the first ramp at the end of the runway,\n and then press LCTRL to start ramping in mid-air.", 8000)
+		exports.display:showObjectiveText("Follow the #ff0000checkpoints#FFFFFF to the first ramp at the end of the runway,\n and then press LCTRL to start ramping in mid-air.", 8000)
 		
 		-- wait 8 seconds for the above instructions to clear then start the countdown!
 		setTimer(
@@ -233,7 +234,7 @@ addEventHandler("onClientEndRampingChallenge", localPlayer,
 			showRampingChallengeGameText(reason)
 			killRampingChallengeMusic()
 			killMissionTimers()
-			hideRampingChallengeInstructions()
+			exports.display:hideObjectiveText()
 			hideRampingChallengeProgressText()
 			
 			setGameSpeed(0.4)
@@ -284,7 +285,7 @@ addEventHandler("onClientFinishRampingChallenge", localPlayer,
 		
 		setTimer(
 			function()
-				hideRampingChallengeInstructions()
+				exports.display:hideObjectiveText()
 				removePlayerFromRampingChallenge()
 				cleanupRampingEnvironment()
 				spawnPlayerAtRampEndedPos()
@@ -334,7 +335,7 @@ addEventHandler("onClientEndRamping", localPlayer,
 addEventHandler("onClientStartRamping", localPlayer,
 	function()
 		if(playerInRampingChallenge) then
-			showRampingChallengeInstructions("Good job - carry on!", 3000) -- todo: sort
+			exports.display:showObjectiveText("Goob job - carry on!", 3000)-- todo: sort
 			
 			setPedCanBeKnockedOffBike(localPlayer, true)
 			
@@ -358,7 +359,7 @@ addEventHandler("onClientStartRamping", localPlayer,
 addEvent("onServerProvideVehicleInformation", true)
 addEventHandler("onServerProvideVehicleInformation", localPlayer,
 	function(theVehicle)
-		showRampingChallengeInstructions("Get in the #ff0000" ..getVehicleName(theVehicle) .."#FFFFFF!") -- todo: localize
+		exports.display:showObjectiveText("Get in the #ff0000" ..getVehicleName(theVehicle) .."#FFFFFF!") -- todo: localize
 	end 
 )
 
@@ -394,8 +395,9 @@ function removePlayerFromRampingChallenge()
 
 	playerInRampingChallenge = false
 	rampingChallengeRaceCheckpointsHit = 1
-	hideRampingChallengeInstructions()
+	exports.display:hideObjectiveText()
 	exports.lvpRadio:toggleStreamRadio(true)
+	exports.display:toggleDisplay(true)
 	
 	toggleControl("enter_exit", true)
 	setPedCanBeKnockedOffBike(localPlayer, true)

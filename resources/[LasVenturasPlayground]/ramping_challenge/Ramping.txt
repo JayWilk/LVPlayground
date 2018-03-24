@@ -41,6 +41,11 @@ PrepareToStart:
   - The vehicle name should be highlighted in red inline with the map icon and marker attached to the vehicle
   - It should be clear what the player needs to do to proceed
 
+- A countdown should start
+  - The countdown should be clearly visible, on the players screen
+  - When time is almost up (1/3 left), it should change colours to red
+  - When the countdown ends, the challenge should go to the EndRamping phase (below)
+
 - The player:
 
   - Should have their armed weapon set to fist
@@ -51,6 +56,7 @@ PrepareToStart:
 
  Upon entering the vehicle:
 
+   - The countdown should stop
    - No radio should be playing (including stream radio)
    - It should not be possible to switch radio stations  
    - It should not be possible to driveby
@@ -68,7 +74,7 @@ PrepareToStart:
 	- Play an airhorn sound on "Go"
    - When the countdown is finished:
 	- The player should be able to move and control the vehicle
-	- Should still, as before, be unable to spawn a ramp
+	- Should be unable to spawn a ramp
 	- Should not be able to exit the vehicle
 	- If the vehicle is a motorbike, should not be able to fall off the motorbike
 	- The vehicle, at this point, should have unlimited health
@@ -79,16 +85,46 @@ PrepareToStart:
 	- The player has 5 seconds to start ramping
 
 
-
-
    - If the player fails to start ramping after 5 seconds:
-
+	Go to EndRamping phase
  
    - If the player succeeds to start ramping after 5 seconds:
 
 
 
- 
+ EndRamping:
+   - An indication should display why the ramping has ended
+   - The players game speed should slow down
+   - The screen should fade to black
+
+   If the player failed:
+   	- After several seconds, the player should be prompt if they wish to try again.
+		- Try again: it should be a clear dialog, easy to use
+ 		- Grammar and spelling correct
+		- Clicking yes: go to the PrepareToStartPhase  
+		- Clicking No: 
+			- Set the players dimension to 0
+			- Position them near the correct ramping office
+			- Unfade the screen
+			- Set the game speed back to normal
+			- Re enable all controls (shooting etc)
+
+   If the player passed:
+	- Set the players dimension to 0
+        - Position them near the correct ramping office
+	- Unfade the screen
+	- Set the game speed back to normal
+	- Re enable all controls (shooting etc)
+	- Show a dialog indictaing that they have passed
+ 	  The dialog:
+		- Should be positioned centrally
+		- Feature a nice, clear image
+		- Have nice text, clear, understandable and presentable
+		- English & Grammar should be fine etc
+		- Should feature a close button
+		- When the dialog is closed, a hint should show several seconds later indicating that the player can try again.
+	
+
 
 
 
