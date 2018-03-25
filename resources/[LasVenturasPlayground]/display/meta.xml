@@ -1,23 +1,38 @@
 <meta>
-     <info author="Jay" name="Display" description="Disables vehicle names, zone names and the player clock, and shows the LVP logo" version="0.1"/>
-     <script src="display.lua" type="client"/>
-	 
-	 <script src="client/hintBox_c.lua" type="client"/>
-	 <script src="client/hintBox_queue_c.lua" type="client"/>
-	 
-	 <script src="client/api_c.lua" type="client"/>
-	 <script src="client/objectiveText_c.lua" type="client"/>
-	 
-	 <script src="server/api_s.lua"/>
-	 
-	 <export function="showHint" type="client"/>
-	 <export function="showHint" />
-	 
-	 <export function="showObjectiveText" type="client"/>
-	 <export function="hideObjectiveText" type="client"/>
-	 
+	<info author="Jay" name="Display" description="Disables vehicle names, zone names and the player clock, and shows the LVP logo" version="0.1"/>
+	<script src="display.lua" type="client"/>
+
+	<script src="client/hintBox/hintBox_c.lua" type="client"/>
+	<script src="client/hintBox/hintBox_queue_c.lua" type="client"/>
+
+	<script src="client/objectiveText/objectiveText_c.lua" type="client"/>
+	
+	<script src="client/commandFeedback/commandFeedback_c.lua" type="client"/>
+	
+	<script src="client/notifications/notifications_c.lua" type="client" />
+	<file src="client/notifications/files/fonts/roboto.ttf" />
+	<file src="client/notifications/files/fonts/icons.ttf" />
+
 	<file src="img/lvp_logo.png" />
 	
-	<export function="toggleDisplay" type="client"/>
+	<script src="client/api_c.lua" type="client"/>
+	<script src="server/api_s.lua"/>
+
+	<export function="showHint" type="client"/>
+	<export function="showHint" />
+
+	<export function="showObjectiveText" type="client"/>
+	<export function="hideObjectiveText" type="client"/>
+
+	<export function="addNotification" type="client" />
+	<export function="addNotification" />
 	
+	<export function="outputCommandSyntax"/>
+	<export function="outputCommandError"/>
+	
+	<export function="outputCommandSyntax" type="client"/>
+	<export function="outputCommandError" type="client"/>
+
+	<export function="toggleDisplay" type="client"/>
+	 
 </meta>

@@ -76,8 +76,11 @@ function stopStreamRadio()
 	end
 	
 	radioPlaying = false
-	radioText:visible(false)
-	radioText:color(163, 161, 16, 0)
+	
+	if radioText then
+		radioText:visible(false)
+		radioText:color(163, 161, 16, 0)
+	end
 end
 
 

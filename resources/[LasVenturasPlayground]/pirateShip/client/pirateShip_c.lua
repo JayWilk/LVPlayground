@@ -33,8 +33,8 @@ addEventHandler("onClientElementColShapeHit", root,
 				timeEnteredShip = getTickCount()
 
 				shipMoneyTimer = setTimer( function() 
-					givePlayerMoney(1)
-				end, 5000, 0)
+					givePlayerMoney(1) -- todo: manage
+				end, 15000, 0)
 
 			elseif(getElementType(source) == "vehicle") then
 				blowVehicle(source)
@@ -52,7 +52,7 @@ addEventHandler("onClientElementColShapeLeave", root,
 			toggleControl("next_weapon", true)
 			toggleControl("previous_weapon", true)
 		
-			exports.display:showHint("You idled on the PirateShip for " ..tostring( (getTickCount() - timeEnteredShip) / 1000) .." seconds")
+			exports.display:addNotification("You idled on the PirateShip for " ..tostring( (getTickCount() - timeEnteredShip) / 1000) .." seconds", "info")
 			timeEnteredShip = nil
 			
 			killTimer(shipMoneyTimer)

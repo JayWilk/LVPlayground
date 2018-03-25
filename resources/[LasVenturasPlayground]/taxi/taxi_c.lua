@@ -6,23 +6,37 @@ function taxiCommandHandler( commandName, taxiId)
 	
 	if(timeLastUsedTaxi ~= nil ) then
 		if(getTickCount() - timeLastUsedTaxi < 60000) then 
-			outputChatBox("* Kaufman Cabs are currently busy. Please call again soon.", 255, 0, 0)
-		return end
+			exports.display:outputCommandError("Kaufman Cabs are busy - please call again soon.")
+			return 
+		end
 	end 
 	
 	if(getPedOccupiedVehicle(localPlayer) ~= false) then 
-		outputChatBox("You need to be on foot.", 255, 0, 0)
-	return end
+		exports.display:outputCommandError("You need to be on foot.")
+		return 
+	end
 	
 	if tonumber(taxiId) == nil then
-		outputChatBox("Please enter a taxi ID number. See /locations", 255, 0, 0)
-	return end 
+			exports.display:outputCommandSyntax(commandName, "taxiId")
+			setTimer(
+				function()
+					exports.display:showHint("Use /locations to see a list of taxi locations.")
+				end, 
+			1000, 1)
+		return 
+	end 
 	
 	taxiId = tonumber(taxiId)
 	
 	if(taxiId < 0 or taxiId > #taxiLocations -1) then 
-		outputChatBox("Invalid taxi ID, see /locations.", 255, 0, 0)
-	return end
+		exports.display:outputCommandError("Invalid taxi ID.")
+		setTimer(
+				function()
+					exports.display:showHint("Use /locations to see a list of taxi locations.")
+				end, 
+			1000, 1)
+		return 
+	end
 
 	timeLastUsedTaxi = getTickCount()
 	taxiId = taxiId + 1
@@ -30,11 +44,12 @@ function taxiCommandHandler( commandName, taxiId)
 	fadeCamera(false, 3)
 	toggleAllControls(false)
 	
+	exports.display:addNotification("You've called a taxi to " ..taxiLocations[taxiId].name, "success")
+	
 	setTimer( function()
 		setElementPosition(localPlayer, taxiLocations[taxiId].x, taxiLocations[taxiId].y, taxiLocations[taxiId].z)
 		fadeCamera(true)
 		toggleAllControls(true)
-		outputChatBox("*** Thanks for using Kaufman Cabs v0.1 - I'll add more features to it soon ;)", 255, 255, 0)
 	end, 3000, 1)
 	
 end 
@@ -53,7 +68,6 @@ addCommandHandler("locations", locationsCommandHandler, false, false)
 addEvent("updateClientTaxiLocationData", true)
 addEventHandler("updateClientTaxiLocationData", localPlayer,
 	function(taxiData)
-		outputDebugString("Taxi: updateClientTaxiLocations from server. Data: " ..inspect(taxiData))
 		taxiLocations = taxiData
 	end 
 )
