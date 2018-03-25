@@ -102,8 +102,6 @@ addEventHandler('onClientRender', root,
 addEvent('addNotification', true);
 function addNotification(text, type)
 
-	iprint("Event called from within notifications library")
-
 	if (text and type) then
 		if (notificationData ~= nil) then
 			table.remove(notificationData, #notificationData);
