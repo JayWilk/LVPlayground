@@ -1,0 +1,15 @@
+<meta>
+	<info name="Languagemanager" author="Jayceon" version="1.0.0" type="script" />
+
+	<!-- Sources -->
+	<script src="g_core.lua" type="shared" />
+	
+	<!-- Localizations -->
+	<script src="languages/hungarian.lua" type="shared" />
+	<script src="languages/english.lua" type="shared" />
+	
+	<!-- Exported functions -->
+	<export function="getLocalizedText" type="shared" />
+	<export function="getPlayerLanguage" type="shared" />
+	<export function="setPlayerLanguage" type="shared" />
+</meta>

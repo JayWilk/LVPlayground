@@ -8,8 +8,9 @@ playerVehicles = {}
 	
 addCommandHandler("v",
 	function(thePlayer, theCommand, vehicle)
+	
 		if not vehicle then
-			outputChatBox("USE: /v [id/name]", thePlayer, 255, 0, 0)
+			exports.display:outputCommandSyntax(thePlayer, theCommand, getLocalizedText(thePlayer, "command.v.syntax"))
 			return
 		end 
 	
@@ -21,8 +22,9 @@ addCommandHandler("v",
 			theVehicle = tonumber(vehicle)
 		end 
 		
-		if theVehicle < 400 or theVehicle > 612 then
-			outputChatBox("Vehicle not found", thePlayer, 255, 0, 0)
+		if not theVehicle or theVehicle < 400 or theVehicle > 612 then
+			exports.display:outputCommandError(thePlayer, getLocalizedText(thePlayer, "command.v.notfound"))
+			return
 		end 
 		
 		if playerVehicles[thePlayer] ~= nil then
@@ -34,20 +36,21 @@ addCommandHandler("v",
 		
 		playerVehicles[thePlayer] = createVehicle(theVehicle, x, y, z, rx, ry, rz, getPlayerName(thePlayer))
 		warpPedIntoVehicle(thePlayer, playerVehicles[thePlayer])
-		exports.display:addNotification(thePlayer, "You have spawned a(n) " ..getVehicleName(playerVehicles[thePlayer]))
+		exports.display:addNotification(thePlayer, getLocalizedText(thePlayer, "command.v.success", getVehicleName(playerVehicles[thePlayer])))
 	end 
 )
 	
 addEventHandler("onPlayerJoin", getRootElement(), 
 	function()
+		exports.languagemanager:setPlayerLanguage(source, "en");
 		local thePlayer = source
 		setTimer(
 			function()
-				exports.display:showHint(thePlayer, "Welcome to LVP MTA. This is an early build, and there will be bugs.")
-				exports.display:showHint(thePlayer, "If you need to spawn an Infernus, use /v 411")
-				exports.display:showHint(thePlayer, "Other Commands: /taxi, /locations, /kill")
-				exports.display:showHint(thePlayer, "There are multiple features such as The Pirate Ship, LVP Radio, Ramping Challenge, Arcade Games, Dancing, Graffiti, Cinema and More.")
-				exports.display:showHint(thePlayer, "Any problems, speak to Jay. Have fun!")
+				local i = 0
+				while i ~= 4 do
+					i = i + 1
+					exports.display:showHint(thePlayer, getLocalizedText(thePlayer, "lvp.welcome" ..tostring(i)))
+				end 
 			end,
 		8000, 1)
 	end
@@ -67,3 +70,8 @@ end
 addEventHandler("onVehicleExplode", getRootElement(), respawnExplodedVehicle)
 
 
+
+function getLocalizedText(player, lang_code, ...)
+	return exports.languagemanager:getLocalizedText(player, lang_code, ...)
+end
+	
