@@ -9,6 +9,7 @@
 	
 	<script src="client/nos_c.lua" type="client"/>
 	
+	<map src="server/maps/vehicleLayoutA.map"/>
 	
 	<settings>
 		<setting name="*blipStreamRadius" value="150" friendlyname="Blip Radius" accept="*" examples="150, 200" group="Blips" desc="Change the stream radius of vehicle blips"/>
