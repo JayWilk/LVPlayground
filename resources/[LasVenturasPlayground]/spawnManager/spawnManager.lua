@@ -8,7 +8,9 @@ addEventHandler("onPlayerJoin", getRootElement(),
 		spawnPlayerAtRandomPosition(source)
 		setPlayerDefaultSpawnSkin(source)
 		givePlayerDefaultSpawnWeapons(source)
-		playerSpawnWeapons[thePlayer] = nil
+		if playerSpawnWeapons and playerSpawnWeapons[thePlayer] then 
+			playerSpawnWeapons[thePlayer] = nil
+		end
 	end
 );
 

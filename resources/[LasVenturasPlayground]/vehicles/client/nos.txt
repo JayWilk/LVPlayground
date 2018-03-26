@@ -1,0 +1,13 @@
+Command :/nos
+Rules:
+- Player must have shot 55 barrels
+- Player must be driving a vehicle
+- Player must have $1000
+- The vehicle must be NOS compatiable (e.g. no planes/helis/boats/bikes/trailers/trains/trams/quads)
+
+- Validation error messages will show for the above in a clear, localised message with correct spelling/grammar.
+
+- 10x nos will be added to the vehicle
+- $1000 will be deducted from the player
+- A notification will show that the NOS was successfully added
+

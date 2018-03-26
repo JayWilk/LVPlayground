@@ -31,7 +31,7 @@ addEventHandler("onServerProvideRedBarrelElements", resourceRoot,
 				getElementData(theElement, "posZ")
 		
 			local object = createObject(1225, x, y, z, 0, 0, 0)
-			local marker = createBlip(x, y, z, 0, 1, 255, 0, 0, 150, 0, 400)
+			local marker = createBlip(x, y, z, 0, 1, 255, 0, 0, 150, 0, 150)
 			
 			setObjectBreakable(object, false)
 			
@@ -54,7 +54,6 @@ addEventHandler("onClientPlayerWeaponFire", localPlayer,
 			
 			numberOfBarrelsShot = numberOfBarrelsShot + 1
 			
-			
 			shotMessage:text(numberOfBarrelsShot .."/"..numberOfBarrels.. " red barrels shot")
 			shotMessage:visible(true)
 			
@@ -67,3 +66,7 @@ addEventHandler("onClientPlayerWeaponFire", localPlayer,
 		end 
 	end 
 )
+
+function getNumberOfBarrelsShot()
+	return tonumber(numberOfBarrelsShot)
+end

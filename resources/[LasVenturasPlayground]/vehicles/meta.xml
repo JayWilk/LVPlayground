@@ -1,0 +1,19 @@
+<meta>
+	<info name="vehicles" author="Jay" version="0.1" type="script" />
+	
+	
+	<script src="client/vehicleBlips_c.lua" type="client" />
+	
+	<script src="client/settings_c.lua" type="client"/>
+	<script src="server/settings_s.lua"/> 
+	
+	<script src="client/nos_c.lua" type="client"/>
+	
+	
+	<settings>
+		<setting name="*blipStreamRadius" value="150" friendlyname="Blip Radius" accept="*" examples="150, 200" group="Blips" desc="Change the stream radius of vehicle blips"/>
+		<setting name="*nosBarrelsShot" value="55" friendlyname="Nos Barrels Shot" accept="*" examples="50,60" group="NOS" desc="Number of barrels to unlock /nos command"/>
+		<setting name="*nosCost" value="1000" friendlyname="Nos cost" accept="*" group="NOS" desc="How much does the /nos command cost"/>
+	 </settings>
+	
+</meta>
