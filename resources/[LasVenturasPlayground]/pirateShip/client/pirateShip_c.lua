@@ -83,7 +83,7 @@ addEventHandler("onClientPlayerPickupHit", localPlayer,
 			local i = 0
 			while i ~= 3 do
 				i = i + 1
-				exports.display:showHint(exports.languagemanager.getLocalizedText(thePlayer, "pirateship.pickup" ..tostring(i)))
+				exports.display:showHint(getLocalizedText(source, "pirateship.pickup" ..tostring(i)))
 			end 
 		end 
 	end
