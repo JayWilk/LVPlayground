@@ -2,8 +2,20 @@
 	<info author="Jay" name="Pirate Ship" version="0.1"/>
 	
 	<script src="client/pirateShip_c.lua" type="client"/>
+	<script src="server/pirateShip_s.lua"/>
+	
+	<script src="server/settings_s.lua"/>
+	<script src="client/settings_c.lua" type="client"/>
 	
 	<include resource="display"/>
-	<map src="pirateShip.map"/>
+	<include resource="languagemanager"/>
+	
+	<settings>
+		<setting name="*pirateShipMoneyInterval" value="15000" friendlyname="Money Interval" accept="*" group="Money" desc="How often should players earn money for idling, in milliseconds"/>
+		<setting name="*pirateShipMoneyAmount" value="1" friendlyname="Money Amount" accept="*" group="Money" desc="How much should the player earn"/>
+		<setting name="*pirateShipEnableWater" value="false" friendlyname="Enable Water" accept="true,false" group="Environment" desc="Should the water around the pirateship be present?"/>
+		<setting name="*pirateShipEnableRail" value="true" friendlyname="Enable Ramp Barrier" accept="true,false" group="Environment"/>
+		<setting name="@pirateShipRailMapFile" value="server/maps/pirateShipRail.map"/>
+	</settings>
 
 </meta>

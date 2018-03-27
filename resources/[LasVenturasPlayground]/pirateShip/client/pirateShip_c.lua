@@ -1,14 +1,11 @@
 -- PirateShip resource version 0.1 by Jay
 pedWeaponSlotBeforeEnteringShip = nil
 
-addEventHandler("onClientResourceStart", root, 
-	function(startedResource)
-		if(startedResource == resource) then
-			setWaterLevel(1963, 1503, 7, -5) -- disables the water at the back of the pirate ship
-			shipPickup = createPickup(2017.150390625, 1545.4384765625, 10.830858230591, 3, 1239)
-			shipRamp = createColCuboid(2004.046875, 1540.5831298828, 9.8531608581543, 20.5, 10, 7.5)
-			shipDeck = createColCuboid(1995.3321533203, 1516.5081787109, 11.869184494019, 10.8, 53.300000000001, 31.2)
-		end 
+addEventHandler("onClientResourceStart", resourceRoot, 
+	function()
+		shipPickup = createPickup(2017.150390625, 1545.4384765625, 10.830858230591, 3, 1239)
+		shipRamp = createColCuboid(2004.046875, 1540.5831298828, 9.8531608581543, 20.5, 10, 7.5)
+		shipDeck = createColCuboid(1995.3321533203, 1516.5081787109, 11.869184494019, 10.8, 53.300000000001, 31.2)
 	end
 )
 
@@ -32,9 +29,11 @@ addEventHandler("onClientElementColShapeHit", root,
 									
 				timeEnteredShip = getTickCount()
 
-				shipMoneyTimer = setTimer( function() 
-					givePlayerMoney(1) -- todo: manage
-				end, 15000, 0)
+				shipMoneyTimer = setTimer( 
+					function() 
+						triggerServerEvent("onClientRequestGivePlayerPirateShipMoney", resourceRoot)
+					end, 
+				getSetting("pirateShipMoneyInterval"), 0)
 
 			elseif(getElementType(source) == "vehicle") then
 				blowVehicle(source)
@@ -81,11 +80,26 @@ addEventHandler("onClientPlayerPickupHit", localPlayer,
 		
 			destroyElement(shipPickup)
 			
-			exports.display:showHint("The PirateShip on Las Venturas Playground is a safety zone. No weapons, shooting, fighting, deathmatch or any killing is allowed.")
-			exports.display:showHint("If you idle on the Pirate Ship, you will earn a small amount of money.")
-			exports.display:showHint("You can increase this idle money by completing arcade game challenges such as 2048 by walking up to the Arcade Machine.")
-			exports.display:showHint("You can get a taxi to the PirateShip at any time by using the command /taxi 0.")
-			
+			local i = 0
+			while i ~= 3 do
+				i = i + 1
+				exports.display:showHint(exports.languagemanager.getLocalizedText(thePlayer, "pirateship.pickup" ..tostring(i)))
+			end 
 		end 
 	end
 )
+
+addEvent("onClientSettingsUpdate")
+addEventHandler("onClientSettingsUpdate", localPlayer,
+	function()
+		if getSetting("pirateShipEnableWater") == "false" then
+			setWaterLevel(1963, 1503, 7, -7) 
+		else
+			resetWaterLevel()
+		end 
+	end
+)
+
+function getLocalizedText(player, lang_code, ...)
+	return exports.languagemanager:getLocalizedText(player, lang_code, ...)
+end
