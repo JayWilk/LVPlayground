@@ -9,6 +9,11 @@ playerVehicles = {}
 addCommandHandler("v",
 	function(thePlayer, theCommand, vehicle)
 	
+		if getPedOccupiedVehicle(thePlayer) then
+			exports.display:outputCommandError(thePlayer, getLocalizedText(thePlayer, "command.v.onfoot"))
+			return
+		end 
+	
 		if not vehicle then
 			exports.display:outputCommandSyntax(thePlayer, theCommand, getLocalizedText(thePlayer, "command.v.syntax"))
 			return

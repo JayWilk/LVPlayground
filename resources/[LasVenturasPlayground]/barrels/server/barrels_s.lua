@@ -5,6 +5,12 @@ addEventHandler("onClientRequestRedBarrelElements", resourceRoot,
 	end 
 )
 
+addEvent("onClientRequestYellowBarrelElements", true)
+addEventHandler("onClientRequestYellowBarrelElements", resourceRoot,
+	function()		
+		triggerClientEvent(client, "onServerProvideYellowBarrelElements", resourceRoot, getElementsByType("yellowBarrel"))
+	end 
+)
 
 
 

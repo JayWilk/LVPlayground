@@ -36,14 +36,13 @@ addEventHandler("onClientVehicleEnter", root,
 			return
 		end
 		
-		bindKey(rampControlKey, "down", spawnRampInfrontOfPlayer)
+		bindKey(rampControlKey, "down", spawnRampInfrontOfPlayerVehicle)
 	end 
 )	
 
 addEventHandler("onClientVehicleExit", root, 
 	function()
-		unbindKey(rampControlKey, "down", spawnRampInfrontOfPlayer)
-		unbindKey(rampControlKey, "down", showRampingInformationToPlayer)
+		unbindKey(rampControlKey, "down", spawnRampInfrontOfPlayerVehicle)
 	end 
 )
 
@@ -66,7 +65,7 @@ addEventHandler("onServerProvideRampingControlInformation", resourceRoot,
 	function(theKey)
 		if(rampControlKey) then 
 			-- Remove any existsing binds in case this is being updated
-			unbindKey(rampControlKey, "down", spawnRampInfrontOfPlayer)
+			unbindKey(rampControlKey, "down", spawnRampInfrontOfPlayerVehicle)
 		end
 		rampControlKey = theKey
 	end 
@@ -111,7 +110,7 @@ addEventHandler("onClientVehicleCollision", root,
 	end 
 )
 
-function spawnRampInfrontOfPlayer()
+function spawnRampInfrontOfPlayerVehicle()
 
 	if not isRampingEnabled() then
 		return

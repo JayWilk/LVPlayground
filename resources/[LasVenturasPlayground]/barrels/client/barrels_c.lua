@@ -1,12 +1,19 @@
 local redBarrelRootElement = createElement("redBarrelParent")
-local numberOfBarrels = 0
-local numberOfBarrelsShot = 0
+local yellowBarrelRootElement = createElement("yellowBarrelParent")
+
+local numerOfRedBarrels = 0
+local numerOfRedBarrelsShot = 0
+
+local numerOfYellowBarrels = 0
+local numerOfYellowBarrelsShot = 0
+
 local shotMessage = nil
 
 
 addEventHandler("onClientResourceStart", resourceRoot, 
 	function()
 		triggerServerEvent("onClientRequestRedBarrelElements", resourceRoot)
+		triggerServerEvent("onClientRequestYellowBarrelElements", resourceRoot)
 		
 		local x, y = guiGetScreenSize()
 		
@@ -38,7 +45,30 @@ addEventHandler("onServerProvideRedBarrelElements", resourceRoot,
 			setElementParent(object, redBarrelRootElement)
 			setElementParent(marker, object)
 			
-			numberOfBarrels = numberOfBarrels + 1
+			numerOfRedBarrels = numerOfRedBarrels + 1
+		end 
+	end 
+)
+
+addEvent("onServerProvideYellowBarrelElements", true)
+addEventHandler("onServerProvideYellowBarrelElements", resourceRoot,
+	function(theElements)
+		for i, theElement in ipairs(theElements) do
+		
+			local x, y, z = 
+				getElementData(theElement, "posX"), 
+				getElementData(theElement, "posY"), 
+				getElementData(theElement, "posZ")
+		
+			local object = createObject(1218, x, y, z, 0, 0, 0)
+			local marker = createBlip(x, y, z, 0, 1, 255, 255, 0, 150, 0, 150)
+			
+			setObjectBreakable(object, false)
+			
+			setElementParent(object, yellowBarrelRootElement)
+			setElementParent(marker, object)
+			
+			numerOfYellowBarrels = numerOfYellowBarrels + 1
 		end 
 	end 
 )
@@ -47,14 +77,46 @@ addEventHandler("onServerProvideRedBarrelElements", resourceRoot,
 addEventHandler("onClientPlayerWeaponFire", localPlayer,
 	function(weapon, ammo, ammoInClip, hitX, hitY, hitZ, hitElement)
 		
-		if hitElement and getElementType(getElementParent(hitElement)) ==  "redBarrelParent" then
+		
+		if not hitElement then
+			return
+		end
+		
+		local parentElementType = getElementType(getElementParent(hitElement))
+		
+		if parentElementType ==  "redBarrelParent" or parentElementType ==  "yellowBarrelParent" then
 		
 			destroyElement(hitElement)
-			createExplosion(hitX, hitY, hitZ, 9)
+			createExplosion(hitX, hitY, hitZ, 0)
+		
+			if(parentElementType == "redBarrelParent") then
 			
-			numberOfBarrelsShot = numberOfBarrelsShot + 1
+				numerOfRedBarrelsShot = numerOfRedBarrelsShot + 1
+				shotMessage:text(numerOfRedBarrelsShot .."/"..numerOfRedBarrels.. " red barrels shot")
 			
-			shotMessage:text(numberOfBarrelsShot .."/"..numberOfBarrels.. " red barrels shot")
+			elseif parentElementType == "yellowBarrelParent" then
+			
+				numerOfYellowBarrelsShot = numerOfYellowBarrelsShot + 1
+				shotMessage:text(numerOfYellowBarrelsShot .."/"..numerOfYellowBarrels.. " yellow barrels shot")
+				
+				-- the yellow barrels are slightly more deadly ;)
+				createEffect("riot_smoke", hitX, hitY, hitZ)
+				
+				setTimer(
+					function()
+						createExplosion(hitX, hitY, hitZ, 1)
+						setTimer(
+							function()
+								createExplosion(hitX, hitY, hitZ, 0)
+							end,
+						math.random(200, 700), 1)
+					end,
+				250, 15)
+			
+
+			end 
+			
+			
 			shotMessage:visible(true)
 			
 			setTimer(
@@ -67,6 +129,11 @@ addEventHandler("onClientPlayerWeaponFire", localPlayer,
 	end 
 )
 
-function getNumberOfBarrelsShot()
-	return tonumber(numberOfBarrelsShot)
+function getnumerOfRedBarrelsShot()
+	return tonumber(numerOfRedBarrelsShot)
 end
+
+function getnumerOfYellowBarrelsShot()
+	return tonumber(numerOfYellowBarrelsShot)
+end
+

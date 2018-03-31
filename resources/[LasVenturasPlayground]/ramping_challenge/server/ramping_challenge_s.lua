@@ -263,14 +263,17 @@ end
 
 
 function setBlipDrawDistance()
+
+	outputConsole("SSetting blip distance1")
 	local blip = getElementByIndex("blip", 1)
 
 	if(blip and getElementID(blip) == "rampingOfficeBlip") then
-		iprint("setting blip distance")
+		outputConsole("SSetting blip distance2")
+		print("setting blip distance")
 		setBlipVisibleDistance(blip, get("blipVisibleDistance")) 
 	end 
 end 
 
-addEventHandler("onResourceStart", resourceRoot, setBlipDrawDistance)
+addEventHandler("onResourceStart", root, setBlipDrawDistance)
 addEventHandler("onPlayerConnect", root, setBlipDrawDistance) --workaround for an issue for new players connecting not having the draw distance synced
-
+addEventHandler("onPlayerSpawn", root, setBlipDrawDistance)

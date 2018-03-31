@@ -1,0 +1,8 @@
+<meta>
+	<info author="Jay" version="0.1" name="Rocket Car"/>
+	
+	<file src="client/img/cross.png"/>
+	<script src="client/rocketcar_c.lua" type="client"/>
+	<script src="server/rocketcar_s.lua"/>
+	
+</meta>

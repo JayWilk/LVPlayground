@@ -1,8 +1,9 @@
 <meta>
 	<info name="barrels" author="Jay" version="0.1"/>
 
-	<map src="barrels.map"/>
-
+	<map src="redBarrels.map"/>
+	<map src="yellowBarrels.map"/>
+	
 	<script src="server/barrels_s.lua"/>
 
 	<script src="client/barrels_c.lua" type="client"/>

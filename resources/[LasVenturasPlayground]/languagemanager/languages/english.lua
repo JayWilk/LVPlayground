@@ -4,6 +4,7 @@ Language['en'] = {
 	['lvp.welcome3'] = 'Be sure to test features like the PirateShip, Ramping Challenge, Taxi, Graffiti, Cinema, Dance, etc',
 	['lvp.welcome4'] = 'Any feedback, please report it to Jay. Cheers',
 	['command.v.syntax'] = 'id/name',
+	['command.v.onfoot'] = 'You are already in a vehicle',
 	['command.v.notfound'] = 'The vehicle coult not be found',
 	['command.v.success'] = 'You have spawned a(n) %s',
 	['pirateship.pickup1'] = 'The PirateShip is a safety zone. No weapons, shooting, deathmatch or any killing is allowed. If you idle here, you earn money.',
