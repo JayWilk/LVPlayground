@@ -39,7 +39,7 @@
 		<!-- Mission timers -->
 		<setting name="*timeToGetInVehicle" value="15000" friendlyname="Time to get in vehicle (ms)" accept="*" group="Mission Timers"/>
 		<setting name="*timeToFirstRamp" value="20000" friendlyname="Time to reach first ramp (ms)" accept="*" group="Mission Timers"/>
-		<setting name="*timeToCompleteChallenge" value="120000" friendlyname="Time to complete challenge (ms)" accept="*" group="Mission Timers"/>
+		<setting name="*timeToCompleteChallenge" value="90000" friendlyname="Time to complete challenge (ms)" accept="*" group="Mission Timers"/>
 		
 		<setting name="*level1NumberOfRampsToComplete" value="50" friendlyname="Number of ramps (level 1)" accept="*" group="Level 1"/>
 		

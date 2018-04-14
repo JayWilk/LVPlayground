@@ -111,7 +111,7 @@ addEventHandler("onClientPlayerWeaponFire", localPlayer,
 							end,
 						math.random(200, 700), 1)
 					end,
-				250, 15)
+				500, 5)
 			
 
 			end 

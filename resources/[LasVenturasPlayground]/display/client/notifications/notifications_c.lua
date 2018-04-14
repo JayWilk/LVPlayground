@@ -79,7 +79,7 @@ addEventHandler('onClientRender', root,
 				v.CurrentWidth = v.Width;
 			end
 			
-			roundedRectangle(v.CurrentX, 20, 25 + v.CurrentWidth, 25, tocolor(0, 0, 0, 150 * v.Alpha / 255), _, true);
+			roundedRectangle(v.CurrentX, 20, 25 + v.CurrentWidth, 25, tocolor(0, 0, 0, 150 * v.Alpha / 255), true);
 			dxDrawRectangle(v.CurrentX, 20, 25, 25, tocolor(0, 0, 0, 255 * v.Alpha / 255), true);
 			
 			if (v.Alpha == 255) then
@@ -133,18 +133,14 @@ function addNotification(text, type)
 end
 addEventHandler('addNotification', root, addNotification);
 
-function roundedRectangle(x, y, w, h, borderColor, bgColor, postGUI)
+function roundedRectangle(x, y, w, h, borderColor, postGUI)
 	if (x and y and w and h) then
 		if (not borderColor) then
 			borderColor = #000000
 		end
 		
-		if (not bgColor) then
-			bgColor = borderColor;
-		end
-		
 		--> Background
-		dxDrawRectangle(x, y, w, h, bgColor, postGUI);
+		dxDrawRectangle(x, y, w, h, borderColor, postGUI);
 		
 		--> Border
 		dxDrawRectangle(x + 2, y - 1, w - 4, 1, borderColor, postGUI); -- top
