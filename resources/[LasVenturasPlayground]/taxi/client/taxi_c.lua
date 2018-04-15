@@ -56,8 +56,12 @@ addEventHandler("onClientTaxiArrive", localPlayer,
 addCommandHandler("taxi", 
 	function(theCommand, taxiId)
 		
+		if hasPlayerCalledTaxi then
+			return
+		end
+		
 		if(getPedOccupiedVehicle(localPlayer) ~= false) then 
-			exports.display:outputCommandError("You need to be on foot.")
+			exports.display:outputCommandError(getLocalizedText("command.taxi.onfoot"))
 			return 
 		end
 		
@@ -65,7 +69,7 @@ addCommandHandler("taxi",
 				exports.display:outputCommandSyntax(theCommand, "taxiId")
 				setTimer(
 					function()
-						exports.display:showHint("Use /locations to see a list of taxi locations.")
+						exports.display:showHint(getLocalizedText("command.taxi.locations.hint"))
 					end, 
 				1000, 1)
 			return 
@@ -73,10 +77,10 @@ addCommandHandler("taxi",
 		
 		taxiId = tonumber(taxiId)
 		if(taxiId < 0 or taxiId > #taxiLocations -1) then 
-			exports.display:outputCommandError("Invalid taxi ID.")
+			exports.display:outputCommandError(getLocalizedText("command.taxi.invalid.location"))
 			setTimer(
 					function()
-						exports.display:showHint("Use /locations to see a list of taxi locations.")
+						exports.display:showHint(getLocalizedText("command.taxi.locations.hint"))
 					end, 
 				1000, 1)
 			return 
@@ -89,7 +93,7 @@ false, false)
 
 addCommandHandler("locations", 
 	function()
-		outputChatBox("Taxi Locations(" ..#taxiLocations  .."):", 255, 0, 255)
+		outputChatBox(getLocalizedText("command.locations").." (" ..#taxiLocations  .."):", 255, 0, 255)
 
 		for theKey, theElement in ipairs(taxiLocations) do 
 			outputChatBox( tostring( theKey -1 ) .. ". " ..getElementData(theElement, "name", false), 255, 255, 0)
@@ -106,7 +110,7 @@ addEventHandler("onClientRequestTaxi", localPlayer,
 		
 		showTaxiPane(0.0005 + math.random()  * (0.00009 - 0.0005))		
 		
-		exports.display:addNotification("You've called a taxi to " ..getElementData(taxiLocations[taxiLocationId], "name"), "success")
+		exports.display:addNotification(getLocalizedText("taxi.confirmation.notification") .." "..getElementData(taxiLocations[taxiLocationId], "name"), "success")
 	end 
 )
 
@@ -116,7 +120,7 @@ addEventHandler("onClientPlayerVehicleEnter", localPlayer,
 			resetTaxiData()
 			setTimer(
 				function()
-					exports.display:addNotification("Your taxi was cancelled because you entered a vehicle.", "info")
+					exports.display:addNotification(getLocalizedText("taxi.cancelled.vehicle.enter"), "info")
 				end,
 			3000, 1)
 		end 
@@ -137,3 +141,8 @@ function resetTaxiData()
 	playerTaxiId = 0
 	hasPlayerCalledTaxi = false
 end 
+
+function getLocalizedText(lang_code, ...)
+	return exports.languagemanager:getLocalizedText(localPlayer, lang_code, ...)
+end
+	

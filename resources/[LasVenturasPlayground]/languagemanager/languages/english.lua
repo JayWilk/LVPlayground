@@ -9,5 +9,15 @@ Language['en'] = {
 	['command.v.success'] = 'You have spawned a(n) %s',
 	['pirateship.pickup1'] = 'The PirateShip is a safety zone. No weapons, shooting, deathmatch or any killing is allowed. If you idle here, you earn money.',
 	['pirateship.pickup2'] = 'You can increase the amount of money you earn by achiveing high scores on the Arcade games on the Ship.',
-	['pirateship.pickup3'] = 'To teleport to the PirateShip, you can use /taxi 0'
+	['pirateship.pickup3'] = 'To teleport to the PirateShip, you can use /taxi 0',
+	['command.taxi.onfoot'] = 'You need to be on foot',
+	['command.taxi.locations.hint'] = 'Use /locations to see a list of taxi locations',
+	['command.taxi.invalid.location'] = "Invalid location Id - see /locations.",
+	['command.locations'] = 'Taxi locations',
+	['taxi.confirmation.notification'] = 'You have called a taxi to',
+	['taxi.cancelled.vehicle.enter'] = 'Your taxi was cancelled because you entered a vehicle',
+	['taxi.cancel.key'] = 'Press X to cancel',
+	['taxi.cancel.confirmation'] = 'Do you want to cancel your taxi?',
+	['taxi.cancel.yes'] = 'Yes',
+	['taxi.cancel.no'] = 'No'
 };

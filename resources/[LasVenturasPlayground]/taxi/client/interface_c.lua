@@ -11,6 +11,7 @@ taxiPaneShowing = false
 taxiPaneProgress = 1
 taxiPaneProgressMultiplier = 0.002
 taxiCancellationPending = false
+taxiCancelText = getLocalizedText("taxi.cancel.key")
 
 addEventHandler("onClientResourceStart", resourceRoot,
     function()
@@ -22,9 +23,9 @@ addEventHandler("onClientResourceStart", resourceRoot,
         guiWindowSetMovable(GUIEditor.window[1], false)
         guiWindowSetSizable(GUIEditor.window[1], false)
 
-        GUIEditor.label[1] = guiCreateLabel((324 - 210) / 2, (152 - 34) / 2, 210, 34, "Do you want to cancel your taxi?", false, GUIEditor.window[1])
-        GUIEditor.button[1] = guiCreateButton(0.05, 0.58, 0.35, 0.26, "Yes", true, GUIEditor.window[1])
-        GUIEditor.button[2] = guiCreateButton(0.56, 0.58, 0.35, 0.26, "No", true, GUIEditor.window[1])    
+        GUIEditor.label[1] = guiCreateLabel((324 - 210) / 2, (152 - 34) / 2, 210, 34, getLocalizedText("taxi.cancel.confirmation"), false, GUIEditor.window[1])
+        GUIEditor.button[1] = guiCreateButton(0.05, 0.58, 0.35, 0.26, getLocalizedText("taxi.cancel.yes"), true, GUIEditor.window[1])
+        GUIEditor.button[2] = guiCreateButton(0.56, 0.58, 0.35, 0.26, getLocalizedText("taxi.cancel.no"), true, GUIEditor.window[1])    
 		
 		guiSetVisible(GUIEditor.window[1], false)
 		guiSetVisible(GUIEditor.staticimage[1], false)
@@ -59,7 +60,7 @@ addEventHandler("onClientRender", root,
 		
 			local textX = startX + (endX - startX) / 4
 			local textY = endY - 8
-			dxDrawText("Press X to cancel taxi", textX, textY, textX, textY, tocolor(244, 230, 10, 255), 1.00, "default-bold", "left", "top", false, false, true, false, false)
+			dxDrawText(taxiCancelText, textX, textY, textX, textY, tocolor(244, 230, 10, 255), 1.00, "default-bold", "left", "top", false, false, true, false, false)
 
 			if startX * taxiPaneProgress < endX - 2  then
 				if(taxiCancellationPending == false) then 
