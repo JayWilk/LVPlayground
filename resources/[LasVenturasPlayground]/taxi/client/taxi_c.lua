@@ -20,7 +20,7 @@ addEvent("onClientCancelTaxi")
 addEventHandler("onClientCancelTaxi", localPlayer,
 	function()
 		exports.display:addNotification("You've cancelled your taxi", "success")
-		cancelTaxi()
+		resetTaxiData()
 		setTimer(
 			function()
 				exports.display:showHint("You can complete taxi missions at Kaufman Cabs near Old Venturas Strip to decrease taxi waiting times.")
